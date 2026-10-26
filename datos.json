@@ -4229,17 +4229,17 @@
    "Dirección": "C. Chiclana, 9, 11140 Conil de la Frontera, Cádiz",
    "Latitud": "36.277130",
    "Longitud": "-6.089135",
-   "Teléfono / Web": "621 212 167 ; https://conilhome.com",
+   "Teléfono / Web": "621 212 167 · reservas@conilhome.com · conilhome.com",
    "Admite perros (Sí/No/Con condiciones)": "Con condiciones",
-   "Tamaño o peso máximo": "Hasta 25 kg",
-   "Suplemento (€)": "10 €/noche por mascota",
-   "Zonas permitidas": "No consta",
+   "Tamaño o peso máximo": "Su política no indica límite de peso. Máximo 1 o 2 mascotas según el tamaño del alojamiento",
+   "Suplemento (€)": "10 € por mascota y noche + 20 € de limpieza el día de salida + depósito reembolsable de 100 € en tarjeta",
+   "Zonas permitidas": "En la habitación o apartamento y en zonas exteriores, con correa en zonas comunes. No pueden entrar al servicio de desayunos",
    "Temporada": "No consta",
-   "Otras condiciones": "Hasta 2 mascotas por habitación",
-   "Fuente": "https://www.hotelswithpets.com/es/destinations/conil-de-la-frontera",
-   "Fecha de comprobación": "2026-10-23",
-   "Verificado": "No",
-   "Fuente oficial": "No"
+   "Otras condiciones": "Admite perros y gatos (otras mascotas, consultar). Deben estar vacunados y hay que avisar antes de llegar. No dejarlos solos mucho tiempo. Facilitan comedero y bebedero. No usar toallas ni sábanas para asearlos",
+   "Fuente": "Política de mascotas enviada por La Jábega by Conil Home (26/10/2026)",
+   "Fecha de comprobación": "2026-10-26",
+   "Verificado": "Sí",
+   "Fuente oficial": "Sí"
   },
   {
    "Nombre": "Casa La Ilusión",
@@ -12499,6 +12499,87 @@
    "antes": "",
    "despues": "Añadido",
    "fuente": "Ordenanza de playas de Cádiz (BOP 01/08/2023)"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "La Jábega by Conil Home",
+   "municipio": "Conil de la Frontera",
+   "campo": "Tamaño o peso máximo",
+   "antes": "Hasta 25 kg",
+   "despues": "Su política no indica límite de peso. Máximo 1 o 2 mascotas según el tamaño del alojamiento",
+   "fuente": "Política de mascotas enviada por el alojamiento"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "La Jábega by Conil Home",
+   "municipio": "Conil de la Frontera",
+   "campo": "Suplemento (€)",
+   "antes": "10 €/noche por mascota",
+   "despues": "10 € por mascota y noche + 20 € de limpieza el día de salida + depósito reembolsable de 100 € en tarjeta",
+   "fuente": "Política de mascotas enviada por el alojamiento"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "La Jábega by Conil Home",
+   "municipio": "Conil de la Frontera",
+   "campo": "Zonas permitidas",
+   "antes": "No consta",
+   "despues": "En la habitación o apartamento y en zonas exteriores, con correa en zonas comunes. No pueden entrar al servicio de desayunos",
+   "fuente": "Política de mascotas enviada por el alojamiento"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "La Jábega by Conil Home",
+   "municipio": "Conil de la Frontera",
+   "campo": "Otras condiciones",
+   "antes": "Hasta 2 mascotas por habitación",
+   "despues": "Admite perros y gatos (otras mascotas, consultar). Deben estar vacunados y hay que avisar antes de llegar. No dejarlos solos mucho tiempo. Facilitan comedero y bebedero. No usar toallas ni sábanas para asearlos",
+   "fuente": "Política de mascotas enviada por el alojamiento"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "La Jábega by Conil Home",
+   "municipio": "Conil de la Frontera",
+   "campo": "Teléfono / Web",
+   "antes": "621 212 167 ; https://conilhome.com",
+   "despues": "621 212 167 · reservas@conilhome.com · conilhome.com",
+   "fuente": "Política de mascotas enviada por el alojamiento"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "La Jábega by Conil Home",
+   "municipio": "Conil de la Frontera",
+   "campo": "Fuente",
+   "antes": "https://www.hotelswithpets.com/es/destinations/conil-de-la-frontera",
+   "despues": "Política de mascotas enviada por La Jábega by Conil Home (26/10/2026)",
+   "fuente": "Política de mascotas enviada por el alojamiento"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "La Jábega by Conil Home",
+   "municipio": "Conil de la Frontera",
+   "campo": "Fecha de comprobación",
+   "antes": "2026-10-23",
+   "despues": "2026-10-26",
+   "fuente": "Política de mascotas enviada por el alojamiento"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "La Jábega by Conil Home",
+   "municipio": "Conil de la Frontera",
+   "campo": "Verificado",
+   "antes": "No",
+   "despues": "Sí",
+   "fuente": "Política de mascotas enviada por el alojamiento"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "La Jábega by Conil Home",
+   "municipio": "Conil de la Frontera",
+   "campo": "Fuente oficial",
+   "antes": "No",
+   "despues": "Sí",
+   "fuente": "Política de mascotas enviada por el alojamiento"
   }
  ]
 }
