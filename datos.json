@@ -10729,6 +10729,69 @@
    "Fecha de comprobación": "2026-10-25",
    "Verificado": "Sí",
    "Fuente oficial": "No"
+  },
+  {
+   "Nombre": "Hotel Soho Boutique Jerez",
+   "Tipo": "Alojamiento",
+   "Subtipo": "Hotel",
+   "Municipio": "Jerez de la Frontera",
+   "Comarca": "Campiña de Jerez",
+   "Dirección": "No consta",
+   "Latitud": "",
+   "Longitud": "",
+   "Teléfono / Web": "Reservas: 952 889 067 · sohohoteles.com/dog-friendly",
+   "Admite perros (Sí/No/Con condiciones)": "Con condiciones",
+   "Tamaño o peso máximo": "Hasta 10 kg. 1 perro por habitación",
+   "Suplemento (€)": "12 €/noche + 25 € de limpieza por estancia (no reembolsable)",
+   "Zonas permitidas": "Fuera de la habitación siempre con correa. No en spa, gimnasio ni piscina. Acceso a zonas de comida y bebida: consultar con el hotel",
+   "Temporada": "No consta",
+   "Otras condiciones": "Puede quedarse solo en la habitación avisando a recepción y dejando teléfono. Durante la limpieza hay que estar presente. Kit de bienvenida (comedero, bebedero, bolsas, snacks y pelota). Normas generales de la cadena; cualquier variación, consultar con el hotel",
+   "Fuente": "https://www.sohohoteles.com/dog-friendly/ (enviada por Soho Boutique Hotels por email, 26/10/2026)",
+   "Fecha de comprobación": "2026-10-26",
+   "Verificado": "No",
+   "Fuente oficial": "Sí"
+  },
+  {
+   "Nombre": "Apartamentos Moon Dreams Puerto",
+   "Tipo": "Alojamiento",
+   "Subtipo": "Apartamentos turísticos",
+   "Municipio": "El Puerto de Santa María",
+   "Comarca": "Bahía de Cádiz",
+   "Dirección": "No consta",
+   "Latitud": "",
+   "Longitud": "",
+   "Teléfono / Web": "Reservas: 952 889 067 · sohohoteles.com/dog-friendly",
+   "Admite perros (Sí/No/Con condiciones)": "Con condiciones",
+   "Tamaño o peso máximo": "Hasta 10 kg. 1 perro por habitación",
+   "Suplemento (€)": "12 €/noche + 25 € de limpieza por estancia (no reembolsable)",
+   "Zonas permitidas": "Fuera de la habitación siempre con correa. No en spa, gimnasio ni piscina. Acceso a zonas de comida y bebida: consultar con el hotel",
+   "Temporada": "No consta",
+   "Otras condiciones": "Puede quedarse solo en la habitación avisando a recepción y dejando teléfono. Durante la limpieza hay que estar presente. Kit de bienvenida (comedero, bebedero, bolsas, snacks y pelota). Normas generales de la cadena; cualquier variación, consultar con el hotel",
+   "Fuente": "https://www.sohohoteles.com/dog-friendly/ (enviada por Soho Boutique Hotels por email, 26/10/2026)",
+   "Fecha de comprobación": "2026-10-26",
+   "Verificado": "No",
+   "Fuente oficial": "Sí"
+  },
+  {
+   "Nombre": "Apartamentos Soho Boutique Vistahermosa",
+   "Tipo": "Alojamiento",
+   "Subtipo": "Apartamentos turísticos",
+   "Municipio": "El Puerto de Santa María",
+   "Comarca": "Bahía de Cádiz",
+   "Dirección": "No consta",
+   "Latitud": "",
+   "Longitud": "",
+   "Teléfono / Web": "Reservas: 952 889 067 · sohohoteles.com/dog-friendly",
+   "Admite perros (Sí/No/Con condiciones)": "Con condiciones",
+   "Tamaño o peso máximo": "Hasta 10 kg. 1 perro por habitación",
+   "Suplemento (€)": "12 €/noche + 25 € de limpieza por estancia (no reembolsable)",
+   "Zonas permitidas": "Fuera de la habitación siempre con correa. No en spa, gimnasio ni piscina. Acceso a zonas de comida y bebida: consultar con el hotel",
+   "Temporada": "No consta",
+   "Otras condiciones": "Puede quedarse solo en la habitación avisando a recepción y dejando teléfono. Durante la limpieza hay que estar presente. Kit de bienvenida (comedero, bebedero, bolsas, snacks y pelota). Normas generales de la cadena; cualquier variación, consultar con el hotel",
+   "Fuente": "https://www.sohohoteles.com/dog-friendly/ (enviada por Soho Boutique Hotels por email, 26/10/2026)",
+   "Fecha de comprobación": "2026-10-26",
+   "Verificado": "No",
+   "Fuente oficial": "Sí"
   }
  ],
  "resenas": [],
@@ -12352,6 +12415,33 @@
    "antes": "No",
    "despues": "Sí",
    "fuente": "Web dog-friendly de Soho Boutique Hotels"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "Hotel Soho Boutique Jerez",
+   "municipio": "Jerez de la Frontera",
+   "campo": "(nuevo sitio)",
+   "antes": "",
+   "despues": "Añadido",
+   "fuente": "Listado dog-friendly de sohohoteles.com"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "Apartamentos Moon Dreams Puerto",
+   "municipio": "El Puerto de Santa María",
+   "campo": "(nuevo sitio)",
+   "antes": "",
+   "despues": "Añadido",
+   "fuente": "Listado dog-friendly de sohohoteles.com"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "Apartamentos Soho Boutique Vistahermosa",
+   "municipio": "El Puerto de Santa María",
+   "campo": "(nuevo sitio)",
+   "antes": "",
+   "despues": "Añadido",
+   "fuente": "Listado dog-friendly de sohohoteles.com"
   }
  ]
 }
