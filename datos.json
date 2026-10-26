@@ -7316,17 +7316,17 @@
    "Dirección": "Calle Diego Fernández Herrera, 1, 11401 Jerez de la Frontera, Cádiz",
    "Latitud": "36.681006",
    "Longitud": "-6.132685",
-   "Teléfono / Web": "No consta",
+   "Teléfono / Web": "Reservas: 952 889 067 · sohohoteles.com/dog-friendly",
    "Admite perros (Sí/No/Con condiciones)": "Con condiciones",
-   "Tamaño o peso máximo": "No consta",
-   "Suplemento (€)": "25 € por estancia + 12 €/día por mascota",
-   "Zonas permitidas": "No consta",
+   "Tamaño o peso máximo": "Hasta 10 kg. 1 perro por habitación",
+   "Suplemento (€)": "12 €/noche + 25 € de limpieza por estancia (no reembolsable)",
+   "Zonas permitidas": "Fuera de la habitación siempre con correa. No en spa, gimnasio ni piscina. Acceso a zonas de comida y bebida: consultar con el hotel",
    "Temporada": "No consta",
-   "Otras condiciones": "No consta",
-   "Fuente": "https://hotelesmascotas.com/espana/cadiz-perros",
-   "Fecha de comprobación": "2026-10-23",
+   "Otras condiciones": "Puede quedarse solo en la habitación avisando a recepción y dejando teléfono. Durante la limpieza hay que estar presente. Kit de bienvenida (comedero, bebedero, bolsas, snacks y pelota). Normas generales de la cadena; cualquier variación, consultar con el hotel",
+   "Fuente": "https://www.sohohoteles.com/dog-friendly/ (enviada por Soho Boutique Hotels por email, 26/10/2026)",
+   "Fecha de comprobación": "2026-10-26",
    "Verificado": "No",
-   "Fuente oficial": "No"
+   "Fuente oficial": "Sí"
   },
   {
    "Nombre": "Barceló Montecastillo Golf",
@@ -12280,6 +12280,78 @@
    "antes": "No",
    "despues": "Sí",
    "fuente": "Respuesta de wecamp Cádiz por email"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "Itaca Jerez by Soho Boutique",
+   "municipio": "Jerez de la Frontera",
+   "campo": "Tamaño o peso máximo",
+   "antes": "No consta",
+   "despues": "Hasta 10 kg. 1 perro por habitación",
+   "fuente": "Web dog-friendly de Soho Boutique Hotels"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "Itaca Jerez by Soho Boutique",
+   "municipio": "Jerez de la Frontera",
+   "campo": "Suplemento (€)",
+   "antes": "25 € por estancia + 12 €/día por mascota",
+   "despues": "12 €/noche + 25 € de limpieza por estancia (no reembolsable)",
+   "fuente": "Web dog-friendly de Soho Boutique Hotels"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "Itaca Jerez by Soho Boutique",
+   "municipio": "Jerez de la Frontera",
+   "campo": "Zonas permitidas",
+   "antes": "No consta",
+   "despues": "Fuera de la habitación siempre con correa. No en spa, gimnasio ni piscina. Acceso a zonas de comida y bebida: consultar con el hotel",
+   "fuente": "Web dog-friendly de Soho Boutique Hotels"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "Itaca Jerez by Soho Boutique",
+   "municipio": "Jerez de la Frontera",
+   "campo": "Otras condiciones",
+   "antes": "No consta",
+   "despues": "Puede quedarse solo en la habitación avisando a recepción y dejando teléfono. Durante la limpieza hay que estar presente. Kit de bienvenida (comedero, bebedero, bolsas, snacks y pelota). Normas generales de la cadena; cualquier variación, consultar con el hotel",
+   "fuente": "Web dog-friendly de Soho Boutique Hotels"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "Itaca Jerez by Soho Boutique",
+   "municipio": "Jerez de la Frontera",
+   "campo": "Teléfono / Web",
+   "antes": "No consta",
+   "despues": "Reservas: 952 889 067 · sohohoteles.com/dog-friendly",
+   "fuente": "Web dog-friendly de Soho Boutique Hotels"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "Itaca Jerez by Soho Boutique",
+   "municipio": "Jerez de la Frontera",
+   "campo": "Fuente",
+   "antes": "https://hotelesmascotas.com/espana/cadiz-perros",
+   "despues": "https://www.sohohoteles.com/dog-friendly/ (enviada por Soho Boutique Hotels por email, 26/10/2026)",
+   "fuente": "Web dog-friendly de Soho Boutique Hotels"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "Itaca Jerez by Soho Boutique",
+   "municipio": "Jerez de la Frontera",
+   "campo": "Fecha de comprobación",
+   "antes": "2026-10-23",
+   "despues": "2026-10-26",
+   "fuente": "Web dog-friendly de Soho Boutique Hotels"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "Itaca Jerez by Soho Boutique",
+   "municipio": "Jerez de la Frontera",
+   "campo": "Fuente oficial",
+   "antes": "No",
+   "despues": "Sí",
+   "fuente": "Web dog-friendly de Soho Boutique Hotels"
   }
  ]
 }
