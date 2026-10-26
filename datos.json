@@ -10720,11 +10720,11 @@
    "Longitud": "-6.143772",
    "Teléfono / Web": "No consta",
    "Admite perros (Sí/No/Con condiciones)": "Sí",
-   "Tamaño o peso máximo": "No consta",
+   "Tamaño o peso máximo": "Sin límite indicado; muy pequeño, más adecuado para perros pequeños",
    "Suplemento (€)": "No consta",
-   "Zonas permitidas": "Parque para perros",
+   "Zonas permitidas": "Parque para perros vallado",
    "Temporada": "No consta",
-   "Otras condiciones": "No consta",
+   "Otras condiciones": "Espacio muy reducido, sin zona separada por tamaños. Fuente de agua: no consta",
    "Fuente": "Comprobado en persona por TravelPet (25/10/2026)",
    "Fecha de comprobación": "2026-10-25",
    "Verificado": "Sí",
@@ -12064,6 +12064,33 @@
    "antes": "",
    "despues": "Añadido",
    "fuente": "Visto en persona por Natalia el 25/10/2026"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "Parque canino (Chiclana centro)",
+   "municipio": "Chiclana de la Frontera",
+   "campo": "Zonas permitidas",
+   "antes": "Parque para perros",
+   "despues": "Parque para perros vallado",
+   "fuente": "Visto en persona por Natalia"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "Parque canino (Chiclana centro)",
+   "municipio": "Chiclana de la Frontera",
+   "campo": "Tamaño o peso máximo",
+   "antes": "No consta",
+   "despues": "Sin límite indicado; muy pequeño, más adecuado para perros pequeños",
+   "fuente": "Visto en persona por Natalia"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "Parque canino (Chiclana centro)",
+   "municipio": "Chiclana de la Frontera",
+   "campo": "Otras condiciones",
+   "antes": "No consta",
+   "despues": "Espacio muy reducido, sin zona separada por tamaños. Fuente de agua: no consta",
+   "fuente": "Visto en persona por Natalia"
   }
  ]
 }
