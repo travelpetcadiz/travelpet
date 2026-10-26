@@ -183,6 +183,7 @@ dl.f dd{margin:0;min-width:0;overflow-wrap:anywhere}
 .leaflet-control-attribution{background:var(--surface);color:var(--muted);font-size:11px;padding:1px 6px;opacity:.9}
 .leaflet-control-attribution a{color:var(--muted)}
 @media (prefers-reduced-motion: reduce){.leaflet-zoom-anim .leaflet-zoom-animated{transition:none}}
+.maplibregl-canvas{position:absolute;left:0;top:0}
 
 /* Marcadores */
 .bub{width:0!important;height:0!important}
@@ -13630,13 +13631,30 @@ function initMap(){
   map.fitBounds(prov.getBounds(), {padding: [10, 10]});
   map._prov = prov;
   /* Fondo de calles: si la plataforma bloquea las imágenes, se queda la silueta de la provincia */
-  try {
-    const tiles = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19});
-    let ok = false;
-    tiles.once("tileload", () => { ok = true; prov.setStyle({fillOpacity: 0, weight: 2}); });
-    tiles.addTo(map);
-    setTimeout(() => { if (!ok) map.removeLayer(tiles); }, 6000);
-  } catch(e){}
+  /* Primero el mapa vectorial gratuito de OpenFreeMap (nítido y sin límites); si no carga, imágenes de OpenStreetMap */
+  const rasterFallback = () => {
+    try {
+      const tiles = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19});
+      let ok = false;
+      tiles.once("tileload", () => { ok = true; prov.setStyle({fillOpacity: 0, weight: 2}); });
+      tiles.addTo(map);
+      setTimeout(() => { if (!ok) map.removeLayer(tiles); }, 6000);
+    } catch(e){}
+  };
+  const loadJS = src => new Promise((res, rej) => { const sc = document.createElement("script"); sc.src = src; sc.onload = res; sc.onerror = rej; document.head.appendChild(sc); });
+  (async () => {
+    try {
+      if (!window.maplibregl) await loadJS("https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js");
+      if (!L.maplibreGL) await loadJS("https://cdn.jsdelivr.net/npm/@maplibre/maplibre-gl-leaflet@0.0.22/leaflet-maplibre-gl.js");
+      const gl = L.maplibreGL({style: "https://tiles.openfreemap.org/styles/positron", attributionControl: false});
+      gl.addTo(map);
+      const glm = gl.getMaplibreMap();
+      let ok = false;
+      glm.once("load", () => { ok = true; prov.setStyle({fillOpacity: 0, weight: 2}); map.attributionControl.addAttribution('<a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a>'); });
+      glm.on("error", () => { if (!ok){ ok = true; map.removeLayer(gl); rasterFallback(); } });
+      setTimeout(() => { if (!ok){ ok = true; map.removeLayer(gl); rasterFallback(); } }, 8000);
+    } catch(e){ rasterFallback(); }
+  })();
   const Loc = L.Control.extend({options: {position: "topleft"}, onAdd(){
     const b = L.DomUtil.create("button", "locbtn"); b.type = "button"; b.id = "locBtn"; b.setAttribute("aria-label", "Mostrar mi ubicación"); b.title = "Mi ubicación";
     b.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>`;
