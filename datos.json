@@ -10792,6 +10792,27 @@
    "Fecha de comprobación": "2026-10-26",
    "Verificado": "No",
    "Fuente oficial": "Sí"
+  },
+  {
+   "Nombre": "Playas urbanas de Cádiz (normativa municipal)",
+   "Tipo": "Playa",
+   "Subtipo": "Normativa de playas",
+   "Municipio": "Cádiz",
+   "Comarca": "Bahía de Cádiz",
+   "Dirección": "Playas del término municipal de Cádiz censadas como zonas de baño",
+   "Latitud": "",
+   "Longitud": "",
+   "Teléfono / Web": "medioambiente@cadiz.es · atencion.ciudadano@cadiz.es",
+   "Admite perros (Sí/No/Con condiciones)": "Con condiciones",
+   "Tamaño o peso máximo": "No consta",
+   "Suplemento (€)": "No consta",
+   "Zonas permitidas": "Fuera de temporada la ordenanza no prohíbe su presencia en las playas de baño. Prohibidos todo el año en dunas y tramos de playa naturales. Para la playa canina, ver Zona canina de Torregorda",
+   "Temporada": "Prohibidos en temporada de baños: del Domingo de Ramos al 30 de septiembre",
+   "Otras condiciones": "Obligatorio llevar bolsas para recoger excrementos. El dueño responde de los daños y molestias. Perros guía, de terapia y de salvamento permitidos todo el año. Multas de hasta 750 € por infracciones leves",
+   "Fuente": "Ordenanza Municipal de Uso y Disfrute de las Playas de Cádiz (BOP Cádiz nº 145, 01/08/2023), arts. 8 y 21-22; enviada por el Ayuntamiento",
+   "Fecha de comprobación": "2026-10-26",
+   "Verificado": "No",
+   "Fuente oficial": "Sí"
   }
  ],
  "resenas": [],
@@ -12469,6 +12490,15 @@
    "antes": "2026-10-22",
    "despues": "2026-10-26",
    "fuente": "Listado dog-friendly de sohohoteles.com"
+  },
+  {
+   "fecha": "2026-10-26",
+   "sitio": "Playas urbanas de Cádiz (normativa municipal)",
+   "municipio": "Cádiz",
+   "campo": "(nuevo sitio)",
+   "antes": "",
+   "despues": "Añadido",
+   "fuente": "Ordenanza de playas de Cádiz (BOP 01/08/2023)"
   }
  ]
 }
