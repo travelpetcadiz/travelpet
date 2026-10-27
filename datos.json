@@ -5953,15 +5953,15 @@
    "Longitud": "-5.654897",
    "Teléfono / Web": "No consta",
    "Admite perros (Sí/No/Con condiciones)": "Con condiciones",
-   "Tamaño o peso máximo": "Hasta 25 kg",
-   "Suplemento (€)": "Gratis",
-   "Zonas permitidas": "No consta",
+   "Tamaño o peso máximo": "Sin límite de peso ni tamaño. Máximo 2 perros por habitación",
+   "Suplemento (€)": "10 € por noche y mascota",
+   "Zonas permitidas": "Zonas comunes siempre atados; no pueden estar en recepción ni en el bufé",
    "Temporada": "No consta",
-   "Otras condiciones": "Hasta 2 mascotas",
-   "Fuente": "https://www.hotelswithpets.com/es/destinations/tarifa",
-   "Fecha de comprobación": "2026-10-23",
-   "Verificado": "No",
-   "Fuente oficial": "No"
+   "Otras condiciones": "El hotel tiene una política de admisión de mascotas en su web: conviene leerla antes de reservar",
+   "Fuente": "Respuesta del Hotel La Peña (27/10/2026)",
+   "Fecha de comprobación": "2026-10-27",
+   "Verificado": "Sí",
+   "Fuente oficial": "Sí"
   },
   {
    "Nombre": "Hotel Misiana",
@@ -13267,6 +13267,78 @@
    "antes": "12 €/noche",
    "despues": "No consta",
    "fuente": "Respuesta de Soho Boutique Hotels por email (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-27",
+   "sitio": "Hotel La Peña",
+   "municipio": "Tarifa",
+   "campo": "Tamaño o peso máximo",
+   "antes": "Hasta 25 kg",
+   "despues": "Sin límite de peso ni tamaño. Máximo 2 perros por habitación",
+   "fuente": "Respuesta del Hotel La Peña (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-27",
+   "sitio": "Hotel La Peña",
+   "municipio": "Tarifa",
+   "campo": "Suplemento (€)",
+   "antes": "Gratis",
+   "despues": "10 € por noche y mascota",
+   "fuente": "Respuesta del Hotel La Peña (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-27",
+   "sitio": "Hotel La Peña",
+   "municipio": "Tarifa",
+   "campo": "Zonas permitidas",
+   "antes": "No consta",
+   "despues": "Zonas comunes siempre atados; no pueden estar en recepción ni en el bufé",
+   "fuente": "Respuesta del Hotel La Peña (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-27",
+   "sitio": "Hotel La Peña",
+   "municipio": "Tarifa",
+   "campo": "Otras condiciones",
+   "antes": "Hasta 2 mascotas",
+   "despues": "El hotel tiene una política de admisión de mascotas en su web: conviene leerla antes de reservar",
+   "fuente": "Respuesta del Hotel La Peña (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-27",
+   "sitio": "Hotel La Peña",
+   "municipio": "Tarifa",
+   "campo": "Fuente",
+   "antes": "https://www.hotelswithpets.com/es/destinations/tarifa",
+   "despues": "Respuesta del Hotel La Peña (27/10/2026)",
+   "fuente": "Respuesta del Hotel La Peña (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-27",
+   "sitio": "Hotel La Peña",
+   "municipio": "Tarifa",
+   "campo": "Fecha de comprobación",
+   "antes": "2026-10-23",
+   "despues": "2026-10-27",
+   "fuente": "Respuesta del Hotel La Peña (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-27",
+   "sitio": "Hotel La Peña",
+   "municipio": "Tarifa",
+   "campo": "Verificado",
+   "antes": "No",
+   "despues": "Sí",
+   "fuente": "Respuesta del Hotel La Peña (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-27",
+   "sitio": "Hotel La Peña",
+   "municipio": "Tarifa",
+   "campo": "Fuente oficial",
+   "antes": "No",
+   "despues": "Sí",
+   "fuente": "Respuesta del Hotel La Peña (27/10/2026)"
   }
  ]
 }
