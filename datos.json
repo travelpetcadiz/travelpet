@@ -714,7 +714,7 @@
    "Fuente oficial": "Sí"
   },
   {
-   "Nombre": "Soho Boutique Cádiz",
+   "Nombre": "Soho Boutique Cádiz (ahora gestionado por Petit Palace)",
    "Tipo": "Alojamiento",
    "Subtipo": "Hotel",
    "Municipio": "Cádiz",
@@ -724,13 +724,13 @@
    "Longitud": "",
    "Teléfono / Web": "No consta",
    "Admite perros (Sí/No/Con condiciones)": "No consta",
-   "Tamaño o peso máximo": "Hasta 25 kg",
-   "Suplemento (€)": "12 €/noche",
+   "Tamaño o peso máximo": "No consta",
+   "Suplemento (€)": "No consta",
    "Zonas permitidas": "No consta",
    "Temporada": "No consta",
-   "Otras condiciones": "No aparece en el listado oficial de hoteles dog-friendly de Soho Boutique (consultado el 26/10/2026). Otras webs indicaban hasta 25 kg, 12 €/noche y hasta 2 mascotas. Pendiente de confirmar con el hotel",
+   "Otras condiciones": "Ya no pertenece a Soho Boutique Hotels: ahora lo gestiona Petit Palace. Las condiciones anteriores (hasta 25 kg, 12 €/noche, hasta 2 mascotas) eran de la etapa Soho y pueden haber cambiado. Pendiente de confirmar con Petit Palace",
    "Fuente": "https://www.hotelswithpets.com/es/destinations/cadiz",
-   "Fecha de comprobación": "2026-10-26",
+   "Fecha de comprobación": "2026-10-27",
    "Verificado": "No",
    "Fuente oficial": "No"
   },
@@ -13222,6 +13222,51 @@
    "antes": "",
    "despues": "Añadido",
    "fuente": "Respuesta de DFDS por Instagram (@dfds_es_ma), 27/10/2026"
+  },
+  {
+   "fecha": "2026-10-27",
+   "sitio": "Soho Boutique Cádiz",
+   "municipio": "Cádiz",
+   "campo": "Nombre",
+   "antes": "Soho Boutique Cádiz",
+   "despues": "Soho Boutique Cádiz (ahora gestionado por Petit Palace)",
+   "fuente": "Respuesta de Soho Boutique Hotels por email (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-27",
+   "sitio": "Soho Boutique Cádiz",
+   "municipio": "Cádiz",
+   "campo": "Otras condiciones",
+   "antes": "No aparece en el listado oficial de hoteles dog-friendly de Soho Boutique (consultado el 26/10/2026). Otras webs indicaban hasta 25 kg, 12 €/noche y hasta 2 mascotas. Pendiente de confirmar con el hotel",
+   "despues": "Ya no pertenece a Soho Boutique Hotels: ahora lo gestiona Petit Palace. Las condiciones anteriores (hasta 25 kg, 12 €/noche, hasta 2 mascotas) eran de la etapa Soho y pueden haber cambiado. Pendiente de confirmar con Petit Palace",
+   "fuente": "Respuesta de Soho Boutique Hotels por email (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-27",
+   "sitio": "Soho Boutique Cádiz",
+   "municipio": "Cádiz",
+   "campo": "Fecha de comprobación",
+   "antes": "2026-10-26",
+   "despues": "2026-10-27",
+   "fuente": "Respuesta de Soho Boutique Hotels por email (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-27",
+   "sitio": "Soho Boutique Cádiz",
+   "municipio": "Cádiz",
+   "campo": "Tamaño o peso máximo",
+   "antes": "Hasta 25 kg",
+   "despues": "No consta",
+   "fuente": "Respuesta de Soho Boutique Hotels por email (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-27",
+   "sitio": "Soho Boutique Cádiz",
+   "municipio": "Cádiz",
+   "campo": "Suplemento (€)",
+   "antes": "12 €/noche",
+   "despues": "No consta",
+   "fuente": "Respuesta de Soho Boutique Hotels por email (27/10/2026)"
   }
  ]
 }
