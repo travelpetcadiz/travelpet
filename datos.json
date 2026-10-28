@@ -7715,16 +7715,16 @@
    "Dirección": "C. José Cádiz Salvatierra, 7D, Loc 4, 11405 Jerez de la Frontera, Cádiz",
    "Latitud": "36.691195",
    "Longitud": "-6.128927",
-   "Teléfono / Web": "No consta",
+   "Teléfono / Web": "856 249 328 · Instagram @bina_bar",
    "Admite perros (Sí/No/Con condiciones)": "Sí",
    "Tamaño o peso máximo": "No consta",
    "Suplemento (€)": "No consta",
    "Zonas permitidas": "No consta",
    "Temporada": "No consta",
-   "Otras condiciones": "DUDOSO: información de agosto de 2022; confirmar que siguen admitiendo perros",
-   "Fuente": "https://www.elmira.es/articulo/jerez/5-restaurantes-mas-destacados-jerez-que-permiten-perros/20220816135813348740.html",
-   "Fecha de comprobación": "2026-10-23",
-   "Verificado": "No",
+   "Otras condiciones": "El local confirma que admite perros. No ha detallado si pueden estar dentro o solo en la terraza",
+   "Fuente": "Respuesta de Bina Bar por Instagram (27/10/2026)",
+   "Fecha de comprobación": "2026-10-28",
+   "Verificado": "Sí",
    "Fuente oficial": "No"
   },
   {
@@ -13411,6 +13411,51 @@
    "antes": "No",
    "despues": "Sí",
    "fuente": "Respuesta del Hostal Las Cumbres por email (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-28",
+   "sitio": "Bina Bar",
+   "municipio": "Jerez de la Frontera",
+   "campo": "Otras condiciones",
+   "antes": "DUDOSO: información de agosto de 2022; confirmar que siguen admitiendo perros",
+   "despues": "El local confirma que admite perros. No ha detallado si pueden estar dentro o solo en la terraza",
+   "fuente": "Respuesta de Bina Bar por Instagram (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-28",
+   "sitio": "Bina Bar",
+   "municipio": "Jerez de la Frontera",
+   "campo": "Teléfono / Web",
+   "antes": "No consta",
+   "despues": "856 249 328 · Instagram @bina_bar",
+   "fuente": "Respuesta de Bina Bar por Instagram (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-28",
+   "sitio": "Bina Bar",
+   "municipio": "Jerez de la Frontera",
+   "campo": "Fuente",
+   "antes": "https://www.elmira.es/articulo/jerez/5-restaurantes-mas-destacados-jerez-que-permiten-perros/20220816135813348740.html",
+   "despues": "Respuesta de Bina Bar por Instagram (27/10/2026)",
+   "fuente": "Respuesta de Bina Bar por Instagram (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-28",
+   "sitio": "Bina Bar",
+   "municipio": "Jerez de la Frontera",
+   "campo": "Fecha de comprobación",
+   "antes": "2026-10-23",
+   "despues": "2026-10-28",
+   "fuente": "Respuesta de Bina Bar por Instagram (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-28",
+   "sitio": "Bina Bar",
+   "municipio": "Jerez de la Frontera",
+   "campo": "Verificado",
+   "antes": "No",
+   "despues": "Sí",
+   "fuente": "Respuesta de Bina Bar por Instagram (27/10/2026)"
   }
  ]
 }
