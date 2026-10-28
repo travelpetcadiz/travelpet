@@ -14627,12 +14627,9 @@ function openFicha(i){
   const head = a === "no" ? ["no", "i-x", "No admite perros", "Te lo indicamos para que no vayas en balde."]
     : a === "cond" ? ["cond", "i-info", "Admite perros, con condiciones", "Revisa las condiciones antes de ir."]
     : ["yes", "i-check", "Sí, admite perros", isNC(r["Temporada"]) ? "Consulta abajo los detalles." : "Temporada: " + r["Temporada"]];
-  const svc = r["Tipo"] === "Salud" || r["Tipo"] === "Servicios"; /* veterinarios y servicios para perros: no hace falta decir que admiten perros */
   const facts = [], miss = [];
   const addF = (label, v, wide) => { if (isNC(v)) miss.push(label.toLowerCase()); else facts.push(`<div class="fact${wide ? " w" : ""}"><small>${esc(label)}</small><span>${esc(v)}</span></div>`); };
-  if (svc){
-    if (!isNC(r["Temporada"])) addF("Horario", r["Temporada"], true);
-  } else if (a !== "no"){
+  if (a !== "no"){
     addF("Tamaño o peso", r["Tamaño o peso máximo"], String(r["Tamaño o peso máximo"]).length > 34);
     addF("Suplemento", r["Suplemento (€)"], String(r["Suplemento (€)"]).length > 34);
     addF("Dónde pueden estar", r["Zonas permitidas"], true);
@@ -14644,9 +14641,9 @@ function openFicha(i){
     : tk === "of" ? `<div class="seal-box of"><span class="seal of">${ico("i-info")}</span><p><strong>${verified(r) ? "Verificado hace más de 6 meses" : "Información oficial del sitio"}</strong><br>${verified(r) ? `Lo comprobamos el ${when}. Puede haber cambiado.` : `La publica el propio sitio. Comprobado el ${when}.`}</p></div>`
     : `<div class="seal-box un"><span class="seal un">${ico("i-info")}</span><p><strong>Pendiente de confirmar</strong><br>Este dato viene de guías externas. Confírmalo con el sitio antes de ir.</p></div>`;
   openSheet(`<div class="fhead"><div class="ftop"><div style="min-width:0"><div class="fmeta">${esc(r["Subtipo"] || catLabel(r["Tipo"]))} · ${esc(r["Municipio"])}</div><h2 id="sheetTitle">${esc(r["Nombre"])}</h2></div><button class="btn ghost x" type="button" data-close aria-label="Cerrar">${ico("i-x")}</button></div></div>
-    ${svc && a !== "no" ? "" : `<div class="answer ${head[0]}"><span class="ai">${ico(head[1])}</span><div><b>${esc(head[2])}</b><span>${esc(head[3])}</span></div></div>`}
+    <div class="answer ${head[0]}"><span class="ai">${ico(head[1])}</span><div><b>${esc(head[2])}</b><span>${esc(head[3])}</span></div></div>
     ${facts.length ? `<div class="facts">${facts.join("")}</div>` : ""}
-    ${!svc && a !== "no" && miss.length ? `<p class="note" style="margin:-4px 0 0">Aún no sabemos: ${esc(miss.join(", "))}.</p>` : ""}
+    ${a !== "no" && miss.length ? `<p class="note" style="margin:-4px 0 0">Aún no sabemos: ${esc(miss.join(", "))}.</p>` : ""}
     ${seal}
     <div class="duo"><a class="btn go" href="https://www.google.com/maps/dir/?api=1&destination=${exact ? coords(r).join(",") : q}" target="_blank" rel="noopener">${ico("i-route")}Cómo llegar</a>${tel ? `<a class="btn" href="tel:+34${tel}">${ico("i-phone")}Llamar</a>` : `<a class="btn" href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">${ico("i-map")}Google Maps</a>`}</div>
     <div class="mine-box"><b>Mi viaje</b><div class="mine">
