@@ -7007,9 +7007,9 @@
    "Suplemento (€)": "No consta",
    "Zonas permitidas": "No consta",
    "Temporada": "No consta",
-   "Otras condiciones": "Centro autorizado nº CA181 (Colegio de Veterinarios de Cádiz)",
+   "Otras condiciones": "DUDOSO: en esta dirección hay ahora una peluquería de mascotas (Micasol), no un veterinario. Puede haber cerrado o cambiado de local. Pendiente de confirmar",
    "Fuente": "https://colvetcadiz.org/images/documentos/listado-clinicas-autorizadas.pdf",
-   "Fecha de comprobación": "2026-10-23",
+   "Fecha de comprobación": "2026-10-28",
    "Verificado": "No",
    "Fuente oficial": "Sí"
   },
@@ -10897,6 +10897,27 @@
    "Fecha de comprobación": "2026-10-27",
    "Verificado": "Sí",
    "Fuente oficial": "Sí"
+  },
+  {
+   "Nombre": "Micasol",
+   "Tipo": "Servicios",
+   "Subtipo": "Peluquería canina",
+   "Municipio": "Tarifa",
+   "Comarca": "Campo de Gibraltar",
+   "Dirección": "C. Cigüeña Negra, 94 (Edificio Balcón de Europa), 11380 Tarifa, Cádiz",
+   "Latitud": "",
+   "Longitud": "",
+   "Teléfono / Web": "No consta",
+   "Admite perros (Sí/No/Con condiciones)": "Sí",
+   "Tamaño o peso máximo": "No consta",
+   "Suplemento (€)": "No consta",
+   "Zonas permitidas": "No consta",
+   "Temporada": "No consta",
+   "Otras condiciones": "Peluquería de mascotas. Horario, precios y cita previa: pendientes de confirmar",
+   "Fuente": "Google Maps / Street View (enero 2025), indicado por Natalia el 28/10/2026",
+   "Fecha de comprobación": "2026-10-28",
+   "Verificado": "No",
+   "Fuente oficial": "No"
   }
  ],
  "resenas": [],
@@ -13456,6 +13477,24 @@
    "antes": "No",
    "despues": "Sí",
    "fuente": "Respuesta de Bina Bar por Instagram (27/10/2026)"
+  },
+  {
+   "fecha": "2026-10-28",
+   "sitio": "Centro Veterinario Los Lances",
+   "municipio": "Tarifa",
+   "campo": "Otras condiciones",
+   "antes": "Centro autorizado nº CA181 (Colegio de Veterinarios de Cádiz)",
+   "despues": "DUDOSO: en esta dirección hay ahora una peluquería de mascotas (Micasol), no un veterinario. Puede haber cerrado o cambiado de local. Pendiente de confirmar",
+   "fuente": "Google Maps / Street View (enero 2025), indicado por Natalia el 28/10/2026"
+  },
+  {
+   "fecha": "2026-10-28",
+   "sitio": "Micasol",
+   "municipio": "Tarifa",
+   "campo": "(nuevo sitio)",
+   "antes": "",
+   "despues": "Añadido",
+   "fuente": "Google Maps / Street View (enero 2025), indicado por Natalia el 28/10/2026"
   }
  ]
 }
