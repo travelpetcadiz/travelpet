@@ -24,6 +24,9 @@ GIT_SSH_COMMAND="ssh -i $CLAVE_DEPLOY -o IdentitiesOnly=yes -o BatchMode=yes" gi
 ACTUAL=$(git rev-parse HEAD)
 NUEVO=$(git rev-parse "origin/$RAMA")
 [ "$ACTUAL" = "$NUEVO" ] && exit 0
+# Solo se despliega si GitHub va por delante. Si es el servidor el que va por delante, alguien
+# está guardando un cambio aquí y aún no lo ha subido: lo publicará al subirlo.
+git merge-base --is-ancestor "$ACTUAL" "$NUEVO" || exit 0
 
 # Un commit que ya falló no se reintenta cada minuto
 [ "$(cat .deploy-fallido 2>/dev/null)" = "$NUEVO" ] && exit 0

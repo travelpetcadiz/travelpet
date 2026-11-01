@@ -183,6 +183,7 @@ Varias personas (y varios asistentes) cambian este repositorio: Natalia con Clau
 - **Antes de empezar** y **justo antes de subir**: `git pull --rebase origin main`. Si hay cambios nuevos, léelos (`git log -p`) antes de seguir para no deshacer el trabajo de otro.
 - Sube cambios pequeños y frecuentes a `main` en lugar de uno enorme al final.
 - En el servidor no se edita nada sin subirlo: el despliegue automático se para si encuentra cambios a medias.
+- Si alguna vez hay que reconstruir a mano en el servidor, con el mismo candado que el despliegue automático: `flock /tmp/travelpet-deploy.lock docker compose up -d --build`.
 
 ## Diseño
 - Antes de cualquier cambio visible (web o panel), usar la skill `diseno-travelpet` (`.claude/skills/diseno-travelpet/SKILL.md`): colores, componentes, iconos (Heroicons) y textos.
