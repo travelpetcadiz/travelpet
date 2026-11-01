@@ -8,6 +8,18 @@
         'Temporada' => $s->temporada,
         'Otras condiciones' => $s->otras_condiciones,
     ];
+    $conocidos = array_filter($datos);
+    // Solo se avisa de lo que falta y importa para ese tipo de sitio
+    $importan = $s->tipo === 'Alojamiento' ? ['Tamaño o peso máximo', 'Suplemento', 'Zonas permitidas'] : ['Zonas permitidas'];
+    $faltan = array_values(array_filter($importan, fn ($k) => empty($datos[$k])));
+    // Primer teléfono del campo de contacto, para el botón de llamar
+    $telefono = preg_match('/(?:\+34[\s.]?)?([6789](?:[\s.]?\d){8})/', (string) $s->contacto, $m) ? preg_replace('/\D/', '', $m[1]) : null;
+    $respuesta = match ($s->admite_perros) {
+        'si' => ['bg-ok-suave text-ok border-ok', 'Sí, admite perros'],
+        'condiciones' => ['bg-aviso-suave text-aviso border-aviso', 'Admite perros, con condiciones'],
+        'no' => ['bg-mal-suave text-mal border-mal', 'No admite perros'],
+        default => ['bg-cal text-gris border-linea', 'Aún no sabemos si admite perros'],
+    };
 @endphp
 <div class="mx-auto max-w-6xl px-4 py-6">
     <nav class="mb-4 text-sm text-gris" aria-label="Ruta">
@@ -26,32 +38,53 @@
                 </span>
                 <h1 class="text-3xl font-extrabold leading-tight sm:text-4xl">{{ $s->nombre }}</h1>
                 <p class="text-gris">{{ $s->direccion ? $s->direccion.' · ' : '' }}{{ $s->municipio->nombre }}{{ $s->municipio->comarca ? ' · '.$s->municipio->comarca : '' }} · {{ $s->municipio->provincia->nombre }}</p>
-                <div class="flex flex-wrap gap-2">
-                    <x-admite :valor="$s->admite_perros" class="px-3 py-1 text-sm" />
-                    @if ($s->verificado)
-                        <span class="sello bg-ok-suave px-3 py-1 text-sm text-ok">✓ Verificado con el sitio</span>
-                    @endif
-                    @if ($media)
-                        <span class="sello bg-albero-suave px-3 py-1 text-sm text-aviso">★ {{ number_format($media, 1, ',', '') }} · {{ $resenas->count() }} {{ $resenas->count() === 1 ? 'reseña' : 'reseñas' }}</span>
-                    @endif
-                </div>
+                @if ($media)
+                    <a href="#resenas" class="text-sm font-bold text-aviso no-underline">★ {{ number_format($media, 1, ',', '') }}, {{ $resenas->count() }} {{ $resenas->count() === 1 ? 'reseña' : 'reseñas' }}</a>
+                @endif
             </header>
 
             @if ($s->esAntiguo())
                 <p class="rounded-xl bg-aviso-suave p-3 text-sm text-aviso">Este dato se comprobó hace más de 6 meses. Confírmalo con el sitio antes de ir.</p>
             @endif
 
-            <section class="tarjeta p-5">
-                <h2 class="mb-3 text-xl font-bold">Condiciones para perros</h2>
-                <dl class="grid gap-3">
-                    @foreach ($datos as $etiqueta => $valor)
-                        <div class="grid gap-0.5 sm:grid-cols-[200px_1fr] sm:gap-4">
-                            <dt class="font-bold">{{ $etiqueta }}</dt>
-                            <dd class="{{ $valor ? '' : 'text-gris' }}">{{ $valor ?: 'No consta' }}</dd>
-                        </div>
-                    @endforeach
-                </dl>
+            {{-- La respuesta a lo que viene a buscar la gente, lo primero --}}
+            <section class="rounded-2xl border-2 p-5 {{ $respuesta[0] }}">
+                <p class="font-display text-2xl font-extrabold">{{ $respuesta[1] }}</p>
+                <p class="mt-1 text-sm">
+                    @if ($s->verificado)
+                        ✓ Nos lo ha confirmado el propio sitio el {{ $s->fecha_comprobacion?->translatedFormat('j \d\e F \d\e Y') }}.
+                    @elseif ($s->fuente_oficial)
+                        Lo publica el propio sitio o su ayuntamiento. Conviene confirmarlo antes de ir.
+                    @else
+                        Sale de guías y webs externas. Confírmalo con el sitio antes de ir.
+                    @endif
+                </p>
+                @if ($conocidos && $s->admite_perros !== 'no')
+                    <dl class="mt-4 grid gap-3 border-t border-current/20 pt-4 text-tinta">
+                        @foreach ($conocidos as $etiqueta => $valor)
+                            <div class="grid gap-0.5 sm:grid-cols-[180px_1fr] sm:gap-4">
+                                <dt class="font-bold">{{ $etiqueta }}</dt>
+                                <dd>{{ $valor }}</dd>
+                            </div>
+                        @endforeach
+                    </dl>
+                @endif
+                @if ($faltan && $s->admite_perros !== 'no')
+                    <p class="mt-3 text-sm text-gris">Aún no sabemos: {{ mb_strtolower(implode(', ', $faltan)) }}. Pregúntalo al reservar.</p>
+                @endif
             </section>
+
+            <div class="flex flex-wrap gap-2">
+                @if ($s->latitud)
+                    <a class="btn btn-albero flex-1 sm:flex-none" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination={{ $s->latitud }},{{ $s->longitud }}">Cómo llegar</a>
+                @endif
+                @if ($telefono)
+                    <a class="btn flex-1 sm:flex-none" href="tel:+34{{ $telefono }}">Llamar</a>
+                @endif
+                @auth
+                    <button type="button" wire:click="alternarViaje('quiero')" class="btn flex-1 sm:flex-none {{ $enViaje === 'quiero' ? 'btn-pri' : '' }}" aria-pressed="{{ $enViaje === 'quiero' ? 'true' : 'false' }}">♡ Guardar</button>
+                @endauth
+            </div>
 
             @if ($s->contacto)
                 <section class="tarjeta p-5">
@@ -146,18 +179,18 @@
             @if ($s->latitud)
                 <div wire:ignore x-data="mapaSitio(@js($mapaCfg), {{ $s->longitud }}, {{ $s->latitud }}, @js($s->color()))"
                      class="h-64 overflow-hidden rounded-xl border border-linea"></div>
-                <a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination={{ $s->latitud }},{{ $s->longitud }}">Cómo llegar</a>
             @endif
 
             <div class="tarjeta grid gap-2 p-4">
                 <h2 class="font-bold">Mi viaje</h2>
+                <p class="text-sm text-gris">Apunta los sitios a los que quieres ir y los que ya has visitado con tu perro.</p>
                 @auth
                     <div class="grid grid-cols-2 gap-2">
                         <button type="button" wire:click="alternarViaje('quiero')" class="btn {{ $enViaje === 'quiero' ? 'btn-pri' : '' }}" aria-pressed="{{ $enViaje === 'quiero' ? 'true' : 'false' }}">♡ Quiero ir</button>
                         <button type="button" wire:click="alternarViaje('visitado')" class="btn {{ $enViaje === 'visitado' ? 'btn-pri' : '' }}" aria-pressed="{{ $enViaje === 'visitado' ? 'true' : 'false' }}">✓ He ido</button>
                     </div>
                 @else
-                    <p class="text-sm text-gris"><a href="{{ route('entrar') }}" wire:navigate class="font-bold text-pino underline">Entra</a> para guardar sitios en tu viaje.</p>
+                    <p class="text-sm text-gris"><a href="{{ route('entrar') }}" wire:navigate class="font-bold text-pino underline">Entra</a> o <a href="{{ route('registro') }}" wire:navigate class="font-bold text-pino underline">crea una cuenta gratis</a> para guardarlos.</p>
                 @endauth
             </div>
 
