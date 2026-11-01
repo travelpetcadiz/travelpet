@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::livewire('/', Explorar::class)->name('inicio');
 Route::livewire('/sitio/{sitio}', Ficha::class)->name('sitio');
+// Dirección corta para compartir: veterinarios con urgencias 24 h, los más cercanos primero
+Route::redirect('/urgencias', '/?urgencias=1')->name('urgencias');
 
 Route::view('/como-funciona', 'paginas.como-funciona')->name('como-funciona');
 Route::view('/aviso-legal', 'legal.aviso')->name('legal.aviso');

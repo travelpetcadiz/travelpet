@@ -2,6 +2,21 @@
     <h1 class="text-3xl font-extrabold">Mi viaje</h1>
     <p class="mt-1 text-gris">Los sitios que has guardado. Se guardan en tu cuenta, así que los verás en cualquier dispositivo.</p>
 
+    @if ($quiero->isNotEmpty() || $visitados->isNotEmpty())
+        @php
+            $lineas = fn ($lista) => $lista->map(fn ($s) => '• '.$s->nombre.' ('.$s->municipio->nombre.'): '.route('sitio', $s))->implode("\n");
+            $texto = trim(($quiero->isNotEmpty() ? "Quiero ir con mi mascota a:\n".$lineas($quiero)."\n\n" : '').($visitados->isNotEmpty() ? "Ya hemos ido a:\n".$lineas($visitados)."\n\n" : '')).
+                "\n\nLo he guardado en TravelPet: ".route('inicio');
+        @endphp
+        <button type="button" class="btn btn-pri mt-4"
+            x-data="{ texto: @js($texto) }"
+            @click="navigator.share
+                ? navigator.share({ title: 'Mi viaje con TravelPet', text: texto }).catch(() => {})
+                : window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank', 'noopener')">
+            @svg('heroicon-o-share', 'size-5', ['aria-hidden' => 'true'])Compartir mi viaje
+        </button>
+    @endif
+
     @foreach (['Quiero ir' => $quiero, 'He ido' => $visitados] as $titulo => $lista)
         <section class="mt-8">
             <h2 class="mb-3 text-xl font-bold">{{ $titulo }} <span class="font-normal text-gris">({{ $lista->count() }})</span></h2>

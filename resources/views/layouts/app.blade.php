@@ -71,6 +71,7 @@
         <nav id="menu-movil" x-show="abierto" x-cloak @click.outside="abierto = false" class="grid gap-1 border-t border-linea px-4 py-3 lg:hidden" aria-label="Principal">
             <a href="{{ route('inicio') }}" wire:navigate class="{{ $enlace }}">{!! $ic('magnifying-glass') !!}Explorar</a>
             <a href="{{ route('como-funciona') }}" wire:navigate class="{{ $enlace }}">{!! $ic('question-mark-circle') !!}Cómo funciona</a>
+            <a href="{{ route('urgencias') }}" wire:navigate class="{{ $enlace }} text-mal">{!! $ic('lifebuoy') !!}Urgencias veterinarias 24 h</a>
             <a href="{{ route('sugerir') }}" wire:navigate class="{{ $enlace }}">{!! $ic('light-bulb') !!}Sugerir un sitio</a>
             @auth
                 <a href="{{ route('viaje') }}" wire:navigate class="{{ $enlace }}">{!! $ic('bookmark') !!}Mi viaje</a>
@@ -98,6 +99,7 @@
             <a href="{{ route('legal.aviso') }}" class="underline">Aviso legal</a>
             <a href="{{ route('legal.privacidad') }}" class="underline">Privacidad</a>
             <a href="{{ route('como-funciona') }}" class="underline">Cómo funciona</a>
+            <a href="{{ route('urgencias') }}" class="underline">Urgencias veterinarias 24 h</a>
             <span>Mapa: © OpenStreetMap</span>
         </div>
     </footer>

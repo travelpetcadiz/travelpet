@@ -22,7 +22,7 @@
     };
     $faltan = array_values(array_filter($importan, fn ($k) => empty($datos[$k])));
     // Primer teléfono del campo de contacto, para el botón de llamar
-    $telefono = preg_match('/(?:\+34[\s.]?)?([6789](?:[\s.]?\d){8})/', (string) $s->contacto, $m) ? preg_replace('/\D/', '', $m[1]) : null;
+    $telefono = $s->telefono();
     $respuesta = match (true) {
         $servicio => ['bg-white text-tinta border-linea', $s->subtipo ?: $s->etiquetaTipo(), $s->icono()],
         $s->admite_perros === 'si' => ['bg-ok-suave text-ok border-ok', 'Sí, admite mascotas', 'check-circle'],
@@ -30,6 +30,16 @@
         $s->admite_perros === 'no' => ['bg-mal-suave text-mal border-mal', 'No admite mascotas', 'no-symbol'],
         default => ['bg-cal text-gris border-linea', 'Aún no sabemos si admite mascotas', 'question-mark-circle'],
     };
+    $hoy = $s->hoy();
+    // Datos clave con icono; solo los que sabemos (null = no lo sabemos y no se muestra)
+    $hechos = array_filter([
+        $s->urgencias_24h ? ['lifebuoy', 'Urgencias 24 h', true] : null,
+        $s->admite_grandes === null ? null : ['scale', $s->admite_grandes ? 'Admite perros grandes' : 'No admite perros grandes', $s->admite_grandes],
+        $s->sin_suplemento === null ? null : ['banknotes', $s->sin_suplemento ? 'Sin suplemento' : 'Con suplemento', $s->sin_suplemento],
+        $s->puede_entrar === null ? null : ['home', $s->puede_entrar ? 'Puede estar dentro del local' : 'Solo en la terraza', $s->puede_entrar],
+        $s->sin_correa === null ? null : ['bolt', $s->sin_correa ? 'Zona para ir sin correa' : 'Siempre con correa', $s->sin_correa],
+    ]);
+    $textoCompartir = $s->nombre.' ('.$s->municipio->nombre.'): '.($servicio ? $respuesta[1] : mb_strtolower($respuesta[1])).'. Míralo en TravelPet:';
 @endphp
 <div class="mx-auto max-w-6xl px-4 py-6">
     <nav class="mb-4 text-sm text-gris" aria-label="Ruta">
@@ -69,6 +79,19 @@
                         Sale de guías y webs externas. Confírmalo con el sitio antes de ir.
                     @endif
                 </p>
+                @if ($hoy)
+                    <p class="mt-3 flex items-start gap-2 rounded-xl bg-white/70 p-3 text-tinta">
+                        @svg('heroicon-s-calendar-days', 'mt-0.5 size-6 flex-none '.($hoy['puede'] ? 'text-ok' : 'text-mal'), ['aria-hidden' => 'true'])
+                        <span><strong class="block text-lg {{ $hoy['puede'] ? 'text-ok' : 'text-mal' }}">{{ $hoy['puede'] ? 'Hoy se puede ir' : 'Hoy no se puede ir' }}</strong>{{ $hoy['texto'] }}</span>
+                    </p>
+                @endif
+                @if ($hechos)
+                    <ul class="mt-3 flex flex-wrap gap-2">
+                        @foreach ($hechos as [$icono, $texto, $bueno])
+                            <li class="sello bg-white px-3 py-1.5 text-sm {{ $bueno ? 'text-tinta' : 'text-gris' }}">@svg('heroicon-o-'.$icono, 'size-5', ['aria-hidden' => 'true']){{ $texto }}</li>
+                        @endforeach
+                    </ul>
+                @endif
                 @if ($conocidos && ($servicio || $s->admite_perros !== 'no'))
                     <dl class="mt-4 grid gap-3 border-t border-current/20 pt-4 text-tinta">
                         @foreach ($conocidos as $etiqueta => $valor)
@@ -89,8 +112,16 @@
                     <a class="btn btn-albero flex-1 sm:flex-none" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination={{ $s->latitud }},{{ $s->longitud }}">@svg('heroicon-o-map', 'size-5', ['aria-hidden' => 'true'])Cómo llegar</a>
                 @endif
                 @if ($telefono)
-                    <a class="btn flex-1 sm:flex-none" href="tel:+34{{ $telefono }}">@svg('heroicon-o-phone', 'size-5', ['aria-hidden' => 'true'])Llamar</a>
+                    <a class="btn flex-1 sm:flex-none" href="tel:{{ $telefono }}">@svg('heroicon-o-phone', 'size-5', ['aria-hidden' => 'true'])Llamar</a>
                 @endif
+                {{-- En el móvil abre el menú de compartir (WhatsApp, etc.); si no lo hay, WhatsApp directamente --}}
+                <button type="button" class="btn flex-1 sm:flex-none"
+                    x-data="{ texto: @js($textoCompartir), url: @js(route('sitio', $s)) }"
+                    @click="navigator.share
+                        ? navigator.share({ title: @js($s->nombre), text: texto, url }).catch(() => {})
+                        : window.open('https://wa.me/?text=' + encodeURIComponent(texto + ' ' + url), '_blank', 'noopener')">
+                    @svg('heroicon-o-share', 'size-5', ['aria-hidden' => 'true'])Compartir
+                </button>
                 @auth
                     <button type="button" wire:click="alternarViaje('quiero')" class="btn flex-1 sm:flex-none {{ $enViaje === 'quiero' ? 'btn-pri' : '' }}" aria-pressed="{{ $enViaje === 'quiero' ? 'true' : 'false' }}">@svg($enViaje === 'quiero' ? 'heroicon-s-bookmark' : 'heroicon-o-bookmark', 'size-5', ['aria-hidden' => 'true']){{ $enViaje === 'quiero' ? 'Guardado' : 'Guardar' }}</button>
                 @endauth

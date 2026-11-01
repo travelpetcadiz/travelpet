@@ -1,9 +1,9 @@
 @php
     $ic = fn (string $n, string $c = 'size-6') => svg('heroicon-o-'.$n, $c.' flex-none text-pino', ['aria-hidden' => 'true'])->toHtml();
     $pasos = [
-        ['magnifying-glass', 'Busca', 'Escribe un pueblo o el nombre de un sitio, o toca una categoría: dormir, comer, playas, parques… Puedes verlo en lista o en el mapa.'],
+        ['magnifying-glass', 'Busca', 'Escribe un pueblo o el nombre de un sitio, o toca una categoría: dormir, comer, playas, parques… Si ya estás de viaje, pulsa «Cerca de mí» y verás primero lo que tienes al lado.'],
         ['check-circle', 'Mira la respuesta', 'Cada sitio dice primero si admite mascotas y, debajo, las condiciones que conocemos: tamaño máximo, suplemento, zonas donde puede estar…'],
-        ['phone', 'Confírmalo y ve', 'Desde la ficha puedes llamar o abrir la ruta en el mapa. Si algo no lo sabemos, te lo decimos para que lo preguntes al reservar.'],
+        ['phone', 'Confírmalo y ve', 'Desde la ficha puedes llamar, abrir la ruta en el mapa o compartirlo por WhatsApp. Si algo no lo sabemos, te lo decimos para que lo preguntes al reservar.'],
     ];
 @endphp
 @component('layouts.app', ['title' => 'Cómo funciona', 'descripcion' => 'Cómo buscar sitios que admiten mascotas, qué significa cada etiqueta y qué puedes hacer con una cuenta gratuita.'])
@@ -49,6 +49,23 @@
                 </div>
             </dl>
             <p class="mt-3 flex items-start gap-2 text-sm text-gris">{!! $ic('heart', 'mt-0.5 size-4') !!}En veterinarios, peluquerías y otros servicios para mascotas no ponemos etiqueta: ahí tu mascota siempre es bienvenida. En su lugar verás el horario.</p>
+        </section>
+
+        <section aria-labelledby="utiles">
+            <h2 id="utiles" class="mb-4 text-2xl font-bold">Lo más útil cuando ya estás de viaje</h2>
+            <ul class="grid gap-3 sm:grid-cols-2">
+                @foreach ([
+                    ['map-pin', 'Cerca de mí', 'Ordena los sitios del más cercano al más lejano. Tu ubicación solo se usa en tu móvil para ordenar: no la guardamos.'],
+                    ['calendar-days', '¿Se puede ir hoy?', 'Muchas playas solo admiten mascotas fuera de la temporada de baño. En su ficha te decimos si hoy se puede ir y desde cuándo.'],
+                    ['lifebuoy', 'Urgencias veterinarias 24 h', 'Desde la portada, las clínicas con urgencias 24 h más cercanas. Llama antes de ir para que te esperen.'],
+                    ['adjustments-horizontal', 'Filtros prácticos', 'En «Filtros» puedes pedir perros grandes, sin suplemento, dentro del local, zona sin correa o playas abiertas hoy.'],
+                ] as [$icono, $titulo, $texto])
+                    <li class="tarjeta p-4">
+                        <h3 class="flex items-center gap-2 font-bold">{!! $ic($icono, 'size-5') !!}{{ $titulo }}</h3>
+                        <p class="mt-1 text-sm text-gris">{{ $texto }}</p>
+                    </li>
+                @endforeach
+            </ul>
         </section>
 
         <section aria-labelledby="cuenta">

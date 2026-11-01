@@ -36,6 +36,30 @@ class Explorar extends Component
     #[Url(except: false)]
     public bool $verificados = false;
 
+    // Filtros prácticos. Solo muestran lo que sabemos con seguridad
+    #[Url(except: false)]
+    public bool $grandes = false;
+
+    #[Url(except: false)]
+    public bool $gratis = false;
+
+    #[Url(except: false)]
+    public bool $dentro = false;
+
+    #[Url(except: false)]
+    public bool $suelto = false;
+
+    #[Url(except: false)]
+    public bool $hoy = false;
+
+    #[Url(except: false)]
+    public bool $urgencias = false;
+
+    // Ubicación de quien busca («Cerca de mí»). No va en la URL ni se guarda
+    public ?float $lat = null;
+
+    public ?float $lng = null;
+
     #[Url(except: 'lista')]
     public string $vista = 'lista';
 
@@ -54,8 +78,37 @@ class Explorar extends Component
 
     public function limpiar(): void
     {
-        $this->reset('q', 'tipo', 'provincia', 'comarca', 'municipio', 'admite', 'verificados');
+        $this->reset('q', 'tipo', 'provincia', 'comarca', 'municipio', 'admite', 'verificados', 'grandes', 'gratis', 'dentro', 'suelto', 'hoy', 'urgencias');
         $this->resetPage();
+    }
+
+    public function cerca(float $lat, float $lng): void
+    {
+        if ($lat < -90 || $lat > 90 || $lng < -180 || $lng > 180) {
+            return;
+        }
+        [$this->lat, $this->lng] = [$lat, $lng];
+        $this->resetPage();
+    }
+
+    public function sinUbicacion(): void
+    {
+        $this->reset('lat', 'lng');
+        $this->resetPage();
+    }
+
+    // Kilómetros aproximados hasta quien busca (suficiente para ordenar dentro de una provincia)
+    private function distancia(): string
+    {
+        return '(SQRT(POW(latitud - ?, 2) + POW((longitud - ?) * '.cos(deg2rad($this->lat)).', 2)) * 111.32)';
+    }
+
+    // Sitios con periodo (playas) a los que hoy no se puede ir
+    private function cerradosHoy(): array
+    {
+        return Sitio::whereNotNull('periodo_tipo')->get()
+            ->filter(fn (Sitio $s) => ($s->hoy()['puede'] ?? true) === false)
+            ->modelKeys();
     }
 
     // Municipios que cumplen los filtros geográficos (provincia y comarca)
@@ -76,11 +129,31 @@ class Explorar extends Component
                     ->orWhere('subtipo', 'like', $t)
                     ->orWhereRelation('municipio', 'nombre', 'like', $t));
             })
+            ->when($this->urgencias, fn (Builder $q) => $q->where('urgencias_24h', true))
+            ->when($this->grandes, fn (Builder $q) => $q->where('admite_grandes', true))
+            ->when($this->gratis, fn (Builder $q) => $q->where('sin_suplemento', true))
+            ->when($this->dentro, fn (Builder $q) => $q->where('puede_entrar', true))
+            ->when($this->suelto, fn (Builder $q) => $q->where('sin_correa', true))
+            ->when($this->hoy, fn (Builder $q) => $q->whereNotNull('periodo_tipo')->whereKeyNot($this->cerradosHoy()))
             ->when($this->tipo !== '', fn (Builder $q) => $q->where('tipo', $this->tipo))
             ->when($this->provincia !== '' || $this->comarca !== '', fn (Builder $q) => $q->whereIn('municipio_id', $this->municipios()->select('id')))
             ->when($this->municipio !== '', fn (Builder $q) => $q->where('municipio_id', (int) $this->municipio))
             ->when($this->admite !== '', fn (Builder $q) => $q->where('admite_perros', $this->admite))
             ->when($this->verificados, fn (Builder $q) => $q->where('verificado', true));
+    }
+
+    // Con ubicación, del más cercano al más lejano; sin ella, primero lo confirmado
+    private function ordenados(): Builder
+    {
+        $q = $this->consulta()->with('municipio:id,nombre');
+        if ($this->lat === null) {
+            return $q->orderByDesc('verificado')->orderBy('nombre');
+        }
+
+        return $q->select('sitios.*')
+            ->selectRaw($this->distancia().' AS distancia_km', [$this->lat, $this->lng])
+            ->orderByRaw('latitud IS NULL')
+            ->orderBy('distancia_km');
     }
 
     public function render()
@@ -113,7 +186,7 @@ class Explorar extends Component
         $geoElegida = $unaSola || $this->provincia !== '';
 
         return view('livewire.explorar', [
-            'sitios' => $this->consulta()->with('municipio:id,nombre')->orderByDesc('verificado')->orderBy('nombre')->paginate(24),
+            'sitios' => $this->ordenados()->paginate(24),
             'puntos' => $puntos,
             'provincias' => $provincias,
             'unaSola' => $unaSola,

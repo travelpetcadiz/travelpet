@@ -60,8 +60,12 @@ Antes de crear un estilo nuevo, comprueba si alguno de estos ya sirve.
 - En botones y menú: contorno, `@svg('heroicon-o-map', 'size-5', ['aria-hidden' => 'true'])`.
 - En etiquetas pequeñas (`.sello`): relleno, `heroicon-s-...` con `size-4`.
 - Siempre `aria-hidden="true"`: el texto de al lado ya dice lo que hace.
-- Significados fijos (no los cambies de sentido): `magnifying-glass` buscar · `map` mapa/cómo llegar · `list-bullet` lista · `bookmark` Mi viaje/guardar · `heart` quiero ir (y veterinarios como categoría) · `check` he ido · `phone` llamar/contacto · `flag` avisar de un error · `light-bulb` sugerir · `chat-bubble-left-right` reseñas · `adjustments-horizontal` filtros · `question-mark-circle` ayuda · `pencil-square` editar · `user-plus` crear cuenta · `arrow-right-end-on-rectangle` entrar · `arrow-left-start-on-rectangle` salir.
+- Significados fijos (no los cambies de sentido): `magnifying-glass` buscar · `map` mapa/cómo llegar · `list-bullet` lista · `bookmark` Mi viaje/guardar · `heart` quiero ir (y veterinarios como categoría) · `check` he ido · `phone` llamar/contacto · `flag` avisar de un error · `light-bulb` sugerir · `chat-bubble-left-right` reseñas · `adjustments-horizontal` filtros · `question-mark-circle` ayuda · `pencil-square` editar · `user-plus` crear cuenta · `arrow-right-end-on-rectangle` entrar · `arrow-left-start-on-rectangle` salir · `share` compartir · `map-pin` ubicación y «Cerca de mí» · `calendar-days` fechas y «¿Se puede ir hoy?» · `lifebuoy` urgencias veterinarias · `scale` perros grandes · `banknotes` suplemento · `home` dentro del local · `bolt` sin correa.
 - No uses emojis ni caracteres (✓ ♡ ▾ →) como iconos.
+
+## Datos para filtrar
+
+Los filtros prácticos (perros grandes, sin suplemento, dentro del local, sin correa, urgencias 24 h, «¿Se puede ir hoy?») salen de campos propios del sitio, no del texto. `null` significa «no lo sabemos»: no se muestra ni entra en el filtro. Nunca rellenes uno de estos campos suponiendo; si el texto no lo dice claro, déjalo en `null`.
 
 ## Textos
 

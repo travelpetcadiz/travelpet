@@ -115,6 +115,58 @@ class Ficha extends Component
         RateLimiter::hit($clave, 3600);
     }
 
+    // Tipo de schema.org de cada categoría (lo que entiende Google)
+    private const TIPOS_SCHEMA = [
+        'Alojamiento' => 'LodgingBusiness',
+        'Restauración' => 'Restaurant',
+        'Playa' => 'Beach',
+        'Espacio' => 'Park',
+        'Salud' => 'VeterinaryCare',
+        'Servicios' => 'LocalBusiness',
+        'Transporte y ocio' => 'TouristAttraction',
+    ];
+
+    /**
+     * Datos estructurados (JSON-LD) para buscadores: tipo de sitio, dirección, contacto y si admite mascotas.
+     * En alojamientos se usa petsAllowed; en el resto, amenityFeature, que es lo que admite schema.org.
+     */
+    private function datosEstructurados($resenas): array
+    {
+        $s = $this->sitio;
+        $admite = match ($s->admite_perros) {
+            'si' => true,
+            'no' => false,
+            'condiciones' => $s->esServicio() ? true : trim('Sí, con condiciones. '.implode('. ', array_filter([$s->tamano_maximo, $s->suplemento, $s->zonas_permitidas]))),
+            default => null,
+        };
+        $esAlojamiento = $s->tipo === 'Alojamiento';
+        $web = preg_match('#https?://[^\s;]+#', (string) $s->contacto, $w) ? $w[0] : null;
+
+        return array_filter([
+            '@context' => 'https://schema.org',
+            '@type' => self::TIPOS_SCHEMA[$s->tipo] ?? 'Place',
+            'name' => $s->nombre,
+            'url' => route('sitio', $s),
+            'sameAs' => $web,
+            'telephone' => $s->telefono(),
+            'address' => array_filter([
+                '@type' => 'PostalAddress',
+                'streetAddress' => $s->direccion,
+                'addressLocality' => $s->municipio->nombre,
+                'addressRegion' => $s->municipio->provincia->nombre,
+                'addressCountry' => $s->municipio->provincia->pais,
+            ]),
+            'geo' => $s->latitud ? ['@type' => 'GeoCoordinates', 'latitude' => $s->latitud, 'longitude' => $s->longitud] : null,
+            'petsAllowed' => $esAlojamiento ? $admite : null,
+            'amenityFeature' => ! $esAlojamiento && $admite !== null
+                ? [['@type' => 'LocationFeatureSpecification', 'name' => 'Admite mascotas', 'value' => $admite !== false]]
+                : null,
+            'aggregateRating' => $resenas->isNotEmpty()
+                ? ['@type' => 'AggregateRating', 'ratingValue' => round($resenas->avg('estrellas'), 1), 'reviewCount' => $resenas->count()]
+                : null,
+        ], fn ($v) => $v !== null && $v !== []);
+    }
+
     public function render()
     {
         $s = $this->sitio->loadMissing('municipio.provincia');
@@ -140,16 +192,7 @@ class Ficha extends Component
                 : collect(),
         ])->title("{$s->nombre}, {$lugar}")->layoutData([
             'descripcion' => mb_strimwidth($descripcion, 0, 158, '…'),
-            'jsonLd' => array_filter([
-                '@context' => 'https://schema.org',
-                '@type' => 'Place',
-                'name' => $s->nombre,
-                'address' => trim(($s->direccion ? $s->direccion.', ' : '').$lugar.', '.$s->municipio->provincia->nombre),
-                'geo' => $s->latitud ? ['@type' => 'GeoCoordinates', 'latitude' => $s->latitud, 'longitude' => $s->longitud] : null,
-                'aggregateRating' => $resenas->isNotEmpty()
-                    ? ['@type' => 'AggregateRating', 'ratingValue' => round($resenas->avg('estrellas'), 1), 'reviewCount' => $resenas->count()]
-                    : null,
-            ]),
+            'jsonLd' => $this->datosEstructurados($resenas),
         ]);
     }
 }

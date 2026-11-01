@@ -57,6 +57,57 @@ class SitioForm
                         Textarea::make('zonas_permitidas')->rows(3)->columnSpanFull(),
                         Textarea::make('otras_condiciones')->rows(3)->columnSpanFull(),
                     ]),
+                Section::make('Para los filtros')
+                    ->description('Lo que usan los filtros de la web y los iconos de la ficha. Si no lo sabes seguro, déjalo en «No lo sabemos»: así no sale en un filtro por error.')
+                    ->columnSpanFull()
+                    ->columns(2)
+                    ->schema([
+                        Select::make('admite_grandes')->label('¿Admite perros grandes (más de 25 kg)?')
+                            ->options(['si' => 'Sí', 'no' => 'No'])
+                            ->placeholder('No lo sabemos')
+                            ->formatStateUsing(fn ($state) => $state === null ? null : ($state ? 'si' : 'no'))
+                            ->dehydrateStateUsing(fn ($state) => blank($state) ? null : $state === 'si'),
+                        Select::make('sin_suplemento')->label('¿Es gratis (sin suplemento por la mascota)?')
+                            ->options(['si' => 'Sí', 'no' => 'No'])
+                            ->placeholder('No lo sabemos')
+                            ->formatStateUsing(fn ($state) => $state === null ? null : ($state ? 'si' : 'no'))
+                            ->dehydrateStateUsing(fn ($state) => blank($state) ? null : $state === 'si'),
+                        Select::make('puede_entrar')->label('¿Puede estar dentro del local? (bares y restaurantes)')
+                            ->options(['si' => 'Sí', 'no' => 'No'])
+                            ->placeholder('No lo sabemos')
+                            ->formatStateUsing(fn ($state) => $state === null ? null : ($state ? 'si' : 'no'))
+                            ->dehydrateStateUsing(fn ($state) => blank($state) ? null : $state === 'si'),
+                        Select::make('sin_correa')->label('¿Hay zona para ir sin correa? (parques y playas)')
+                            ->options(['si' => 'Sí', 'no' => 'No'])
+                            ->placeholder('No lo sabemos')
+                            ->formatStateUsing(fn ($state) => $state === null ? null : ($state ? 'si' : 'no'))
+                            ->dehydrateStateUsing(fn ($state) => blank($state) ? null : $state === 'si'),
+                        Toggle::make('urgencias_24h')->label('Urgencias 24 h (veterinarios)')
+                            ->helperText('Sale en «Urgencias veterinarias 24 h» de la portada.'),
+                    ]),
+                Section::make('Fechas en que se puede ir (playas)')
+                    ->description('Con esto la ficha dice «Hoy se puede ir» o «Hoy no». Los días van como día/mes: 01/06 es el 1 de junio.')
+                    ->columnSpanFull()
+                    ->columns(3)
+                    ->schema([
+                        Select::make('periodo_tipo')->label('Cuándo')
+                            ->options(Sitio::PERIODOS)
+                            ->placeholder('No lo sabemos')
+                            ->live(),
+                        TextInput::make('periodo_desde')->label('Desde (día/mes)')
+                            ->placeholder('01/06')
+                            ->regex('#^(\d{2}/\d{2}|ramos)$#')
+                            ->validationMessages(['regex' => 'Escribe el día y el mes así: 01/06. Para el Domingo de Ramos, escribe ramos.'])
+                            ->helperText('Para el Domingo de Ramos, escribe «ramos».')
+                            ->required(fn ($get) => in_array($get('periodo_tipo'), ['solo', 'prohibido'], true))
+                            ->visible(fn ($get) => in_array($get('periodo_tipo'), ['solo', 'prohibido'], true)),
+                        TextInput::make('periodo_hasta')->label('Hasta (día/mes)')
+                            ->placeholder('30/09')
+                            ->regex('#^\d{2}/\d{2}$#')
+                            ->validationMessages(['regex' => 'Escribe el día y el mes así: 30/09.'])
+                            ->required(fn ($get) => in_array($get('periodo_tipo'), ['solo', 'prohibido'], true))
+                            ->visible(fn ($get) => in_array($get('periodo_tipo'), ['solo', 'prohibido'], true)),
+                    ]),
                 Section::make('Comprobación')
                     ->columnSpanFull()
                     ->columns(2)

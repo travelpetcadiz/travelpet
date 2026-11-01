@@ -30,6 +30,12 @@ No necesitas saber nada de programación. Para cada paso pone **qué haces tú**
 - La web carga más rápido en el móvil: el mapa solo se descarga cuando alguien pulsa «Mapa».
 - Una actualización de seguridad aplicada.
 - La sección **Fotos** en el panel, para subir tus fotos reales.
+- **«Cerca de mí»**: ordena por distancia.
+- **«¿Se puede ir hoy?»** en las playas: la ficha dice «Hoy se puede ir» o «Hoy no» según las fechas de cada playa (incluido el Domingo de Ramos de Cádiz, que cambia cada año).
+- **Urgencias veterinarias 24 h** desde la portada (o en https://travelpetcadiz.es/urgencias), con botón para llamar directamente.
+- **Filtros prácticos**: perros grandes, sin suplemento, dentro del local, zona sin correa y playas abiertas hoy.
+- **Compartir** cada sitio y tu «Mi viaje» por WhatsApp.
+- Google ya sabe, en cada ficha, qué tipo de sitio es y si admite mascotas.
 
 ---
 
@@ -81,9 +87,9 @@ Claude lo cambia y lo vuelves a mirar, tantas veces como haga falta.
 
 Claude pasa a la web real lo que hayas aprobado, sin tocar tus datos. Después te pide que eches un vistazo final.
 
-### Paso 5. «Cerca de mí» 🤖 *(lo hace Claude)*
+### Paso 5. «Cerca de mí» ✅ *(hecho)*
 
-Un botón para quien ya está de viaje: ordena los sitios por distancia y muestra «a 800 m», «a 3 km»… La ubicación solo se usa en el móvil de quien lo pulsa: no se guarda.
+Ya está en la web: el botón «Cerca de mí» ordena los sitios por distancia y muestra «a 800 m», «a 3 km»… La ubicación solo se usa en el móvil de quien lo pulsa: no se guarda.
 
 ### Paso 6. Páginas para que te encuentren en Google 🤖 + ✋
 
@@ -108,6 +114,11 @@ Contar cuánta gente busca, llama, pide la ruta o guarda sitios, **sin cookies d
 Que un hotel o un bar pueda reclamar su ficha y confirmar sus datos. Tú decides a quién se le da acceso.
 
 ---
+
+## Dos cosas que puedes completar en el panel ✋
+
+1. **Fechas de las playas.** Ya tienen fechas 14 playas. A las que solo dicen «temporada de verano» (Los Manolos, Santa Clara, Bonanza, El Aculadero…) les falta saber del día tal al día cual. Cuando lo sepas: Panel › Sitios › la playa › «Fechas en que se puede ir».
+2. **Datos para los filtros.** Se rellenaron solos a partir de lo que ya estaba escrito, solo cuando el texto lo decía claro. Lo que no se sabe pone «No lo sabemos» y no sale en los filtros. Cuando confirmes algo con un sitio (si admite perros grandes, si cobra suplemento, si se puede estar dentro…), márcalo en «Para los filtros». En el Historial verás lo que se rellenó solo como «Clasificación automática».
 
 ## Una decisión pendiente para ti ✋
 
@@ -142,7 +153,8 @@ Claude marca aquí lo que se va terminando.
 - [ ] Paso 2. Bocetos
 - [ ] Paso 3. Revisión de bocetos
 - [ ] Paso 4. Diseño nuevo en la web
-- [ ] Paso 5. «Cerca de mí»
+- [x] Paso 5. «Cerca de mí»
+- [x] «¿Se puede ir hoy?» en playas, urgencias 24 h, filtros prácticos, compartir y datos para Google
 - [ ] Paso 6. Páginas para Google
 - [ ] Paso 7. Participación
 - [ ] Paso 8. Revisión escalonada de datos

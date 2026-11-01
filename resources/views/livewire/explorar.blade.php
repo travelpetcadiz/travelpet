@@ -1,11 +1,14 @@
 @php
     use App\Models\Sitio;
-    $hayFiltros = $q !== '' || $tipo !== '' || $provincia !== '' || $comarca !== '' || $municipio !== '' || $admite !== '' || $verificados;
+    $practicos = ['grandes' => 'Admiten perros grandes (más de 25 kg)', 'gratis' => 'Sin suplemento por la mascota', 'dentro' => 'Puede estar dentro del local, no solo en la terraza', 'suelto' => 'Tiene zona para ir sin correa', 'hoy' => 'Playas a las que se puede ir hoy'];
+    $nPracticos = collect(array_keys($practicos))->filter(fn ($k) => $this->{$k})->count();
+    $hayFiltros = $q !== '' || $tipo !== '' || $provincia !== '' || $comarca !== '' || $municipio !== '' || $admite !== '' || $verificados || $nPracticos || $urgencias;
+    $distancia = fn ($km) => ($km = (float) $km) < 1 ? 'a '.(round($km * 10) * 100).' m' : 'a '.number_format($km, $km < 10 ? 1 : 0, ',', '.').' km';
 @endphp
 <div>
     @php
         // Filtros secundarios: van plegados para que en el móvil se vean los resultados
-        $extra = ($provincia !== '') + ($comarca !== '') + ($municipio !== '') + ($admite !== '') + (int) $verificados;
+        $extra = ($provincia !== '') + ($comarca !== '') + ($municipio !== '') + ($admite !== '') + (int) $verificados + $nPracticos;
         // En la portada las categorías van como accesos grandes; la fila de botones solo aparece al buscar
         $portada = ! $hayFiltros && $sitios->onFirstPage() && $vista === 'lista';
         $zona = $unaSola ? $provincias->first()->nombre : null;
@@ -42,6 +45,10 @@
                                 </button>
                             @endforeach
                         </p>
+                        <a href="{{ route('urgencias') }}" wire:navigate class="flex min-h-12 items-center gap-3 rounded-2xl border border-mal/30 bg-mal-suave px-4 py-2 font-bold text-mal no-underline hover:border-mal">
+                            @svg('heroicon-o-lifebuoy', 'size-6 flex-none', ['aria-hidden' => 'true'])
+                            <span class="leading-tight">Urgencias veterinarias 24 h<span class="block text-sm font-normal">Las más cercanas a ti</span></span>
+                        </a>
                     </div>
                 </div>
                 {{-- Foto vertical: al lado del texto en escritorio, banda recortada por arriba en móvil --}}
@@ -54,6 +61,21 @@
     {{-- Buscador y filtros: fijo solo lo imprescindible (buscar, lista/mapa y categorías) --}}
     <section x-data="{ filtros: false }" class="sticky top-[57px] z-20 border-b border-linea bg-white">
         <div class="mx-auto grid max-w-6xl gap-3 px-4 py-3">
+            {{-- Ubicación: el navegador la pide al pulsar y solo se usa para ordenar, no se guarda --}}
+            <div x-data="{
+                    estado: '',
+                    ubicar() {
+                        if (! navigator.geolocation) { this.estado = 'error'; return; }
+                        this.estado = 'buscando';
+                        navigator.geolocation.getCurrentPosition(
+                            p => { this.estado = ''; $wire.cerca(p.coords.latitude, p.coords.longitude); },
+                            () => { this.estado = 'error'; },
+                            { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 },
+                        );
+                    },
+                 }"
+                 @if ($urgencias && $lat === null) x-init="ubicar()" @endif
+                 class="grid gap-3">
             <div class="flex gap-2">
                 <label for="q" class="sr-only">Buscar</label>
                 <div class="relative flex-1">
@@ -79,6 +101,20 @@
                 @endforeach
             </div>
             @endunless
+
+            <div class="flex flex-wrap items-center gap-2">
+                @if ($lat === null)
+                    <button type="button" @click="ubicar()" :disabled="estado === 'buscando'" class="btn min-h-10 py-1.5">
+                        @svg('heroicon-o-map-pin', 'size-5', ['aria-hidden' => 'true'])
+                        <span x-text="estado === 'buscando' ? 'Buscando dónde estás…' : 'Cerca de mí'">Cerca de mí</span>
+                    </button>
+                @else
+                    <span class="sello bg-pino-suave px-3 py-2 text-sm text-pino">@svg('heroicon-s-map-pin', 'size-4', ['aria-hidden' => 'true'])Ordenado por cercanía</span>
+                    <button type="button" wire:click="sinUbicacion" class="inline-flex items-center gap-1 text-sm font-bold text-pino underline">@svg('heroicon-m-x-mark', 'size-4', ['aria-hidden' => 'true'])Quitar</button>
+                @endif
+                <p x-show="estado === 'error'" x-cloak class="text-sm text-mal" role="alert">No hemos podido saber dónde estás. Activa la ubicación en el móvil o busca un pueblo.</p>
+            </div>
+            </div>
 
             <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-gris" aria-live="polite">
                 <button type="button" @click="filtros = !filtros" :aria-expanded="filtros" aria-controls="mas-filtros"
@@ -129,6 +165,16 @@
                     <input type="checkbox" wire:model.live="verificados" class="size-5 accent-pino">
                     Solo confirmados por el sitio
                 </label>
+                <fieldset class="grid gap-2 sm:col-span-4 sm:grid-cols-2 lg:grid-cols-3">
+                    <legend class="etiqueta">Lo que necesitas</legend>
+                    @foreach ($practicos as $campo => $texto)
+                        <label class="flex min-h-11 items-center gap-2 rounded-xl border border-linea bg-white px-3 py-2 leading-tight">
+                            <input type="checkbox" wire:model.live="{{ $campo }}" class="size-5 flex-none accent-pino">
+                            {{ $texto }}
+                        </label>
+                    @endforeach
+                    <p class="text-sm text-gris sm:col-span-full">Solo salen los sitios donde lo sabemos seguro. Si falta alguno, puede que aún no lo hayamos comprobado.</p>
+                </fieldset>
             </div>
         </div>
     </section>
@@ -146,6 +192,15 @@
 
     @if ($vista === 'lista')
         <section class="mx-auto max-w-6xl px-4 py-6">
+            @if ($urgencias)
+                <div class="mb-4 flex gap-3 rounded-2xl border-2 border-mal bg-mal-suave p-4 text-mal" role="note">
+                    @svg('heroicon-o-lifebuoy', 'size-7 flex-none', ['aria-hidden' => 'true'])
+                    <div>
+                        <h1 class="font-display text-xl font-extrabold">Urgencias veterinarias 24 h</h1>
+                        <p class="mt-1 text-tinta">Llama antes de ir para que te esperen. {{ $lat === null ? 'Pulsa «Cerca de mí» para ver primero las más cercanas.' : 'Están ordenadas de la más cercana a la más lejana.' }}</p>
+                    </div>
+                </div>
+            @endif
             @if ($sitios->isEmpty())
                 <div class="tarjeta mx-auto max-w-lg p-8 text-center">
                     <p class="text-lg font-bold">No hay sitios con estos filtros.</p>
@@ -159,8 +214,8 @@
                 <p class="mb-3 text-sm leading-7 text-gris"><x-confirmado class="mr-1 align-middle" />nos lo ha dicho el propio sitio. Lo demás, confírmalo antes de ir.</p>
                 <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($sitios as $s)
-                        <li wire:key="s-{{ $s->id }}">
-                            <a href="{{ route('sitio', $s) }}" wire:navigate class="tarjeta flex h-full flex-col gap-2 p-4 no-underline transition hover:border-gris hover:shadow-sm">
+                        <li wire:key="s-{{ $s->id }}" class="flex flex-col">
+                            <a href="{{ route('sitio', $s) }}" wire:navigate class="tarjeta flex flex-1 flex-col gap-2 p-4 no-underline transition hover:border-gris hover:shadow-sm">
                                 <span class="flex flex-wrap gap-1.5">
                                     {{-- En veterinarios y servicios para mascotas se da por hecho que admiten mascotas --}}
                                     @if (! $s->esServicio() || $s->admite_perros === 'no')
@@ -169,18 +224,31 @@
                                     @if ($s->verificado)
                                         <x-confirmado class="px-2.5 py-1 text-sm" />
                                     @endif
+                                    @if ($s->urgencias_24h)
+                                        <span class="sello bg-mal-suave px-2.5 py-1 text-sm text-mal">@svg('heroicon-s-lifebuoy', 'size-4', ['aria-hidden' => 'true'])Urgencias 24 h</span>
+                                    @endif
+                                    @if ($estadoHoy = $s->hoy())
+                                        <span class="sello px-2.5 py-1 text-sm {{ $estadoHoy['puede'] ? 'bg-ok-suave text-ok' : 'bg-mal-suave text-mal' }}">@svg('heroicon-s-calendar-days', 'size-4', ['aria-hidden' => 'true']){{ $estadoHoy['puede'] ? 'Hoy sí' : 'Hoy no' }}</span>
+                                    @endif
                                 </span>
                                 <h2 class="text-lg font-semibold leading-snug">{{ $s->nombre }}</h2>
                                 <span class="flex items-center gap-2 text-sm text-gris">
                                     <x-icono-tipo :tipo="$s->tipo" />
                                     {{ $s->subtipo ?: $s->etiquetaTipo() }}, {{ $s->municipio->nombre }}
                                 </span>
+                                @if (isset($s->distancia_km))
+                                    <span class="flex items-center gap-2 text-sm font-bold text-pino">@svg('heroicon-o-map-pin', 'size-4 flex-none', ['aria-hidden' => 'true']){{ $distancia($s->distancia_km) }}</span>
+                                @endif
                                 @if ($s->esServicio() && $s->temporada)
                                     <p class="flex items-start gap-2 text-sm text-gris">@svg('heroicon-o-clock', 'mt-0.5 size-4 flex-none', ['aria-hidden' => 'true'])<span class="line-clamp-2">{{ $s->temporada }}</span></p>
                                 @elseif ($s->otras_condiciones || $s->zonas_permitidas)
                                     <p class="line-clamp-2 text-sm text-gris">{{ $s->zonas_permitidas ?: $s->otras_condiciones }}</p>
                                 @endif
                             </a>
+                            {{-- En una urgencia lo primero es llamar: sin tener que abrir la ficha --}}
+                            @if ($s->urgencias_24h && ($tel = $s->telefonoUrgencias()))
+                                <a href="tel:{{ $tel }}" class="btn btn-pri mt-2 w-full">@svg('heroicon-o-phone', 'size-5', ['aria-hidden' => 'true'])Llamar a urgencias</a>
+                            @endif
                         </li>
                     @endforeach
                 </ul>

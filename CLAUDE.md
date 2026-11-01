@@ -197,6 +197,7 @@ Varias personas (y varios asistentes) cambian este repositorio: Natalia con Clau
 - `provincias` → `municipios` → `sitios`. Una provincia con `activa = false` no sale en la web.
 - Editar un sitio guarda cada campo cambiado en `cambios` (observer en `Sitio`). Las importaciones usan `saveQuietly()` para no ensuciar el historial.
 - Reseñas y sugerencias entran como `pendiente` y se moderan en el panel.
+- Campos para filtrar (`admite_grandes`, `sin_suplemento`, `puede_entrar`, `sin_correa`): `null` = no lo sabemos y no sale en el filtro. `urgencias_24h` para veterinarios. Playas: `periodo_tipo` (todo | solo | prohibido) con `periodo_desde`/`periodo_hasta` en DD/MM o `ramos`; `Sitio::hoy()` dice si hoy se puede ir.
 
 ## Cambiar datos desde el repositorio (migraciones de datos)
 Natalia gestiona el día a día en el panel. Cuando pida cambios de datos a Claude (corregir sitios, añadir varios a la vez, ocultar uno), se hacen con una **migración** que usa `App\Support\DatosGuia`; al llegar a `main` se aplica sola en producción (`migrate --force` al desplegar).
@@ -237,7 +238,7 @@ public function up(): void
 ## Comandos
 - `php artisan travelpet:importar [archivo] --provincia=Cádiz` importa un `datos.json` con el formato de la web estática.
 - `php artisan travelpet:admin email@x.com [--rol=editor]` crea un admin/editor o cambia el rol de uno existente.
-- `php artisan test` (29 tests). Tienen que pasar: si fallan, el despliegue no se publica.
+- `php artisan test`. Tienen que pasar: si fallan, el despliegue no se publica.
 
 ## Despliegue
 - `docker compose up -d --build` → contenedor `travelpet_app` (FrankenPHP) en `127.0.0.1:8070`. Migra e importa (si está vacío) al arrancar.
