@@ -6,38 +6,42 @@
     @php
         // Filtros secundarios: van plegados para que en el móvil se vean los resultados
         $extra = ($provincia !== '') + ($comarca !== '') + ($municipio !== '') + ($admite !== '') + (int) $verificados;
-        $atajos = [
-            'Alojamiento' => 'Dormir',
-            'Restauración' => 'Comer y beber',
-            'Playa' => 'Playas',
-            'Espacio' => 'Parques',
-            'Salud' => 'Veterinarios',
-            'Servicios' => 'Servicios para perros',
-        ];
+        // En la portada las categorías van como accesos grandes; la fila de botones solo aparece al buscar
+        $portada = ! $hayFiltros && $sitios->onFirstPage() && $vista === 'lista';
         $zona = $unaSola ? $provincias->first()->nombre : null;
     @endphp
 
-    @if (! $hayFiltros && $sitios->onFirstPage() && $vista === 'lista')
+    @if ($portada)
         <section class="bg-pino-suave">
             <div class="mx-auto grid max-w-6xl items-center gap-6 px-4 pb-6 pt-5 md:grid-cols-[minmax(0,1fr)_300px] md:gap-10 md:py-10">
                 <div class="grid gap-4">
                     <div>
-                        <h1 class="text-4xl font-extrabold leading-tight text-tinta sm:text-5xl">¿Puedo ir con mi perro?</h1>
+                        <h1 class="text-4xl font-extrabold leading-tight text-tinta sm:text-5xl">¿Puedo ir con mi mascota?</h1>
                         <p class="mt-2 max-w-xl text-lg text-gris">
-                            Busca un hotel, un bar, una playa o un parque{{ $zona ? ' de '.$zona : '' }} y mira si admiten perros y con qué condiciones.
+                            Busca un hotel, un bar, una playa o un parque{{ $zona ? ' de '.$zona : '' }} y mira si admiten mascotas y con qué condiciones.
                         </p>
                         <a href="{{ route('como-funciona') }}" wire:navigate class="mt-2 inline-flex items-center gap-1.5 font-bold text-pino underline">
                             @svg('heroicon-o-question-mark-circle', 'size-5', ['aria-hidden' => 'true'])¿Primera vez? Así funciona
                         </a>
                     </div>
-                    <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                        @foreach ($atajos as $clave => $texto)
-                            <button type="button" wire:click="$set('tipo', @js($clave))"
-                                class="flex min-h-14 items-center gap-3 rounded-2xl border border-linea bg-white px-4 py-3 text-left font-bold hover:border-pino">
-                                <span class="grid size-9 flex-none place-items-center rounded-xl bg-cal"><x-icono-tipo :tipo="$clave" class="size-5" /></span>
-                                <span class="leading-tight">{{ $texto }}<span class="block text-sm font-normal text-gris">{{ $conteoTipos[$clave] ?? 0 }} sitios</span></span>
-                            </button>
-                        @endforeach
+                    <div class="grid gap-3">
+                        <div class="grid grid-cols-2 gap-2">
+                            @foreach (Sitio::PRINCIPALES as $clave)
+                                <button type="button" wire:click="$set('tipo', @js($clave))"
+                                    class="flex min-h-16 items-center gap-3 rounded-2xl border border-linea bg-white px-4 py-3 text-left font-bold hover:border-pino">
+                                    <span class="grid size-10 flex-none place-items-center rounded-xl bg-cal"><x-icono-tipo :tipo="$clave" class="size-6" /></span>
+                                    <span class="leading-tight">{{ Sitio::TIPOS[$clave][0] }}<span class="block text-sm font-normal text-gris">{{ $conteoTipos[$clave] ?? 0 }} sitios</span></span>
+                                </button>
+                            @endforeach
+                        </div>
+                        <p class="flex flex-wrap items-center gap-x-1 gap-y-2 text-sm text-gris">
+                            <span class="mr-1">También:</span>
+                            @foreach (array_diff(array_keys(Sitio::TIPOS), Sitio::PRINCIPALES) as $clave)
+                                <button type="button" wire:click="$set('tipo', @js($clave))" class="chip min-h-9 py-1">
+                                    <x-icono-tipo :tipo="$clave" />{{ Sitio::TIPOS[$clave][0] }}
+                                </button>
+                            @endforeach
+                        </p>
                     </div>
                 </div>
                 {{-- Foto vertical: al lado del texto en escritorio, banda recortada por arriba en móvil --}}
@@ -64,6 +68,7 @@
                 </div>
             </div>
 
+            @unless ($portada)
             <div class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:overflow-visible md:px-0">
                 <button type="button" class="chip" wire:click="$set('tipo', '')" aria-pressed="{{ $tipo === '' ? 'true' : 'false' }}">Todo</button>
                 @foreach (Sitio::TIPOS as $clave => [$etiqueta])
@@ -73,6 +78,7 @@
                     </button>
                 @endforeach
             </div>
+            @endunless
 
             <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-gris" aria-live="polite">
                 <button type="button" @click="filtros = !filtros" :aria-expanded="filtros" aria-controls="mas-filtros"
@@ -113,11 +119,11 @@
                         @endforeach
                     </select>
                 @endif
-                <select wire:model.live="admite" class="campo" aria-label="Admite perros">
-                    <option value="">Admitan o no perros</option>
-                    <option value="si">Admiten perros</option>
+                <select wire:model.live="admite" class="campo" aria-label="Admite mascotas">
+                    <option value="">Admitan o no mascotas</option>
+                    <option value="si">Admiten mascotas</option>
                     <option value="condiciones">Admiten, con condiciones</option>
-                    <option value="no">No admiten perros</option>
+                    <option value="no">No admiten mascotas</option>
                 </select>
                 <label class="flex min-h-11 items-center gap-2 rounded-xl border border-linea bg-white px-3 font-bold">
                     <input type="checkbox" wire:model.live="verificados" class="size-5 accent-pino">
@@ -156,7 +162,7 @@
                         <li wire:key="s-{{ $s->id }}">
                             <a href="{{ route('sitio', $s) }}" wire:navigate class="tarjeta flex h-full flex-col gap-2 p-4 no-underline transition hover:border-gris hover:shadow-sm">
                                 <span class="flex flex-wrap gap-1.5">
-                                    {{-- En veterinarios y servicios para perros se da por hecho que admiten perros --}}
+                                    {{-- En veterinarios y servicios para mascotas se da por hecho que admiten mascotas --}}
                                     @if (! $s->esServicio() || $s->admite_perros === 'no')
                                         <x-admite :valor="$s->admite_perros" class="px-2.5 py-1 text-sm" />
                                     @endif

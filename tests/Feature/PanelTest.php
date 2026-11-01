@@ -29,6 +29,7 @@ class PanelTest extends TestCase
         return [
             ['/admin'], ['/admin/sitios'], ['/admin/sitios/create'], ['/admin/resenas'], ['/admin/sugerencias'],
             ['/admin/cambios'], ['/admin/municipios'], ['/admin/users'], ['/admin/provincias'],
+            ['/admin/fotos'], ['/admin/fotos/create'], ['/mockup'],
         ];
     }
 
@@ -54,6 +55,15 @@ class PanelTest extends TestCase
         $this->actingAs($editor)->get('/admin/resenas')->assertOk();
         $this->actingAs($editor)->get('/admin/users')->assertForbidden();
         $this->actingAs($editor)->get('/admin/provincias')->assertForbidden();
+    }
+
+    public function test_los_bocetos_solo_los_ve_el_equipo(): void
+    {
+        $this->get('/mockup')->assertRedirect('/entrar');
+        $this->actingAs(User::factory()->create())->get('/mockup')->assertForbidden();
+        $this->actingAs(User::factory()->editor()->create())->get('/mockup')->assertOk()->assertSee('noindex', false);
+        $this->get('/mockup/no-existe')->assertNotFound();
+        $this->get('/mockup/..%2Findex')->assertNotFound();
     }
 
     public function test_un_usuario_normal_no_entra_al_panel(): void

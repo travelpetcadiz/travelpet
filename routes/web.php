@@ -27,6 +27,14 @@ Route::middleware('auth')->group(function () {
     Route::livewire('/mi-viaje', MiViaje::class)->name('viaje');
     Route::livewire('/sugerir', Sugerir::class)->name('sugerir');
 
+    // Bocetos del rediseño: solo el equipo (admin y editores)
+    Route::get('/mockup/{pantalla?}', function (string $pantalla = 'index') {
+        abort_unless(auth()->user()->isStaff(), 403);
+        abort_unless(preg_match('/^[a-z0-9-]+$/', $pantalla) && view()->exists("mockup.{$pantalla}"), 404);
+
+        return view("mockup.{$pantalla}");
+    })->name('mockup');
+
     Route::post('/salir', function (Request $request) {
         Auth::logout();
         $request->session()->invalidate();

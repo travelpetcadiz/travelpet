@@ -42,6 +42,7 @@ class WebTest extends TestCase
             $this->get($url)->assertOk();
         }
         $this->get('/mi-viaje')->assertRedirect('/entrar');
+        $this->get('/')->assertSee('¿Puedo ir con mi mascota?')->assertDontSee('mi perro');
     }
 
     public function test_explorar_filtra_por_provincia_y_oculta_lo_no_publicado(): void

@@ -1,4 +1,5 @@
 User-agent: *
 Disallow: /admin
+Disallow: /mockup
 
 Sitemap: https://travelpetcadiz.es/sitemap.xml

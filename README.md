@@ -1,6 +1,6 @@
 # TravelPet
 
-Guía gratuita de sitios que admiten perros. Web: https://travelpetcadiz.es
+Guía gratuita de sitios que admiten mascotas. Web: https://travelpetcadiz.es
 
 La versión estática anterior (index.html + datos.json en Netlify) está guardada en la etiqueta y la rama `web-estatica`.
 

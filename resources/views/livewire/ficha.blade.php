@@ -1,7 +1,7 @@
 @php
     use App\Models\Resena;
     $s = $sitio;
-    // Veterinarios y servicios para perros: no se dice si "admiten perros" y la temporada es su horario
+    // Veterinarios y servicios para mascotas: no se dice si "admiten mascotas" y la temporada es su horario
     $servicio = $s->esServicio() && $s->admite_perros !== 'no';
     $datos = $servicio ? [
         'Horario' => $s->temporada,
@@ -25,10 +25,10 @@
     $telefono = preg_match('/(?:\+34[\s.]?)?([6789](?:[\s.]?\d){8})/', (string) $s->contacto, $m) ? preg_replace('/\D/', '', $m[1]) : null;
     $respuesta = match (true) {
         $servicio => ['bg-white text-tinta border-linea', $s->subtipo ?: $s->etiquetaTipo(), $s->icono()],
-        $s->admite_perros === 'si' => ['bg-ok-suave text-ok border-ok', 'Sí, admite perros', 'check-circle'],
-        $s->admite_perros === 'condiciones' => ['bg-aviso-suave text-aviso border-aviso', 'Admite perros, con condiciones', 'exclamation-triangle'],
-        $s->admite_perros === 'no' => ['bg-mal-suave text-mal border-mal', 'No admite perros', 'no-symbol'],
-        default => ['bg-cal text-gris border-linea', 'Aún no sabemos si admite perros', 'question-mark-circle'],
+        $s->admite_perros === 'si' => ['bg-ok-suave text-ok border-ok', 'Sí, admite mascotas', 'check-circle'],
+        $s->admite_perros === 'condiciones' => ['bg-aviso-suave text-aviso border-aviso', 'Admite mascotas, con condiciones', 'exclamation-triangle'],
+        $s->admite_perros === 'no' => ['bg-mal-suave text-mal border-mal', 'No admite mascotas', 'no-symbol'],
+        default => ['bg-cal text-gris border-linea', 'Aún no sabemos si admite mascotas', 'question-mark-circle'],
     };
 @endphp
 <div class="mx-auto max-w-6xl px-4 py-6">
@@ -121,7 +121,7 @@
                         </div>
                         <p class="mt-1 text-sm">
                             @if ($r->pudo_entrar === 'si')
-                                <span class="sello bg-ok-suave text-ok">@svg('heroicon-s-check-circle', 'size-4', ['aria-hidden' => 'true'])Entró con su perro</span>
+                                <span class="sello bg-ok-suave text-ok">@svg('heroicon-s-check-circle', 'size-4', ['aria-hidden' => 'true'])Entró con su mascota</span>
                             @else
                                 <span class="sello bg-mal-suave text-mal">@svg('heroicon-s-no-symbol', 'size-4', ['aria-hidden' => 'true'])No le dejaron entrar</span>
                             @endif
@@ -130,7 +130,7 @@
                         <p class="mt-2 whitespace-pre-line">{{ $r->texto }}</p>
                     </article>
                 @empty
-                    <p class="text-gris">Todavía no hay reseñas. ¿Has estado con tu perro? Cuéntalo.</p>
+                    <p class="text-gris">Todavía no hay reseñas. ¿Has estado con tu mascota? Cuéntalo.</p>
                 @endforelse
 
                 @if (session('resena'))
@@ -156,14 +156,14 @@
                         </fieldset>
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div>
-                                <label for="pudo" class="etiqueta">¿Pudiste entrar con tu perro?</label>
+                                <label for="pudo" class="etiqueta">¿Pudiste entrar con tu mascota?</label>
                                 <select id="pudo" wire:model="pudo_entrar" class="campo">
                                     <option value="si">Sí</option>
                                     <option value="no">No</option>
                                 </select>
                             </div>
                             <div>
-                                <label for="tam" class="etiqueta">Tamaño de tu perro</label>
+                                <label for="tam" class="etiqueta">Tamaño de tu mascota</label>
                                 <select id="tam" wire:model="tamano_perro" class="campo">
                                     <option value="">Prefiero no decirlo</option>
                                     @foreach (Resena::TAMANOS as $k => $v)
@@ -193,7 +193,7 @@
 
             <div class="tarjeta grid gap-2 p-4">
                 <h2 class="flex items-center gap-2 font-bold">@svg('heroicon-o-bookmark', 'size-5 text-pino', ['aria-hidden' => 'true'])Mi viaje</h2>
-                <p class="text-sm text-gris">Apunta los sitios a los que quieres ir y los que ya has visitado con tu perro.</p>
+                <p class="text-sm text-gris">Apunta los sitios a los que quieres ir y los que ya has visitado con tu mascota.</p>
                 @auth
                     <div class="grid grid-cols-2 gap-2">
                         <button type="button" wire:click="alternarViaje('quiero')" class="btn {{ $enViaje === 'quiero' ? 'btn-pri' : '' }}" aria-pressed="{{ $enViaje === 'quiero' ? 'true' : 'false' }}">@svg('heroicon-o-heart', 'size-5', ['aria-hidden' => 'true'])Quiero ir</button>
@@ -212,7 +212,7 @@
                     @if ($mostrarError)
                         <form wire:submit="reportarError" class="grid gap-2">
                             <label for="err" class="etiqueta">¿Qué dato está mal?</label>
-                            <textarea id="err" wire:model="error_mensaje" rows="3" class="campo" placeholder="Por ejemplo: ya no admiten perros en la terraza"></textarea>
+                            <textarea id="err" wire:model="error_mensaje" rows="3" class="campo" placeholder="Por ejemplo: ya no admiten mascotas en la terraza"></textarea>
                             @error('error_mensaje') <p class="error">{{ $message }}</p> @enderror
                             <div class="flex gap-2">
                                 <button class="btn btn-pri">@svg('heroicon-o-paper-airplane', 'size-5', ['aria-hidden' => 'true'])Enviar aviso</button>

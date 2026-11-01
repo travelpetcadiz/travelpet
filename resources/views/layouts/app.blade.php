@@ -1,7 +1,7 @@
 @php
     $marca = config('app.name');
-    $titulo = isset($title) ? $title.' · '.$marca : $marca.' · Guía para viajar con perro';
-    $descripcion ??= 'Guía gratuita de sitios pet-friendly: alojamientos, restaurantes, playas, parques y servicios que admiten perros, con sus condiciones y de dónde sale cada dato.';
+    $titulo = isset($title) ? $title.' · '.$marca : $marca.' · Guía para viajar con mascota';
+    $descripcion ??= 'Guía gratuita de sitios pet-friendly: alojamientos, restaurantes, playas, parques y servicios que admiten mascotas, con sus condiciones y de dónde sale cada dato.';
 @endphp
 <!DOCTYPE html>
 <html lang="es">
@@ -12,6 +12,9 @@
     <title>{{ $titulo }}</title>
     <meta name="description" content="{{ $descripcion }}">
     <link rel="canonical" href="{{ url()->current() }}">
+    @if ($noindex ?? false)
+        <meta name="robots" content="noindex, nofollow">
+    @endif
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="{{ $marca }}">
     <meta property="og:locale" content="es_ES">

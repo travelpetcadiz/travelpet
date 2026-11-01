@@ -46,11 +46,11 @@ class SitioForm
                             ->helperText('Separa varios con punto y coma. Las direcciones que empiezan por https:// salen como enlace.')
                             ->columnSpanFull(),
                     ]),
-                Section::make('Condiciones para perros')
+                Section::make('Condiciones para mascotas')
                     ->columnSpanFull()
                     ->columns(2)
                     ->schema([
-                        Select::make('admite_perros')->label('¿Admite perros?')->options(Sitio::ADMITE)->required()->default('no_consta'),
+                        Select::make('admite_perros')->label('¿Admite mascotas?')->options(Sitio::ADMITE)->required()->default('no_consta'),
                         TextInput::make('tamano_maximo')->label('Tamaño o peso máximo'),
                         TextInput::make('suplemento')->label('Suplemento (€)'),
                         TextInput::make('temporada'),

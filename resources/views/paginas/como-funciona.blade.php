@@ -2,15 +2,15 @@
     $ic = fn (string $n, string $c = 'size-6') => svg('heroicon-o-'.$n, $c.' flex-none text-pino', ['aria-hidden' => 'true'])->toHtml();
     $pasos = [
         ['magnifying-glass', 'Busca', 'Escribe un pueblo o el nombre de un sitio, o toca una categoría: dormir, comer, playas, parques… Puedes verlo en lista o en el mapa.'],
-        ['check-circle', 'Mira la respuesta', 'Cada sitio dice primero si admite perros y, debajo, las condiciones que conocemos: tamaño máximo, suplemento, zonas donde puede estar…'],
+        ['check-circle', 'Mira la respuesta', 'Cada sitio dice primero si admite mascotas y, debajo, las condiciones que conocemos: tamaño máximo, suplemento, zonas donde puede estar…'],
         ['phone', 'Confírmalo y ve', 'Desde la ficha puedes llamar o abrir la ruta en el mapa. Si algo no lo sabemos, te lo decimos para que lo preguntes al reservar.'],
     ];
 @endphp
-@component('layouts.app', ['title' => 'Cómo funciona', 'descripcion' => 'Cómo buscar sitios que admiten perros, qué significa cada etiqueta y qué puedes hacer con una cuenta gratuita.'])
+@component('layouts.app', ['title' => 'Cómo funciona', 'descripcion' => 'Cómo buscar sitios que admiten mascotas, qué significa cada etiqueta y qué puedes hacer con una cuenta gratuita.'])
     <div class="mx-auto grid max-w-3xl gap-10 px-4 py-8">
         <header>
             <h1 class="text-3xl font-extrabold sm:text-4xl">Cómo funciona</h1>
-            <p class="mt-2 text-lg text-gris">Una guía para saber, antes de ir, si puedes entrar con tu perro y en qué condiciones.</p>
+            <p class="mt-2 text-lg text-gris">Una guía para saber, antes de ir, si puedes entrar con tu mascota y en qué condiciones.</p>
         </header>
 
         <section aria-labelledby="pasos">
@@ -33,9 +33,9 @@
             <h2 id="etiquetas" class="mb-4 text-2xl font-bold">Qué significa cada etiqueta</h2>
             <dl class="tarjeta divide-y divide-linea">
                 @foreach ([
-                    ['si', 'Puedes ir con tu perro.'],
+                    ['si', 'Puedes ir con tu mascota.'],
                     ['condiciones', 'Puedes ir, pero hay algo que tener en cuenta: un tamaño máximo, un suplemento o zonas a las que no puede pasar. Lo verás en la ficha.'],
-                    ['no', 'No dejan entrar con perros.'],
+                    ['no', 'No dejan entrar con mascotas.'],
                     ['no_consta', 'Todavía no lo sabemos. Pregunta antes de ir y, si te enteras, avísanos.'],
                 ] as [$valor, $texto])
                     <div class="grid gap-1 p-4 sm:grid-cols-[220px_1fr] sm:gap-4">
@@ -48,7 +48,7 @@
                     <dd class="text-gris">Nos lo ha dicho el propio sitio. Si no aparece, el dato sale de su web, de su ayuntamiento o de otras guías, y conviene confirmarlo.</dd>
                 </div>
             </dl>
-            <p class="mt-3 flex items-start gap-2 text-sm text-gris">{!! $ic('heart', 'mt-0.5 size-4') !!}En veterinarios, peluquerías y otros servicios para perros no ponemos etiqueta: ahí tu perro siempre es bienvenido. En su lugar verás el horario.</p>
+            <p class="mt-3 flex items-start gap-2 text-sm text-gris">{!! $ic('heart', 'mt-0.5 size-4') !!}En veterinarios, peluquerías y otros servicios para mascotas no ponemos etiqueta: ahí tu mascota siempre es bienvenida. En su lugar verás el horario.</p>
         </section>
 
         <section aria-labelledby="cuenta">

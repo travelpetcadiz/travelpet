@@ -58,7 +58,7 @@ class SitiosTable
                     ->relationship('municipio', 'nombre')
                     ->searchable()
                     ->preload(),
-                SelectFilter::make('admite_perros')->label('Admite perros')->options(Sitio::ADMITE),
+                SelectFilter::make('admite_perros')->label('Admite mascotas')->options(Sitio::ADMITE),
                 TernaryFilter::make('verificado'),
                 TernaryFilter::make('publicado'),
                 Filter::make('sin_coordenadas')

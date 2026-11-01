@@ -1,6 +1,6 @@
 <div class="mx-auto max-w-xl px-4 py-8">
     <h1 class="text-3xl font-extrabold">Sugerir un sitio</h1>
-    <p class="mt-1 text-gris">¿Conoces un sitio que admite perros y no está en la guía? Cuéntanos lo que sepas y lo comprobaremos antes de publicarlo.</p>
+    <p class="mt-1 text-gris">¿Conoces un sitio que admite mascotas y no está en la guía? Cuéntanos lo que sepas y lo comprobaremos antes de publicarlo.</p>
 
     @if ($enviado)
         <p class="mt-6 rounded-xl bg-ok-suave p-4 text-ok" role="status">¡Gracias! Hemos recibido tu sugerencia. <button type="button" wire:click="$set('enviado', false)" class="font-bold underline">Sugerir otro</button></p>
@@ -32,7 +32,7 @@
             </div>
             <div>
                 <label for="mensaje" class="etiqueta">¿Qué sabes de él?</label>
-                <textarea id="mensaje" wire:model="mensaje" rows="5" class="campo" placeholder="Qué tipo de sitio es, si admite perros grandes, si hay que pagar suplemento, web o teléfono…"></textarea>
+                <textarea id="mensaje" wire:model="mensaje" rows="5" class="campo" placeholder="Qué tipo de sitio es, qué animales admite y de qué tamaño, si hay que pagar suplemento, web o teléfono…"></textarea>
                 @error('mensaje') <p class="error">{{ $message }}</p> @enderror
             </div>
             <button class="btn btn-pri justify-self-start" wire:loading.attr="disabled">Enviar sugerencia</button>

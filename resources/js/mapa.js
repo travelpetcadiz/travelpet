@@ -10,9 +10,18 @@ document.addEventListener('alpine:init', () => {
         geojson: null,
         listo: false,
         encuadrado: false,
+        cargando: false,
         pendientes: puntosIniciales,
 
-        async init() {
+        // El motor del mapa (~1 MB) solo se descarga la primera vez que se abre la vista de mapa
+        init() {
+            if (this.$wire.vista === 'mapa') this.arrancar();
+            this.$wire.$watch('vista', vista => vista === 'mapa' && this.arrancar());
+        },
+
+        async arrancar() {
+            if (this.cargando) return;
+            this.cargando = true;
             const { maplibregl, crearMapa, geojson } = await motor();
             this.geojson = geojson;
             this.map = crearMapa(this.$refs.mapa, cfg);

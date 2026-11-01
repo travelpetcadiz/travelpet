@@ -5,16 +5,16 @@ description: Reglas de diseño y estilo de TravelPet (colores, fuentes, botones,
 
 # Diseño de TravelPet
 
-TravelPet responde a una pregunta: **«¿Puedo ir con mi perro?»**. La usa gente con prisa, casi siempre desde el móvil y sin conocimientos técnicos. Todo cambio visual tiene que hacer esa respuesta más rápida y más clara. Si un adorno no ayuda a eso, no va.
+TravelPet responde a una pregunta: **«¿Puedo ir con mi mascota?»**. La usa gente con prisa, casi siempre desde el móvil y sin conocimientos técnicos. Todo cambio visual tiene que hacer esa respuesta más rápida y más clara. Si un adorno no ayuda a eso, no va.
 
 ## Principios
 
-1. **La respuesta primero.** En tarjetas y fichas, lo primero es si admite perros (`<x-admite>`) y si está confirmado (`<x-confirmado>`). Luego, las condiciones. Lo demás, después.
+1. **La respuesta primero.** En tarjetas y fichas, lo primero es si admite mascotas (`<x-admite>`) y si está confirmado (`<x-confirmado>`). Luego, las condiciones. Lo demás, después.
 2. **Icono + texto, siempre juntos.** Ningún botón ni enlace del menú lleva solo icono, ni solo texto. Los iconos ayudan a reconocer; el texto explica.
 3. **Móvil primero.** Diseña para 390 px de ancho y luego amplía. En el móvil, lo secundario va plegado (como «Filtros»).
 4. **Explica lo que no es obvio en el sitio donde surge la duda**: una línea de ayuda junto al elemento, no un manual aparte. Las dudas generales van en `/como-funciona` (`resources/views/paginas/como-funciona.blade.php`): si añades una función que la gente pueda no entender, añádela también ahí.
 5. **Lo que no sabemos se dice** («Aún no sabemos…», «Sin confirmar»), en lugar de esconderlo o rellenar con «No consta».
-6. **Veterinarios y servicios para perros** (`Sitio::SERVICIOS`) no llevan la etiqueta de admite perros; muestran el horario (campo `temporada`). Usa `$sitio->esServicio()`.
+6. **Veterinarios y servicios para mascotas** (`Sitio::SERVICIOS`) no llevan la etiqueta de admite mascotas; muestran el horario (campo `temporada`). Usa `$sitio->esServicio()`.
 
 ## Colores (tokens de `resources/css/app.css`)
 
@@ -24,7 +24,7 @@ Usa solo estos tokens con las clases de Tailwind (`bg-pino`, `text-gris`, `borde
 |---|---|
 | `pino` #0E7F8A / `pino-oscuro` / `pino-suave` | Marca, acciones principales (`btn-pri`), enlaces, fondo de la portada |
 | `albero` #EBAA3C / `albero-suave` | Acción destacada de la ficha («Cómo llegar», `btn-albero`) y estrellas |
-| `ok` / `ok-suave` | Admite perros, confirmado |
+| `ok` / `ok-suave` | Admite mascotas, confirmado |
 | `aviso` / `aviso-suave` | Con condiciones, datos antiguos |
 | `mal` / `mal-suave` | No admite, errores |
 | `tinta` #132A2E, `gris` #56696D | Texto principal y secundario |
@@ -65,6 +65,7 @@ Antes de crear un estilo nuevo, comprueba si alguno de estos ya sirve.
 
 ## Textos
 
+- **Hablamos de «mascota», no de «perro».** La guía es para cualquier animal de compañía: «¿Puedo ir con mi mascota?», «Admite mascotas», «Servicios para mascotas». Usa «perro» solo cuando el dato es concreto de perros (por ejemplo, «Solo perros de menos de 10 kg» en las condiciones de un sitio) o para describir una foto en la que sale un perro. Los nombres internos (`admite_perros`, `tamano_perro`) no se ven y no se cambian.
 - Español de España, tú, frases cortas y verbos de acción: «Guardar», «Cómo llegar», «Enviar reseña». Nunca «Enviar» o «Aceptar» a secas si se puede decir qué hace.
 - La misma acción se llama igual en todas partes (si el botón dice «Guardar», el estado es «Guardado»).
 - Nombra las cosas como las entiende la gente, no como se llaman en la base de datos: «Confirmado», no «verificado»; «Dormir», no «Alojamiento» en los accesos de la portada.

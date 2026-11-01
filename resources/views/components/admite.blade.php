@@ -1,9 +1,9 @@
 @props(['valor'])
 @php
     [$clase, $icono, $texto] = match ($valor) {
-        'si' => ['bg-ok-suave text-ok', 'check-circle', 'Admite perros'],
+        'si' => ['bg-ok-suave text-ok', 'check-circle', 'Admite mascotas'],
         'condiciones' => ['bg-aviso-suave text-aviso', 'exclamation-triangle', 'Admite, con condiciones'],
-        'no' => ['bg-mal-suave text-mal', 'no-symbol', 'No admite perros'],
+        'no' => ['bg-mal-suave text-mal', 'no-symbol', 'No admite mascotas'],
         default => ['bg-cal text-gris', 'question-mark-circle', 'Sin confirmar'],
     };
 @endphp

@@ -24,18 +24,21 @@ class Sitio extends Model
         'publicado' => true,
     ];
 
-    // tipo => [etiqueta pública, color, icono de Heroicons]
+    // tipo => [nombre que ve la gente (también en el panel), color, icono de Heroicons]
     public const TIPOS = [
-        'Alojamiento' => ['Alojamiento', '#2F6F8F', 'home-modern'],
-        'Restauración' => ['Restauración', '#C0582F', 'building-storefront'],
-        'Playa' => ['Playa', '#1F8A8A', 'sun'],
-        'Espacio' => ['Parques y espacios', '#5B8C2A', 'map'],
+        'Alojamiento' => ['Dormir', '#2F6F8F', 'home-modern'],
+        'Restauración' => ['Comer y beber', '#C0582F', 'building-storefront'],
+        'Playa' => ['Playas', '#1F8A8A', 'sun'],
+        'Espacio' => ['Parques y paseos', '#5B8C2A', 'map'],
         'Salud' => ['Veterinarios', '#B3261E', 'heart'],
-        'Servicios' => ['Servicios', '#7B5AA6', 'scissors'],
+        'Servicios' => ['Servicios para mascotas', '#7B5AA6', 'scissors'],
         'Transporte y ocio' => ['Transporte y ocio', '#6B6B3A', 'ticket'],
     ];
 
-    // Sitios para perros (veterinarios, peluquerías…): no tiene sentido decir si "admiten perros"
+    // Lo que busca quien viaja: van como accesos grandes en la portada; el resto, como utilidades
+    public const PRINCIPALES = ['Alojamiento', 'Restauración', 'Playa', 'Espacio'];
+
+    // Sitios para mascotas (veterinarios, peluquerías…): no tiene sentido decir si "admiten mascotas"
     public const SERVICIOS = ['Salud', 'Servicios'];
 
     public const ADMITE = [
