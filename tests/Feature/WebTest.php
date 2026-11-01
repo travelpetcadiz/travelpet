@@ -53,6 +53,18 @@ class WebTest extends TestCase
             ->assertSee('Bar Ayamonte')->assertDontSee('Playa de los Bateles');
     }
 
+    public function test_la_portada_busca_al_enviar(): void
+    {
+        Livewire::test(Explorar::class)
+            ->assertSee('¿A qué pueblo o sitio quieres ir?')
+            ->assertSee('Cerca de mí')
+            ->set('q', 'Bateles')
+            ->call('buscar')
+            ->assertSee('Playa de los Bateles')
+            ->assertDontSee('Bar Ayamonte')
+            ->assertDontSee('¿A qué pueblo o sitio quieres ir?');
+    }
+
     public function test_una_provincia_desactivada_no_sale_en_la_web(): void
     {
         $this->huelva->update(['activa' => false]);

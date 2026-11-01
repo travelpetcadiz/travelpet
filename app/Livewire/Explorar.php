@@ -82,6 +82,12 @@ class Explorar extends Component
         $this->resetPage();
     }
 
+    // Buscador de la portada: busca al enviar, no mientras se escribe (si no, la portada desaparecería a mitad de palabra)
+    public function buscar(): void
+    {
+        $this->resetPage();
+    }
+
     public function cerca(float $lat, float $lng): void
     {
         if ($lat < -90 || $lat > 90 || $lng < -180 || $lng > 180) {

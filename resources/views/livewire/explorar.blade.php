@@ -5,55 +5,81 @@
     $hayFiltros = $q !== '' || $tipo !== '' || $provincia !== '' || $comarca !== '' || $municipio !== '' || $admite !== '' || $verificados || $nPracticos || $urgencias;
     $distancia = fn ($km) => ($km = (float) $km) < 1 ? 'a '.(round($km * 10) * 100).' m' : 'a '.number_format($km, $km < 10 ? 1 : 0, ',', '.').' km';
 @endphp
-<div>
+{{-- Ubicación («Cerca de mí»): el navegador la pide al pulsar y solo se usa para ordenar, no se guarda --}}
+<div x-data="{
+        estado: '',
+        ubicar() {
+            if (! navigator.geolocation) { this.estado = 'error'; return; }
+            this.estado = 'buscando';
+            navigator.geolocation.getCurrentPosition(
+                p => { this.estado = ''; $wire.cerca(p.coords.latitude, p.coords.longitude); },
+                () => { this.estado = 'error'; },
+                { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 },
+            );
+        },
+     }"
+     @if ($urgencias && $lat === null) x-init="ubicar()" @endif>
     @php
         // Filtros secundarios: van plegados para que en el móvil se vean los resultados
         $extra = ($provincia !== '') + ($comarca !== '') + ($municipio !== '') + ($admite !== '') + (int) $verificados + $nPracticos;
         // En la portada las categorías van como accesos grandes; la fila de botones solo aparece al buscar
-        $portada = ! $hayFiltros && $sitios->onFirstPage() && $vista === 'lista';
+        $portada = ! $hayFiltros && $sitios->onFirstPage() && $vista === 'lista' && $lat === null;
         $zona = $unaSola ? $provincias->first()->nombre : null;
     @endphp
 
     @if ($portada)
+        {{-- Portada: lo primero es buscar. El buscador va dentro y busca al pulsar (no mientras escribes) --}}
         <section class="bg-pino-suave">
-            <div class="mx-auto grid max-w-6xl items-center gap-6 px-4 pb-6 pt-5 md:grid-cols-[minmax(0,1fr)_300px] md:gap-10 md:py-10">
-                <div class="grid gap-4">
+            <div class="mx-auto grid max-w-6xl items-center gap-8 px-4 py-8 md:grid-cols-[minmax(0,1fr)_260px] md:gap-12 md:py-12">
+                <div class="grid gap-6">
                     <div>
                         <h1 class="text-4xl font-extrabold leading-tight text-tinta sm:text-5xl">¿Puedo ir con mi mascota?</h1>
                         <p class="mt-2 max-w-xl text-lg text-gris">
-                            Busca un hotel, un bar, una playa o un parque{{ $zona ? ' de '.$zona : '' }} y mira si admiten mascotas y con qué condiciones.
+                            Hoteles, bares, playas y parques{{ $zona ? ' de '.$zona : '' }}: si admiten mascotas y con qué condiciones.
+                            <a href="{{ route('como-funciona') }}" wire:navigate class="whitespace-nowrap font-bold text-pino underline">Así funciona</a>
                         </p>
-                        <a href="{{ route('como-funciona') }}" wire:navigate class="mt-2 inline-flex items-center gap-1.5 font-bold text-pino underline">
-                            @svg('heroicon-o-question-mark-circle', 'size-5', ['aria-hidden' => 'true'])¿Primera vez? Así funciona
-                        </a>
                     </div>
+
+                    <form wire:submit="buscar" role="search" class="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto_auto]">
+                        <label for="q-portada" class="sr-only">¿A qué pueblo o sitio quieres ir?</label>
+                        <div class="relative">
+                            @svg('heroicon-o-magnifying-glass', 'pointer-events-none absolute left-4 top-1/2 size-6 -translate-y-1/2 text-gris', ['aria-hidden' => 'true'])
+                            <input id="q-portada" type="search" wire:model="q" placeholder="¿A qué pueblo o sitio quieres ir?" class="campo min-h-14 rounded-2xl pl-12 text-lg shadow-sm">
+                        </div>
+                        <button type="submit" class="btn btn-pri min-h-14 rounded-2xl px-6 text-lg">@svg('heroicon-o-magnifying-glass', 'size-5', ['aria-hidden' => 'true'])Buscar</button>
+                        <button type="button" @click="ubicar()" :disabled="estado === 'buscando'" class="btn min-h-14 rounded-2xl px-5 text-lg">
+                            @svg('heroicon-o-map-pin', 'size-5', ['aria-hidden' => 'true'])
+                            <span x-text="estado === 'buscando' ? 'Buscando…' : 'Cerca de mí'">Cerca de mí</span>
+                        </button>
+                        <p x-show="estado === 'error'" x-cloak class="text-sm text-mal sm:col-span-3" role="alert">No hemos podido saber dónde estás. Activa la ubicación en el móvil o escribe un pueblo.</p>
+                    </form>
+
                     <div class="grid gap-3">
-                        <div class="grid grid-cols-2 gap-2">
+                        <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
                             @foreach (Sitio::PRINCIPALES as $clave)
                                 <button type="button" wire:click="$set('tipo', @js($clave))"
-                                    class="flex min-h-16 items-center gap-3 rounded-2xl border border-linea bg-white px-4 py-3 text-left font-bold hover:border-pino">
-                                    <span class="grid size-10 flex-none place-items-center rounded-xl bg-cal"><x-icono-tipo :tipo="$clave" class="size-6" /></span>
-                                    <span class="leading-tight">{{ Sitio::TIPOS[$clave][0] }}<span class="block text-sm font-normal text-gris">{{ $conteoTipos[$clave] ?? 0 }} sitios</span></span>
+                                    class="flex min-h-12 items-center gap-2.5 rounded-xl border border-linea bg-white px-3 py-2 text-left font-bold hover:border-pino">
+                                    <x-icono-tipo :tipo="$clave" class="size-6" />
+                                    <span class="leading-tight">{{ Sitio::TIPOS[$clave][0] }}<span class="block text-xs font-normal text-gris">{{ $conteoTipos[$clave] ?? 0 }} sitios</span></span>
                                 </button>
                             @endforeach
                         </div>
-                        <p class="flex flex-wrap items-center gap-x-1 gap-y-2 text-sm text-gris">
-                            <span class="mr-1">También:</span>
+                        <p class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+                            <span class="text-gris">También:</span>
                             @foreach (array_diff(array_keys(Sitio::TIPOS), Sitio::PRINCIPALES) as $clave)
-                                <button type="button" wire:click="$set('tipo', @js($clave))" class="chip min-h-9 py-1">
+                                <button type="button" wire:click="$set('tipo', @js($clave))" class="inline-flex min-h-9 items-center gap-1.5 font-bold text-tinta underline decoration-linea underline-offset-4 hover:decoration-tinta">
                                     <x-icono-tipo :tipo="$clave" />{{ Sitio::TIPOS[$clave][0] }}
                                 </button>
                             @endforeach
+                            <a href="{{ route('urgencias') }}" wire:navigate class="inline-flex min-h-9 items-center gap-1.5 font-bold text-mal underline decoration-mal/30 underline-offset-4 hover:decoration-mal">
+                                @svg('heroicon-o-lifebuoy', 'size-5', ['aria-hidden' => 'true'])Urgencias veterinarias 24 h
+                            </a>
                         </p>
-                        <a href="{{ route('urgencias') }}" wire:navigate class="flex min-h-12 items-center gap-3 rounded-2xl border border-mal/30 bg-mal-suave px-4 py-2 font-bold text-mal no-underline hover:border-mal">
-                            @svg('heroicon-o-lifebuoy', 'size-6 flex-none', ['aria-hidden' => 'true'])
-                            <span class="leading-tight">Urgencias veterinarias 24 h<span class="block text-sm font-normal">Las más cercanas a ti</span></span>
-                        </a>
                     </div>
                 </div>
-                {{-- Foto vertical: al lado del texto en escritorio, banda recortada por arriba en móvil --}}
+                {{-- En el móvil no va la foto: el buscador tiene que verse sin bajar --}}
                 <img src="{{ asset('hero.jpg') }}" alt="Perro con correa sobre una mesa de madera en un parque"
-                     class="order-first h-36 w-full rounded-3xl object-cover object-[50%_12%] shadow-sm md:order-none md:h-auto md:aspect-[4/5]">
+                     class="hidden w-full rounded-3xl object-cover object-[50%_12%] shadow-sm md:block md:aspect-[4/5]">
             </div>
         </section>
     @endif
@@ -61,34 +87,17 @@
     {{-- Buscador y filtros: fijo solo lo imprescindible (buscar, lista/mapa y categorías) --}}
     <section x-data="{ filtros: false }" class="sticky top-[57px] z-20 border-b border-linea bg-white">
         <div class="mx-auto grid max-w-6xl gap-3 px-4 py-3">
-            {{-- Ubicación: el navegador la pide al pulsar y solo se usa para ordenar, no se guarda --}}
-            <div x-data="{
-                    estado: '',
-                    ubicar() {
-                        if (! navigator.geolocation) { this.estado = 'error'; return; }
-                        this.estado = 'buscando';
-                        navigator.geolocation.getCurrentPosition(
-                            p => { this.estado = ''; $wire.cerca(p.coords.latitude, p.coords.longitude); },
-                            () => { this.estado = 'error'; },
-                            { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 },
-                        );
-                    },
-                 }"
-                 @if ($urgencias && $lat === null) x-init="ubicar()" @endif
-                 class="grid gap-3">
+            <div class="grid gap-3">
+            @unless ($portada)
             <div class="flex gap-2">
                 <label for="q" class="sr-only">Buscar</label>
                 <div class="relative flex-1">
                     @svg('heroicon-o-magnifying-glass', 'pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-gris', ['aria-hidden' => 'true'])
                     <input id="q" type="search" wire:model.live.debounce.300ms="q" placeholder="Pueblo o sitio" class="campo pl-10">
                 </div>
-                <div class="flex rounded-full border border-linea bg-cal p-1" role="group" aria-label="Ver como">
-                    <button type="button" wire:click="$set('vista', 'lista')" aria-pressed="{{ $vista === 'lista' ? 'true' : 'false' }}"
-                        class="inline-flex items-center gap-1.5 rounded-full px-3 text-sm font-bold sm:px-4 {{ $vista === 'lista' ? 'bg-pino text-white' : 'text-gris' }}">@svg('heroicon-o-list-bullet', 'size-5', ['aria-hidden' => 'true'])Lista</button>
-                    <button type="button" wire:click="$set('vista', 'mapa')" aria-pressed="{{ $vista === 'mapa' ? 'true' : 'false' }}"
-                        class="inline-flex items-center gap-1.5 rounded-full px-3 text-sm font-bold sm:px-4 {{ $vista === 'mapa' ? 'bg-pino text-white' : 'text-gris' }}">@svg('heroicon-o-map', 'size-5', ['aria-hidden' => 'true'])Mapa</button>
-                </div>
+                <x-vista-toggle :vista="$vista" />
             </div>
+            @endunless
 
             @unless ($portada)
             <div class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:overflow-visible md:px-0">
@@ -102,6 +111,7 @@
             </div>
             @endunless
 
+            @unless ($portada)
             <div class="flex flex-wrap items-center gap-2">
                 @if ($lat === null)
                     <button type="button" @click="ubicar()" :disabled="estado === 'buscando'" class="btn min-h-10 py-1.5">
@@ -114,6 +124,7 @@
                 @endif
                 <p x-show="estado === 'error'" x-cloak class="text-sm text-mal" role="alert">No hemos podido saber dónde estás. Activa la ubicación en el móvil o busca un pueblo.</p>
             </div>
+            @endunless
             </div>
 
             <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-gris" aria-live="polite">
@@ -128,6 +139,9 @@
                     <button type="button" wire:click="limpiar" class="inline-flex items-center gap-1 font-bold text-pino underline">@svg('heroicon-m-x-mark', 'size-4', ['aria-hidden' => 'true'])Quitar filtros</button>
                 @endif
                 <span wire:loading class="text-pino">Buscando…</span>
+                @if ($portada)
+                    <span class="ml-auto"><x-vista-toggle :vista="$vista" /></span>
+                @endif
             </div>
 
             <div id="mas-filtros" x-show="filtros" x-cloak x-collapse class="grid gap-2 sm:grid-cols-4">
