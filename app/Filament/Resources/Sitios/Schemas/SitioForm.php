@@ -65,7 +65,8 @@ class SitioForm
                         TextInput::make('temporada')->label('Temporada u horario')
                             ->helperText('En veterinarios y servicios, su horario. En playas, el texto de la temporada (las fechas exactas van más abajo).'),
                         Textarea::make('zonas_permitidas')->rows(3)->columnSpanFull(),
-                        Textarea::make('otras_condiciones')->rows(3)->columnSpanFull(),
+                        Textarea::make('otras_condiciones')->label('Información adicional')->rows(3)->columnSpanFull()
+                            ->helperText('Cualquier otra cosa útil: normas, documentación que piden, si tienen agua para mascotas…'),
                     ]),
                 Section::make('Para los filtros')
                     ->icon('heroicon-o-adjustments-horizontal')

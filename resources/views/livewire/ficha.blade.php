@@ -3,28 +3,28 @@
     $s = $sitio;
     // Veterinarios y servicios para mascotas: no se dice si "admiten mascotas" y la temporada es su horario
     $servicio = $s->esServicio() && $s->admite_perros !== 'no';
+    // etiqueta => [icono, valor]
     $datos = $servicio ? [
-        'Horario' => $s->temporada,
-        'Otras condiciones' => $s->otras_condiciones,
+        'Horario' => ['clock', $s->temporada],
+        'Información adicional' => ['information-circle', $s->otras_condiciones],
     ] : [
-        'Tamaño o peso máximo' => $s->tamano_maximo,
-        'Suplemento' => $s->suplemento,
-        'Zonas permitidas' => $s->zonas_permitidas,
-        'Temporada' => $s->temporada,
-        'Otras condiciones' => $s->otras_condiciones,
+        'Tamaño o peso máximo' => ['scale', $s->tamano_maximo],
+        'Suplemento' => ['banknotes', $s->suplemento],
+        'Zonas permitidas' => ['home', $s->zonas_permitidas],
+        'Temporada' => ['calendar-days', $s->temporada],
+        'Información adicional' => ['information-circle', $s->otras_condiciones],
     ];
-    $conocidos = array_filter($datos);
+    $conocidos = array_filter($datos, fn ($d) => filled($d[1]));
     // Solo se avisa de lo que falta y importa para ese tipo de sitio
     $importan = match (true) {
-        $servicio => [],
+        $servicio => ['Horario'],
         $s->tipo === 'Alojamiento' => ['Tamaño o peso máximo', 'Suplemento', 'Zonas permitidas'],
         default => ['Zonas permitidas'],
     };
-    $faltan = array_values(array_filter($importan, fn ($k) => empty($datos[$k])));
-    // Primer teléfono del campo de contacto, para el botón de llamar
-    $telefono = $s->telefono();
+    $faltan = array_values(array_filter($importan, fn ($k) => blank($datos[$k][1])));
     $respuesta = match (true) {
-        $servicio => ['bg-white text-tinta border-linea', $s->subtipo ?: $s->etiquetaTipo(), $s->icono()],
+        $servicio && $s->urgencias_24h => ['bg-mal-suave text-mal border-mal', 'Urgencias las 24 horas', 'lifebuoy'],
+        $servicio => ['bg-white text-tinta border-linea', 'Información útil', 'information-circle'],
         $s->admite_perros === 'si' => ['bg-ok-suave text-ok border-ok', 'Sí, admite mascotas', 'check-circle'],
         $s->admite_perros === 'condiciones' => ['bg-aviso-suave text-aviso border-aviso', 'Admite mascotas, con condiciones', 'exclamation-triangle'],
         $s->admite_perros === 'no' => ['bg-mal-suave text-mal border-mal', 'No admite mascotas', 'no-symbol'],
@@ -33,13 +33,26 @@
     $hoy = $s->hoy();
     // Datos clave con icono; solo los que sabemos (null = no lo sabemos y no se muestra)
     $hechos = array_filter([
-        $s->urgencias_24h ? ['lifebuoy', 'Urgencias 24 h', true] : null,
         $s->admite_grandes === null ? null : ['scale', $s->admite_grandes ? 'Admite perros grandes' : 'No admite perros grandes', $s->admite_grandes],
         $s->sin_suplemento === null ? null : ['banknotes', $s->sin_suplemento ? 'Sin suplemento' : 'Con suplemento', $s->sin_suplemento],
         $s->puede_entrar === null ? null : ['home', $s->puede_entrar ? 'Puede estar dentro del local' : 'Solo en la terraza', $s->puede_entrar],
         $s->sin_correa === null ? null : ['bolt', $s->sin_correa ? 'Zona para ir sin correa' : 'Siempre con correa', $s->sin_correa],
     ]);
-    $textoCompartir = $s->nombre.' ('.$s->municipio->nombre.'): '.($servicio ? $respuesta[1] : mb_strtolower($respuesta[1])).'. Míralo en TravelPet:';
+
+    // Teléfonos: el de urgencias (si lo hay y es distinto) y el normal, escritos como se leen en España
+    $telefono = $s->telefono();
+    $telUrgencias = $s->urgencias_24h ? $s->telefonoUrgencias() : null;
+    if ($telUrgencias === $telefono) {
+        $telefono = null;
+    }
+    $verTel = fn (string $tel) => implode(' ', str_split(substr($tel, 3), 3));
+    // La caja de contacto solo si hay algo más que el teléfono (web, redes…)
+    $otroContacto = trim(preg_replace('/(?:\+34[\s.]?)?[6789](?:[\s.]?\d){8}|[;·,\s]+/u', ' ', (string) $s->contacto)) !== '';
+    // Dirección sin repetir el pueblo (la comarca y la provincia ya van en la ruta de arriba)
+    $direccion = $s->direccion && ! str_contains(mb_strtolower($s->direccion), mb_strtolower($s->municipio->nombre))
+        ? $s->direccion.', '.$s->municipio->nombre
+        : ($s->direccion ?: $s->municipio->nombre);
+    $textoCompartir = $s->nombre.' ('.$s->municipio->nombre.'): '.($servicio ? $s->etiquetaTipo() : mb_strtolower($respuesta[1])).'. Míralo en TravelPet:';
 @endphp
 <div class="mx-auto max-w-6xl px-4 py-6">
     <nav class="mb-4 text-sm text-gris" aria-label="Ruta">
@@ -57,7 +70,7 @@
                     {{ $s->etiquetaTipo() }}@if ($s->subtipo)<span class="font-normal text-gris">· {{ $s->subtipo }}</span>@endif
                 </span>
                 <h1 class="text-3xl font-extrabold leading-tight sm:text-4xl">{{ $s->nombre }}</h1>
-                <p class="flex items-start gap-1.5 text-gris">@svg('heroicon-o-map-pin', 'mt-1 size-4 flex-none', ['aria-hidden' => 'true'])<span>{{ $s->direccion ? $s->direccion.' · ' : '' }}{{ $s->municipio->nombre }}{{ $s->municipio->comarca ? ' · '.$s->municipio->comarca : '' }} · {{ $s->municipio->provincia->nombre }}</span></p>
+                <p class="flex items-start gap-1.5 text-gris">@svg('heroicon-o-map-pin', 'mt-1 size-4 flex-none', ['aria-hidden' => 'true'])<span>{{ $direccion }}</span></p>
                 @if ($media)
                     <a href="#resenas" class="text-sm font-bold text-aviso no-underline">★ {{ number_format($media, 1, ',', '') }}, {{ $resenas->count() }} {{ $resenas->count() === 1 ? 'reseña' : 'reseñas' }}</a>
                 @endif
@@ -70,15 +83,6 @@
             {{-- La respuesta a lo que viene a buscar la gente, lo primero --}}
             <section class="rounded-2xl border-2 p-5 {{ $respuesta[0] }}">
                 <p class="flex items-center gap-2 font-display text-2xl font-extrabold">@svg('heroicon-s-'.$respuesta[2], 'size-7 flex-none', ['aria-hidden' => 'true']){{ $respuesta[1] }}</p>
-                <p class="mt-1 text-sm">
-                    @if ($s->verificado)
-                        Nos lo ha confirmado el propio sitio el {{ $s->fecha_comprobacion?->translatedFormat('j \d\e F \d\e Y') }}.
-                    @elseif ($s->fuente_oficial)
-                        Lo publica el propio sitio o su ayuntamiento. Conviene confirmarlo antes de ir.
-                    @else
-                        Sale de guías y webs externas. Confírmalo con el sitio antes de ir.
-                    @endif
-                </p>
                 @if ($hoy)
                     <p class="mt-3 flex items-start gap-2 rounded-xl bg-white/70 p-3 text-tinta">
                         @svg('heroicon-s-calendar-days', 'mt-0.5 size-6 flex-none '.($hoy['puede'] ? 'text-ok' : 'text-mal'), ['aria-hidden' => 'true'])
@@ -93,26 +97,32 @@
                     </ul>
                 @endif
                 @if ($conocidos && ($servicio || $s->admite_perros !== 'no'))
-                    <dl class="mt-4 grid gap-3 border-t border-current/20 pt-4 text-tinta">
-                        @foreach ($conocidos as $etiqueta => $valor)
-                            <div class="grid gap-0.5 sm:grid-cols-[180px_1fr] sm:gap-4">
-                                <dt class="font-bold">{{ $etiqueta }}</dt>
-                                <dd>{{ $valor }}</dd>
+                    <dl class="mt-4 grid gap-4 border-t border-current/20 pt-4 text-tinta">
+                        @foreach ($conocidos as $etiqueta => [$icono, $valor])
+                            <div class="flex gap-3">
+                                @svg('heroicon-o-'.$icono, 'mt-0.5 size-5 flex-none text-gris', ['aria-hidden' => 'true'])
+                                <div>
+                                    <dt class="font-bold">{{ $etiqueta }}</dt>
+                                    <dd class="whitespace-pre-line">{{ $valor }}</dd>
+                                </div>
                             </div>
                         @endforeach
                     </dl>
                 @endif
-                @if ($faltan && ! $servicio && $s->admite_perros !== 'no')
-                    <p class="mt-3 text-sm text-gris">Aún no sabemos: {{ mb_strtolower(implode(', ', $faltan)) }}. Pregúntalo al reservar.</p>
+                @if ($faltan && ($servicio || $s->admite_perros !== 'no'))
+                    <p class="mt-3 text-sm text-gris">Aún no sabemos: {{ mb_strtolower(implode(', ', $faltan)) }}. {{ $servicio ? 'Llama antes de ir.' : 'Pregúntalo al reservar.' }}</p>
                 @endif
             </section>
 
             <div class="flex flex-wrap gap-2">
-                @if ($s->latitud)
-                    <a class="btn btn-albero flex-1 sm:flex-none" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination={{ $s->latitud }},{{ $s->longitud }}">@svg('heroicon-o-map', 'size-5', ['aria-hidden' => 'true'])Cómo llegar</a>
+                @if ($telUrgencias)
+                    <a class="btn w-full border-mal bg-mal text-white hover:brightness-110 sm:w-auto" href="tel:{{ $telUrgencias }}">@svg('heroicon-o-phone', 'size-5', ['aria-hidden' => 'true'])Llamar a urgencias · {{ $verTel($telUrgencias) }}</a>
                 @endif
                 @if ($telefono)
-                    <a class="btn flex-1 sm:flex-none" href="tel:{{ $telefono }}">@svg('heroicon-o-phone', 'size-5', ['aria-hidden' => 'true'])Llamar</a>
+                    <a class="btn w-full sm:w-auto" href="tel:{{ $telefono }}">@svg('heroicon-o-phone', 'size-5', ['aria-hidden' => 'true']){{ $telUrgencias ? 'Llamar a la clínica' : 'Llamar' }} · {{ $verTel($telefono) }}</a>
+                @endif
+                @if ($s->latitud)
+                    <a class="btn btn-albero flex-1 sm:flex-none" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination={{ $s->latitud }},{{ $s->longitud }}">@svg('heroicon-o-map', 'size-5', ['aria-hidden' => 'true'])Cómo llegar</a>
                 @endif
                 {{-- En el móvil abre el menú de compartir (WhatsApp, etc.); si no lo hay, WhatsApp directamente --}}
                 <button type="button" class="btn flex-1 sm:flex-none"
@@ -127,16 +137,36 @@
                 @endauth
             </div>
 
-            @if ($s->contacto)
+            @if ($otroContacto)
                 <section class="tarjeta p-5">
-                    <h2 class="mb-2 flex items-center gap-2 text-xl font-bold">@svg('heroicon-o-phone', 'size-5 text-pino', ['aria-hidden' => 'true'])Contacto</h2>
+                    <h2 class="mb-2 flex items-center gap-2 text-lg font-bold">@svg('heroicon-o-globe-alt', 'size-5 text-pino', ['aria-hidden' => 'true'])Web y contacto</h2>
                     <div class="prosa">{!! enlazar($s->contacto) !!}</div>
                 </section>
             @endif
 
-            <section class="text-sm text-gris">
-                <p><strong class="text-tinta">Fuente:</strong> {{ $s->fuente ?: 'No consta' }}@if ($s->fuente_oficial) <span class="sello bg-pino-suave text-pino">Oficial</span>@endif</p>
-                <p><strong class="text-tinta">Comprobado:</strong> {{ $s->fecha_comprobacion?->translatedFormat('j \d\e F \d\e Y') ?? 'No consta' }}</p>
+            {{-- De dónde sale el dato: lo que da confianza a la guía --}}
+            <section class="flex gap-3 rounded-xl border border-linea bg-white/60 p-4 text-sm text-gris">
+                @svg('heroicon-o-shield-check', 'size-5 flex-none text-pino', ['aria-hidden' => 'true'])
+                <div class="grid gap-1">
+                    <p class="font-bold text-tinta">
+                        @if ($s->verificado)
+                            Confirmado por el propio sitio
+                        @elseif ($s->fuente_oficial)
+                            Dato de una fuente oficial
+                        @else
+                            Dato de guías y webs
+                        @endif
+                        @if ($s->fecha_comprobacion)
+                            <span class="font-normal text-gris">· comprobado el {{ $s->fecha_comprobacion->translatedFormat('j \d\e F \d\e Y') }}</span>
+                        @endif
+                    </p>
+                    @if ($s->fuente)
+                        <div class="prosa">De dónde sale: {!! enlazar($s->fuente) !!}</div>
+                    @endif
+                    @unless ($s->verificado)
+                        <p>Confírmalo con el sitio antes de ir.</p>
+                    @endunless
+                </div>
             </section>
 
             {{-- Reseñas --}}

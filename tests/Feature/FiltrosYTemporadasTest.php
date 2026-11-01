@@ -131,6 +131,26 @@ class FiltrosYTemporadasTest extends TestCase
             ->assertSee('Llamar a urgencias');
     }
 
+    public function test_la_ficha_de_un_veterinario_de_urgencias_es_clara(): void
+    {
+        $avila = $this->sitio([
+            'tipo' => 'Salud', 'admite_perros' => 'si', 'urgencias_24h' => true, 'nombre' => 'Clínica Avila Conil',
+            'subtipo' => 'Clínica veterinaria', 'direccion' => 'C/ Magallanes 17, 11140 Conil de la Frontera',
+            'contacto' => '956402972', 'otras_condiciones' => 'Centro autorizado. Urgencias 24 h: 956 870 717',
+        ]);
+
+        $this->get('/sitio/'.$avila->slug)
+            ->assertSee('Urgencias las 24 horas')
+            ->assertSee('Llamar a urgencias · 956 870 717')
+            ->assertSee('href="tel:+34956870717"', false)
+            ->assertSee('Llamar a la clínica · 956 402 972')
+            ->assertSee('Información adicional')
+            ->assertDontSee('Otras condiciones')
+            ->assertSee('C/ Magallanes 17, 11140 Conil de la Frontera')
+            ->assertDontSee('Conil de la Frontera, Conil de la Frontera')
+            ->assertDontSee('Web y contacto');
+    }
+
     public function test_la_ficha_avisa_a_google_de_que_admite_mascotas(): void
     {
         $hotel = $this->sitio(['nombre' => 'Hotel Conil', 'tipo' => 'Alojamiento', 'admite_perros' => 'si', 'contacto' => '956 44 55 66; https://hotelconil.es']);
