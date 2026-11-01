@@ -1,0 +1,58 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/bricolage-grotesque';
+@import '@fontsource/atkinson-hyperlegible/400.css';
+@import '@fontsource/atkinson-hyperlegible/700.css';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../js';
+
+/* "Costa de la Luz": turquesa atlántico para la marca, cal blanca de fondo,
+   albero para la acción principal, verde sello para lo verificado. */
+@theme {
+    --font-sans: 'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
+    --font-display: 'Bricolage Grotesque Variable', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+
+    --color-cal: #F6F9F9;
+    --color-tinta: #132A2E;
+    --color-gris: #56696D;
+    --color-linea: #DCE5E6;
+    --color-pino: #0E7F8A;
+    --color-pino-oscuro: #0A5F67;
+    --color-pino-suave: #E1F3F4;
+    --color-mar: #D3EBEE;
+    --color-albero: #EBAA3C;
+    --color-albero-suave: #FCF0D9;
+    --color-ok: #2C7A4B;
+    --color-ok-suave: #E2F2E8;
+    --color-aviso: #8A5A00;
+    --color-aviso-suave: #FCEFD6;
+    --color-mal: #B3261E;
+    --color-mal-suave: #FBE6E3;
+}
+
+@layer base {
+    html { color-scheme: light; }
+    body { @apply bg-cal text-tinta font-sans antialiased; }
+    :focus-visible { outline: 3px solid var(--color-pino); outline-offset: 2px; }
+    h1, h2, h3 { @apply font-display; text-wrap: balance; }
+}
+
+@layer components {
+    .btn { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-linea bg-white px-4 py-2 font-bold text-tinta no-underline transition hover:border-gris disabled:opacity-60; }
+    .btn-pri { @apply border-pino bg-pino text-white hover:border-pino-oscuro hover:bg-pino-oscuro; }
+    .btn-albero { @apply border-albero bg-albero text-tinta hover:brightness-95; }
+    .chip { @apply inline-flex min-h-10 flex-none items-center gap-2 whitespace-nowrap rounded-full border border-linea bg-white px-3 py-1.5 text-sm font-bold; }
+    .chip[aria-pressed='true'] { @apply border-tinta bg-tinta text-white; }
+    .campo { @apply w-full min-h-11 rounded-xl border border-linea bg-white px-3 py-2 text-base focus:border-pino; }
+    .etiqueta { @apply mb-1 block text-sm font-bold; }
+    .error { @apply mt-1 text-sm text-mal; }
+    .tarjeta { @apply rounded-xl border border-linea bg-white; }
+    .sello { @apply inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-bold; }
+    .prosa a { @apply text-pino underline; }
+    .prosa p { @apply mb-3; }
+    .prosa h2 { @apply mt-6 mb-2 text-xl font-bold; }
+}
+
+.maplibregl-popup-content { @apply rounded-xl px-3 py-2 font-sans shadow-lg; }
+[x-cloak]{display:none!important}

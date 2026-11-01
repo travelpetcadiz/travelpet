@@ -1,0 +1,32 @@
+name: travelpet
+
+services:
+  app:
+    build: .
+    image: travelpet:production
+    container_name: travelpet_app
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      DB_HOST: mysql_container
+      DB_PORT: "3306"
+      LOG_CHANNEL: stderr
+    ports:
+      # Solo en local: el nginx del servidor hace de proxy con HTTPS
+      - "127.0.0.1:8070:80"
+    volumes:
+      - travelpet_storage:/app/storage/app
+      # Mapa propio (PMTiles): fuera de la imagen porque pesa varios GB
+      - ./mapa:/app/public/mapa:ro
+    networks:
+      - red_boty
+
+volumes:
+  travelpet_storage:
+
+networks:
+  red_boty:
+    external: true
