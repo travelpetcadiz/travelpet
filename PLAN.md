@@ -36,6 +36,8 @@ No necesitas saber nada de programación. Para cada paso pone **qué haces tú**
 - **Filtros prácticos**: perros grandes, sin suplemento, dentro del local, zona sin correa y playas abiertas hoy.
 - **Compartir** cada sitio y tu «Mi viaje» por WhatsApp.
 - Google ya sabe, en cada ficha, qué tipo de sitio es y si admite mascotas.
+- **Fotos en cada ficha**, con su crédito debajo. Ninguna sale hasta que la publicas tú. Al subirlas se les quita la ubicación GPS y se hacen ligeras.
+- **Fotos libres de Wikimedia**: ya hay fotos candidatas de playas y parques esperando tu revisión (en el panel: Inicio › «Fotos por revisar»).
 
 ---
 
@@ -58,6 +60,11 @@ El diseño nuevo necesita **fotos reales tuyas**, no de internet. Son lo que har
 - **En horizontal**, con buena luz de día y que se vea dónde estáis.
 - Mejor sin caras de desconocidos.
 - Hechas por ti, o con permiso de quien las hizo.
+
+**Y las fotos de cada sitio** (salen en su ficha):
+- **Playas y parques:** en el panel, Inicio › **Fotos por revisar**. Son fotos libres de Wikimedia. Mira que sean de verdad ese sitio y que no salga nadie reconocible, y pulsa **Publicar** en la que más te guste.
+- **Hoteles, bares y negocios:** pídeles fotos con el correo modelo que tienes en el panel, en **Ayuda › Correo para pedir fotos a un negocio** (tiene un botón para copiarlo). Cuando te las manden, súbelas en la ficha del sitio, pestaña **Fotos de este sitio**, eligiendo «Me la ha cedido el propio sitio».
+- **Nunca** copies fotos de Google, Booking o Instagram: tienen dueño.
 
 👉 Cuando las tengas, dile a Claude: **«Ya he subido las fotos»**.
 

@@ -12,7 +12,7 @@ class ListFotos extends ListRecords
 
     public function getSubheading(): ?string
     {
-        return 'Tus fotos reales para el diseño de la web. Al subirlas, marca las que te gustaría para la portada.';
+        return 'Las fotos de los sitios (salen en su ficha) y las del diseño de la web. Ninguna sale en la web hasta que pulsas «Publicar». También puedes añadirlas desde la ficha de cada sitio, abajo del todo.';
     }
 
     protected function getHeaderActions(): array

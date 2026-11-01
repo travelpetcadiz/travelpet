@@ -21,7 +21,7 @@ RUN npm run build
 # --- 3. Imagen final: FrankenPHP (Caddy + PHP en un solo proceso) -----------
 FROM dunglas/frankenphp:1-php8.3-bookworm
 
-RUN install-php-extensions pdo_mysql intl zip bcmath opcache pcntl \
+RUN install-php-extensions pdo_mysql intl zip bcmath opcache pcntl gd exif \
     && cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY docker/php.ini $PHP_INI_DIR/conf.d/zz-travelpet.ini
 

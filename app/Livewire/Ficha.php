@@ -156,6 +156,7 @@ class Ficha extends Component
                 'addressRegion' => $s->municipio->provincia->nombre,
                 'addressCountry' => $s->municipio->provincia->pais,
             ]),
+            'image' => $s->fotos()->publicadas()->get()->map->url()->all() ?: null,
             'geo' => $s->latitud ? ['@type' => 'GeoCoordinates', 'latitude' => $s->latitud, 'longitude' => $s->longitud] : null,
             'petsAllowed' => $esAlojamiento ? $admite : null,
             'amenityFeature' => ! $esAlojamiento && $admite !== null
@@ -184,6 +185,7 @@ class Ficha extends Component
             'media' => $resenas->avg('estrellas'),
             'miResena' => $miResena,
             'enViaje' => $enViaje,
+            'fotos' => $s->fotos()->publicadas()->get(),
             'mapaCfg' => mapa_config(),
             'cercanos' => $s->latitud
                 ? Sitio::publicados()->whereKeyNot($s->id)->whereNotNull('latitud')

@@ -282,6 +282,11 @@ class Sitio extends Model
         return Carbon::create($ano, $mes, $dia, 0, 0, 0, 'Europe/Madrid')->subWeek();
     }
 
+    public function fotos(): HasMany
+    {
+        return $this->hasMany(Foto::class)->orderBy('orden')->orderBy('id');
+    }
+
     public function resenas(): HasMany
     {
         return $this->hasMany(Resena::class);

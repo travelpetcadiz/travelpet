@@ -11,6 +11,22 @@ class EditSitio extends EditRecord
 {
     protected static string $resource = SitioResource::class;
 
+    // Las fotos van en una pestaña arriba, al lado de los datos, en vez de al final de la página
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
+    public function getContentTabLabel(): ?string
+    {
+        return 'Datos del sitio';
+    }
+
+    public function getContentTabIcon(): string
+    {
+        return 'heroicon-o-pencil-square';
+    }
+
     public function getSubheading(): ?string
     {
         return 'Cambia lo que haga falta y pulsa «Guardar cambios» al final. Cada cambio queda apuntado en el Historial.';

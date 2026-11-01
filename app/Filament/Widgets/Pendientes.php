@@ -50,6 +50,14 @@ class Pendientes extends Widget
                 'url' => SugerenciaResource::getUrl(),
             ],
             [
+                'icono' => 'heroicon-o-photo',
+                'titulo' => 'Fotos por revisar',
+                'n' => Foto::whereNotNull('sitio_id')->where('publicada', false)->count(),
+                'texto' => 'Fotos de sitios que aún no salen en la web. Mira que sean del sitio y que no salga nadie reconocible.',
+                'boton' => 'Revisar fotos',
+                'url' => FotoResource::getUrl('index', ['filters' => ['publicada' => ['value' => '0']]]),
+            ],
+            [
                 'icono' => 'heroicon-o-clock',
                 'titulo' => 'Datos que caducan pronto',
                 'n' => $sitios()->where('fecha_comprobacion', '<', now()->subDays(Sitio::DIAS_ANTIGUO - 60))->count(),

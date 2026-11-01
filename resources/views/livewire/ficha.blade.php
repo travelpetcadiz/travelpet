@@ -80,6 +80,27 @@
                 <p class="rounded-xl bg-aviso-suave p-3 text-sm text-aviso">Este dato se comprobó hace más de 6 meses. Confírmalo con el sitio antes de ir.</p>
             @endif
 
+            {{-- Fotos: la principal grande y el resto en fila; siempre con su crédito --}}
+            @if ($fotos->isNotEmpty())
+                @php($principal = $fotos->first())
+                <figure class="grid gap-2">
+                    <img src="{{ $principal->url() }}" alt="{{ $principal->descripcion }}" class="aspect-[16/9] w-full rounded-2xl object-cover" fetchpriority="high">
+                    <x-credito-foto :foto="$principal" />
+                </figure>
+                @if ($fotos->count() > 1)
+                    <ul class="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:thin]" aria-label="Más fotos">
+                        @foreach ($fotos->skip(1) as $f)
+                            <li class="w-56 flex-none snap-start">
+                                <figure class="grid gap-1">
+                                    <img src="{{ $f->url() }}" alt="{{ $f->descripcion }}" loading="lazy" class="aspect-[4/3] w-full rounded-xl object-cover">
+                                    <x-credito-foto :foto="$f" />
+                                </figure>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            @endif
+
             {{-- La respuesta a lo que viene a buscar la gente, lo primero --}}
             <section class="rounded-2xl border-2 p-5 {{ $respuesta[0] }}">
                 <p class="flex items-center gap-2 font-display text-2xl font-extrabold">@svg('heroicon-s-'.$respuesta[2], 'size-7 flex-none', ['aria-hidden' => 'true']){{ $respuesta[1] }}</p>

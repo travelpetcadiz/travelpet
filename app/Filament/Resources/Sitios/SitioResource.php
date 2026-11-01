@@ -58,6 +58,13 @@ class SitioResource extends Resource
         return auth()->user()?->isAdmin() ?? false;
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\FotosRelationManager::class,
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
