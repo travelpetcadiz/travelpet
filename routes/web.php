@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 Route::livewire('/', Explorar::class)->name('inicio');
 Route::livewire('/sitio/{sitio}', Ficha::class)->name('sitio');
 
+Route::view('/como-funciona', 'paginas.como-funciona')->name('como-funciona');
 Route::view('/aviso-legal', 'legal.aviso')->name('legal.aviso');
 Route::view('/privacidad', 'legal.privacidad')->name('legal.privacidad');
 

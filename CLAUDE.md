@@ -50,6 +50,9 @@ Boost replaces these bootstrap instructions with guidelines tailored to the appl
 
 Guía de sitios que admiten perros. Empezó con la provincia de Cádiz (web estática original: github.com/travelpetcadiz/travelpet) y está pensada para crecer a más provincias.
 
+## Diseño
+- Antes de cualquier cambio visible (web o panel), usar la skill `diseno-travelpet` (`.claude/skills/diseno-travelpet/SKILL.md`): colores, componentes, iconos (Heroicons) y textos.
+
 ## Stack
 - Laravel 13, Livewire 4 (componentes de clase en `app/Livewire`), Filament 5 (panel en `/admin`), Tailwind 4.
 - Mapa: MapLibre GL. Usa `public/mapa/base.pmtiles` (Protomaps) si existe o `MAPA_PMTILES_URL`; si no, OpenFreeMap. El motor del mapa se carga bajo demanda (`resources/js/mapa-motor.js`).

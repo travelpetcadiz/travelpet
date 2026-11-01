@@ -24,16 +24,19 @@ class Sitio extends Model
         'publicado' => true,
     ];
 
-    // tipo => [etiqueta pública, color]
+    // tipo => [etiqueta pública, color, icono de Heroicons]
     public const TIPOS = [
-        'Alojamiento' => ['Alojamiento', '#2F6F8F'],
-        'Restauración' => ['Restauración', '#C0582F'],
-        'Playa' => ['Playa', '#1F8A8A'],
-        'Espacio' => ['Parques y espacios', '#5B8C2A'],
-        'Salud' => ['Veterinarios', '#B3261E'],
-        'Servicios' => ['Servicios', '#7B5AA6'],
-        'Transporte y ocio' => ['Transporte y ocio', '#6B6B3A'],
+        'Alojamiento' => ['Alojamiento', '#2F6F8F', 'home-modern'],
+        'Restauración' => ['Restauración', '#C0582F', 'building-storefront'],
+        'Playa' => ['Playa', '#1F8A8A', 'sun'],
+        'Espacio' => ['Parques y espacios', '#5B8C2A', 'map'],
+        'Salud' => ['Veterinarios', '#B3261E', 'heart'],
+        'Servicios' => ['Servicios', '#7B5AA6', 'scissors'],
+        'Transporte y ocio' => ['Transporte y ocio', '#6B6B3A', 'ticket'],
     ];
+
+    // Sitios para perros (veterinarios, peluquerías…): no tiene sentido decir si "admiten perros"
+    public const SERVICIOS = ['Salud', 'Servicios'];
 
     public const ADMITE = [
         'si' => 'Sí',
@@ -129,6 +132,16 @@ class Sitio extends Model
     public function color(): string
     {
         return static::TIPOS[$this->tipo][1] ?? '#56696D';
+    }
+
+    public function icono(): string
+    {
+        return static::TIPOS[$this->tipo][2] ?? 'map-pin';
+    }
+
+    public function esServicio(): bool
+    {
+        return in_array($this->tipo, static::SERVICIOS, true);
     }
 
     public function etiquetaAdmite(): string

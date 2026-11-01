@@ -39,42 +39,48 @@
             </a>
             <span class="flex-1"></span>
 
-            <nav class="hidden items-center gap-1 md:flex" aria-label="Principal">
-                <a href="{{ route('inicio') }}" wire:navigate class="rounded-lg px-3 py-2 font-bold hover:bg-cal">Explorar</a>
-                <a href="{{ route('sugerir') }}" wire:navigate class="rounded-lg px-3 py-2 font-bold hover:bg-cal">Sugerir un sitio</a>
+            @php
+                $ic = fn (string $n) => svg('heroicon-o-'.$n, 'size-5 flex-none', ['aria-hidden' => 'true'])->toHtml();
+                $enlace = 'inline-flex items-center gap-2 rounded-lg px-3 py-2 font-bold hover:bg-cal';
+            @endphp
+            <nav class="hidden items-center gap-1 lg:flex" aria-label="Principal">
+                <a href="{{ route('inicio') }}" wire:navigate class="{{ $enlace }}">{!! $ic('magnifying-glass') !!}Explorar</a>
+                <a href="{{ route('como-funciona') }}" wire:navigate class="{{ $enlace }}">{!! $ic('question-mark-circle') !!}Cómo funciona</a>
+                <a href="{{ route('sugerir') }}" wire:navigate class="{{ $enlace }}">{!! $ic('light-bulb') !!}Sugerir un sitio</a>
                 @auth
-                    <a href="{{ route('viaje') }}" wire:navigate class="rounded-lg px-3 py-2 font-bold hover:bg-cal">Mi viaje</a>
+                    <a href="{{ route('viaje') }}" wire:navigate class="{{ $enlace }}">{!! $ic('bookmark') !!}Mi viaje</a>
                     @if (auth()->user()->isStaff())
-                        <a href="{{ url('/admin') }}" class="rounded-lg px-3 py-2 font-bold text-pino hover:bg-cal">Panel</a>
+                        <a href="{{ url('/admin') }}" class="{{ $enlace }} text-pino">{!! $ic('cog-6-tooth') !!}Panel</a>
                     @endif
                     <form method="POST" action="{{ route('salir') }}">
                         @csrf
-                        <button class="btn ml-1">Salir</button>
+                        <button class="btn ml-1">{!! $ic('arrow-left-start-on-rectangle') !!}Salir</button>
                     </form>
                 @else
-                    <a href="{{ route('entrar') }}" wire:navigate class="rounded-lg px-3 py-2 font-bold hover:bg-cal">Entrar</a>
-                    <a href="{{ route('registro') }}" wire:navigate class="btn btn-pri ml-1">Crear cuenta</a>
+                    <a href="{{ route('entrar') }}" wire:navigate class="{{ $enlace }}">{!! $ic('arrow-right-end-on-rectangle') !!}Entrar</a>
+                    <a href="{{ route('registro') }}" wire:navigate class="btn btn-pri ml-1">{!! $ic('user-plus') !!}Crear cuenta</a>
                 @endauth
             </nav>
 
-            <button type="button" class="btn md:hidden" @click="abierto = !abierto" :aria-expanded="abierto" aria-controls="menu-movil">Menú</button>
+            <button type="button" class="btn lg:hidden" @click="abierto = !abierto" :aria-expanded="abierto" aria-controls="menu-movil">{!! $ic('bars-3') !!}Menú</button>
         </div>
 
-        <nav id="menu-movil" x-show="abierto" x-cloak @click.outside="abierto = false" class="grid gap-1 border-t border-linea px-4 py-3 md:hidden" aria-label="Principal">
-            <a href="{{ route('inicio') }}" wire:navigate class="rounded-lg px-3 py-2 font-bold hover:bg-cal">Explorar</a>
-            <a href="{{ route('sugerir') }}" wire:navigate class="rounded-lg px-3 py-2 font-bold hover:bg-cal">Sugerir un sitio</a>
+        <nav id="menu-movil" x-show="abierto" x-cloak @click.outside="abierto = false" class="grid gap-1 border-t border-linea px-4 py-3 lg:hidden" aria-label="Principal">
+            <a href="{{ route('inicio') }}" wire:navigate class="{{ $enlace }}">{!! $ic('magnifying-glass') !!}Explorar</a>
+            <a href="{{ route('como-funciona') }}" wire:navigate class="{{ $enlace }}">{!! $ic('question-mark-circle') !!}Cómo funciona</a>
+            <a href="{{ route('sugerir') }}" wire:navigate class="{{ $enlace }}">{!! $ic('light-bulb') !!}Sugerir un sitio</a>
             @auth
-                <a href="{{ route('viaje') }}" wire:navigate class="rounded-lg px-3 py-2 font-bold hover:bg-cal">Mi viaje</a>
+                <a href="{{ route('viaje') }}" wire:navigate class="{{ $enlace }}">{!! $ic('bookmark') !!}Mi viaje</a>
                 @if (auth()->user()->isStaff())
-                    <a href="{{ url('/admin') }}" class="rounded-lg px-3 py-2 font-bold text-pino hover:bg-cal">Panel de administración</a>
+                    <a href="{{ url('/admin') }}" class="{{ $enlace }} text-pino">{!! $ic('cog-6-tooth') !!}Panel de administración</a>
                 @endif
                 <form method="POST" action="{{ route('salir') }}">
                     @csrf
-                    <button class="w-full rounded-lg px-3 py-2 text-left font-bold hover:bg-cal">Salir ({{ auth()->user()->name }})</button>
+                    <button class="{{ $enlace }} w-full text-left">{!! $ic('arrow-left-start-on-rectangle') !!}Salir ({{ auth()->user()->name }})</button>
                 </form>
             @else
-                <a href="{{ route('entrar') }}" wire:navigate class="rounded-lg px-3 py-2 font-bold hover:bg-cal">Entrar</a>
-                <a href="{{ route('registro') }}" wire:navigate class="btn btn-pri">Crear cuenta</a>
+                <a href="{{ route('entrar') }}" wire:navigate class="{{ $enlace }}">{!! $ic('arrow-right-end-on-rectangle') !!}Entrar</a>
+                <a href="{{ route('registro') }}" wire:navigate class="btn btn-pri">{!! $ic('user-plus') !!}Crear cuenta</a>
             @endauth
         </nav>
     </header>
@@ -88,6 +94,7 @@
             <span>© {{ date('Y') }} {{ $marca }} · Guía gratuita</span>
             <a href="{{ route('legal.aviso') }}" class="underline">Aviso legal</a>
             <a href="{{ route('legal.privacidad') }}" class="underline">Privacidad</a>
+            <a href="{{ route('como-funciona') }}" class="underline">Cómo funciona</a>
             <span>Mapa: © OpenStreetMap</span>
         </div>
     </footer>

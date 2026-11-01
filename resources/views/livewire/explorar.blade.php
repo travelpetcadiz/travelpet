@@ -26,12 +26,15 @@
                         <p class="mt-2 max-w-xl text-lg text-gris">
                             Busca un hotel, un bar, una playa o un parque{{ $zona ? ' de '.$zona : '' }} y mira si admiten perros y con qué condiciones.
                         </p>
+                        <a href="{{ route('como-funciona') }}" wire:navigate class="mt-2 inline-flex items-center gap-1.5 font-bold text-pino underline">
+                            @svg('heroicon-o-question-mark-circle', 'size-5', ['aria-hidden' => 'true'])¿Primera vez? Así funciona
+                        </a>
                     </div>
                     <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
                         @foreach ($atajos as $clave => $texto)
                             <button type="button" wire:click="$set('tipo', @js($clave))"
                                 class="flex min-h-14 items-center gap-3 rounded-2xl border border-linea bg-white px-4 py-3 text-left font-bold hover:border-pino">
-                                <span class="size-3 flex-none rounded-full" style="background: {{ Sitio::TIPOS[$clave][1] }}"></span>
+                                <span class="grid size-9 flex-none place-items-center rounded-xl bg-cal"><x-icono-tipo :tipo="$clave" class="size-5" /></span>
                                 <span class="leading-tight">{{ $texto }}<span class="block text-sm font-normal text-gris">{{ $conteoTipos[$clave] ?? 0 }} sitios</span></span>
                             </button>
                         @endforeach
@@ -49,20 +52,23 @@
         <div class="mx-auto grid max-w-6xl gap-3 px-4 py-3">
             <div class="flex gap-2">
                 <label for="q" class="sr-only">Buscar</label>
-                <input id="q" type="search" wire:model.live.debounce.300ms="q" placeholder="Pueblo o sitio" class="campo flex-1">
+                <div class="relative flex-1">
+                    @svg('heroicon-o-magnifying-glass', 'pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-gris', ['aria-hidden' => 'true'])
+                    <input id="q" type="search" wire:model.live.debounce.300ms="q" placeholder="Pueblo o sitio" class="campo pl-10">
+                </div>
                 <div class="flex rounded-full border border-linea bg-cal p-1" role="group" aria-label="Ver como">
                     <button type="button" wire:click="$set('vista', 'lista')" aria-pressed="{{ $vista === 'lista' ? 'true' : 'false' }}"
-                        class="rounded-full px-3 text-sm font-bold sm:px-4 {{ $vista === 'lista' ? 'bg-pino text-white' : 'text-gris' }}">Lista</button>
+                        class="inline-flex items-center gap-1.5 rounded-full px-3 text-sm font-bold sm:px-4 {{ $vista === 'lista' ? 'bg-pino text-white' : 'text-gris' }}">@svg('heroicon-o-list-bullet', 'size-5', ['aria-hidden' => 'true'])Lista</button>
                     <button type="button" wire:click="$set('vista', 'mapa')" aria-pressed="{{ $vista === 'mapa' ? 'true' : 'false' }}"
-                        class="rounded-full px-3 text-sm font-bold sm:px-4 {{ $vista === 'mapa' ? 'bg-pino text-white' : 'text-gris' }}">Mapa</button>
+                        class="inline-flex items-center gap-1.5 rounded-full px-3 text-sm font-bold sm:px-4 {{ $vista === 'mapa' ? 'bg-pino text-white' : 'text-gris' }}">@svg('heroicon-o-map', 'size-5', ['aria-hidden' => 'true'])Mapa</button>
                 </div>
             </div>
 
             <div class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:overflow-visible md:px-0">
                 <button type="button" class="chip" wire:click="$set('tipo', '')" aria-pressed="{{ $tipo === '' ? 'true' : 'false' }}">Todo</button>
-                @foreach (Sitio::TIPOS as $clave => [$etiqueta, $color])
+                @foreach (Sitio::TIPOS as $clave => [$etiqueta])
                     <button type="button" class="chip" wire:click="$set('tipo', @js($clave))" aria-pressed="{{ $tipo === $clave ? 'true' : 'false' }}">
-                        <span class="size-2.5 rounded-full" style="background: {{ $color }}"></span>
+                        <x-icono-tipo :tipo="$clave" />
                         {{ $etiqueta }} <span class="font-normal opacity-70">{{ $conteoTipos[$clave] ?? 0 }}</span>
                     </button>
                 @endforeach
@@ -71,12 +77,13 @@
             <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-gris" aria-live="polite">
                 <button type="button" @click="filtros = !filtros" :aria-expanded="filtros" aria-controls="mas-filtros"
                     class="inline-flex min-h-10 items-center gap-2 rounded-full border px-3 font-bold {{ $extra ? 'border-pino bg-pino-suave text-pino' : 'border-linea bg-white text-tinta' }}">
+                    @svg('heroicon-o-adjustments-horizontal', 'size-5', ['aria-hidden' => 'true'])
                     Filtros{{ $extra ? ' ('.$extra.')' : '' }}
-                    <span aria-hidden="true" class="transition" :class="filtros && 'rotate-180'">▾</span>
+                    @svg('heroicon-m-chevron-down', 'size-4 transition', ['aria-hidden' => 'true', ':class' => "filtros && 'rotate-180'"])
                 </button>
                 <span><strong class="text-tinta">{{ $sitios->total() }}</strong> {{ $sitios->total() === 1 ? 'sitio' : 'sitios' }}@if ($vista === 'mapa'), {{ count($puntos) }} en el mapa @endif</span>
                 @if ($hayFiltros)
-                    <button type="button" wire:click="limpiar" class="font-bold text-pino underline">Quitar filtros</button>
+                    <button type="button" wire:click="limpiar" class="inline-flex items-center gap-1 font-bold text-pino underline">@svg('heroicon-m-x-mark', 'size-4', ['aria-hidden' => 'true'])Quitar filtros</button>
                 @endif
                 <span wire:loading class="text-pino">Buscando…</span>
             </div>
@@ -138,28 +145,33 @@
                     <p class="text-lg font-bold">No hay sitios con estos filtros.</p>
                     <p class="mt-1 text-gris">Prueba a quitar algún filtro o a buscar otro nombre. Si conoces un sitio que falte, cuéntanoslo.</p>
                     <div class="mt-4 flex justify-center gap-2">
-                        <button type="button" wire:click="limpiar" class="btn">Quitar filtros</button>
-                        <a href="{{ route('sugerir') }}" wire:navigate class="btn btn-pri">Sugerir un sitio</a>
+                        <button type="button" wire:click="limpiar" class="btn">@svg('heroicon-o-x-mark', 'size-5', ['aria-hidden' => 'true'])Quitar filtros</button>
+                        <a href="{{ route('sugerir') }}" wire:navigate class="btn btn-pri">@svg('heroicon-o-light-bulb', 'size-5', ['aria-hidden' => 'true'])Sugerir un sitio</a>
                     </div>
                 </div>
             @else
-                <p class="mb-3 text-sm text-gris"><span class="sello bg-ok-suave text-ok">✓ Confirmado</span> nos lo ha dicho el propio sitio. Lo demás, confírmalo antes de ir.</p>
+                <p class="mb-3 text-sm leading-7 text-gris"><x-confirmado class="mr-1 align-middle" />nos lo ha dicho el propio sitio. Lo demás, confírmalo antes de ir.</p>
                 <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($sitios as $s)
                         <li wire:key="s-{{ $s->id }}">
                             <a href="{{ route('sitio', $s) }}" wire:navigate class="tarjeta flex h-full flex-col gap-2 p-4 no-underline transition hover:border-gris hover:shadow-sm">
                                 <span class="flex flex-wrap gap-1.5">
-                                    <x-admite :valor="$s->admite_perros" class="px-2.5 py-1 text-sm" />
+                                    {{-- En veterinarios y servicios para perros se da por hecho que admiten perros --}}
+                                    @if (! $s->esServicio() || $s->admite_perros === 'no')
+                                        <x-admite :valor="$s->admite_perros" class="px-2.5 py-1 text-sm" />
+                                    @endif
                                     @if ($s->verificado)
-                                        <span class="sello bg-ok-suave px-2.5 py-1 text-sm text-ok" title="Lo ha confirmado el propio sitio">✓ Confirmado</span>
+                                        <x-confirmado class="px-2.5 py-1 text-sm" />
                                     @endif
                                 </span>
                                 <h2 class="text-lg font-semibold leading-snug">{{ $s->nombre }}</h2>
                                 <span class="flex items-center gap-2 text-sm text-gris">
-                                    <span class="size-2.5 flex-none rounded-full" style="background: {{ $s->color() }}"></span>
+                                    <x-icono-tipo :tipo="$s->tipo" />
                                     {{ $s->subtipo ?: $s->etiquetaTipo() }}, {{ $s->municipio->nombre }}
                                 </span>
-                                @if ($s->otras_condiciones || $s->zonas_permitidas)
+                                @if ($s->esServicio() && $s->temporada)
+                                    <p class="flex items-start gap-2 text-sm text-gris">@svg('heroicon-o-clock', 'mt-0.5 size-4 flex-none', ['aria-hidden' => 'true'])<span class="line-clamp-2">{{ $s->temporada }}</span></p>
+                                @elseif ($s->otras_condiciones || $s->zonas_permitidas)
                                     <p class="line-clamp-2 text-sm text-gris">{{ $s->zonas_permitidas ?: $s->otras_condiciones }}</p>
                                 @endif
                             </a>

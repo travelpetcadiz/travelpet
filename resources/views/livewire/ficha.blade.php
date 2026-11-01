@@ -1,7 +1,12 @@
 @php
     use App\Models\Resena;
     $s = $sitio;
-    $datos = [
+    // Veterinarios y servicios para perros: no se dice si "admiten perros" y la temporada es su horario
+    $servicio = $s->esServicio() && $s->admite_perros !== 'no';
+    $datos = $servicio ? [
+        'Horario' => $s->temporada,
+        'Otras condiciones' => $s->otras_condiciones,
+    ] : [
         'Tamaño o peso máximo' => $s->tamano_maximo,
         'Suplemento' => $s->suplemento,
         'Zonas permitidas' => $s->zonas_permitidas,
@@ -10,15 +15,20 @@
     ];
     $conocidos = array_filter($datos);
     // Solo se avisa de lo que falta y importa para ese tipo de sitio
-    $importan = $s->tipo === 'Alojamiento' ? ['Tamaño o peso máximo', 'Suplemento', 'Zonas permitidas'] : ['Zonas permitidas'];
+    $importan = match (true) {
+        $servicio => [],
+        $s->tipo === 'Alojamiento' => ['Tamaño o peso máximo', 'Suplemento', 'Zonas permitidas'],
+        default => ['Zonas permitidas'],
+    };
     $faltan = array_values(array_filter($importan, fn ($k) => empty($datos[$k])));
     // Primer teléfono del campo de contacto, para el botón de llamar
     $telefono = preg_match('/(?:\+34[\s.]?)?([6789](?:[\s.]?\d){8})/', (string) $s->contacto, $m) ? preg_replace('/\D/', '', $m[1]) : null;
-    $respuesta = match ($s->admite_perros) {
-        'si' => ['bg-ok-suave text-ok border-ok', 'Sí, admite perros'],
-        'condiciones' => ['bg-aviso-suave text-aviso border-aviso', 'Admite perros, con condiciones'],
-        'no' => ['bg-mal-suave text-mal border-mal', 'No admite perros'],
-        default => ['bg-cal text-gris border-linea', 'Aún no sabemos si admite perros'],
+    $respuesta = match (true) {
+        $servicio => ['bg-white text-tinta border-linea', $s->subtipo ?: $s->etiquetaTipo(), $s->icono()],
+        $s->admite_perros === 'si' => ['bg-ok-suave text-ok border-ok', 'Sí, admite perros', 'check-circle'],
+        $s->admite_perros === 'condiciones' => ['bg-aviso-suave text-aviso border-aviso', 'Admite perros, con condiciones', 'exclamation-triangle'],
+        $s->admite_perros === 'no' => ['bg-mal-suave text-mal border-mal', 'No admite perros', 'no-symbol'],
+        default => ['bg-cal text-gris border-linea', 'Aún no sabemos si admite perros', 'question-mark-circle'],
     };
 @endphp
 <div class="mx-auto max-w-6xl px-4 py-6">
@@ -33,11 +43,11 @@
         <article class="grid content-start gap-5">
             <header class="grid gap-2">
                 <span class="flex items-center gap-2 text-sm font-bold">
-                    <span class="size-2.5 rounded-full" style="background: {{ $s->color() }}"></span>
+                    <x-icono-tipo :tipo="$s->tipo" />
                     {{ $s->etiquetaTipo() }}@if ($s->subtipo)<span class="font-normal text-gris">· {{ $s->subtipo }}</span>@endif
                 </span>
                 <h1 class="text-3xl font-extrabold leading-tight sm:text-4xl">{{ $s->nombre }}</h1>
-                <p class="text-gris">{{ $s->direccion ? $s->direccion.' · ' : '' }}{{ $s->municipio->nombre }}{{ $s->municipio->comarca ? ' · '.$s->municipio->comarca : '' }} · {{ $s->municipio->provincia->nombre }}</p>
+                <p class="flex items-start gap-1.5 text-gris">@svg('heroicon-o-map-pin', 'mt-1 size-4 flex-none', ['aria-hidden' => 'true'])<span>{{ $s->direccion ? $s->direccion.' · ' : '' }}{{ $s->municipio->nombre }}{{ $s->municipio->comarca ? ' · '.$s->municipio->comarca : '' }} · {{ $s->municipio->provincia->nombre }}</span></p>
                 @if ($media)
                     <a href="#resenas" class="text-sm font-bold text-aviso no-underline">★ {{ number_format($media, 1, ',', '') }}, {{ $resenas->count() }} {{ $resenas->count() === 1 ? 'reseña' : 'reseñas' }}</a>
                 @endif
@@ -49,17 +59,17 @@
 
             {{-- La respuesta a lo que viene a buscar la gente, lo primero --}}
             <section class="rounded-2xl border-2 p-5 {{ $respuesta[0] }}">
-                <p class="font-display text-2xl font-extrabold">{{ $respuesta[1] }}</p>
+                <p class="flex items-center gap-2 font-display text-2xl font-extrabold">@svg('heroicon-s-'.$respuesta[2], 'size-7 flex-none', ['aria-hidden' => 'true']){{ $respuesta[1] }}</p>
                 <p class="mt-1 text-sm">
                     @if ($s->verificado)
-                        ✓ Nos lo ha confirmado el propio sitio el {{ $s->fecha_comprobacion?->translatedFormat('j \d\e F \d\e Y') }}.
+                        Nos lo ha confirmado el propio sitio el {{ $s->fecha_comprobacion?->translatedFormat('j \d\e F \d\e Y') }}.
                     @elseif ($s->fuente_oficial)
                         Lo publica el propio sitio o su ayuntamiento. Conviene confirmarlo antes de ir.
                     @else
                         Sale de guías y webs externas. Confírmalo con el sitio antes de ir.
                     @endif
                 </p>
-                @if ($conocidos && $s->admite_perros !== 'no')
+                @if ($conocidos && ($servicio || $s->admite_perros !== 'no'))
                     <dl class="mt-4 grid gap-3 border-t border-current/20 pt-4 text-tinta">
                         @foreach ($conocidos as $etiqueta => $valor)
                             <div class="grid gap-0.5 sm:grid-cols-[180px_1fr] sm:gap-4">
@@ -69,26 +79,26 @@
                         @endforeach
                     </dl>
                 @endif
-                @if ($faltan && $s->admite_perros !== 'no')
+                @if ($faltan && ! $servicio && $s->admite_perros !== 'no')
                     <p class="mt-3 text-sm text-gris">Aún no sabemos: {{ mb_strtolower(implode(', ', $faltan)) }}. Pregúntalo al reservar.</p>
                 @endif
             </section>
 
             <div class="flex flex-wrap gap-2">
                 @if ($s->latitud)
-                    <a class="btn btn-albero flex-1 sm:flex-none" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination={{ $s->latitud }},{{ $s->longitud }}">Cómo llegar</a>
+                    <a class="btn btn-albero flex-1 sm:flex-none" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination={{ $s->latitud }},{{ $s->longitud }}">@svg('heroicon-o-map', 'size-5', ['aria-hidden' => 'true'])Cómo llegar</a>
                 @endif
                 @if ($telefono)
-                    <a class="btn flex-1 sm:flex-none" href="tel:+34{{ $telefono }}">Llamar</a>
+                    <a class="btn flex-1 sm:flex-none" href="tel:+34{{ $telefono }}">@svg('heroicon-o-phone', 'size-5', ['aria-hidden' => 'true'])Llamar</a>
                 @endif
                 @auth
-                    <button type="button" wire:click="alternarViaje('quiero')" class="btn flex-1 sm:flex-none {{ $enViaje === 'quiero' ? 'btn-pri' : '' }}" aria-pressed="{{ $enViaje === 'quiero' ? 'true' : 'false' }}">♡ Guardar</button>
+                    <button type="button" wire:click="alternarViaje('quiero')" class="btn flex-1 sm:flex-none {{ $enViaje === 'quiero' ? 'btn-pri' : '' }}" aria-pressed="{{ $enViaje === 'quiero' ? 'true' : 'false' }}">@svg($enViaje === 'quiero' ? 'heroicon-s-bookmark' : 'heroicon-o-bookmark', 'size-5', ['aria-hidden' => 'true']){{ $enViaje === 'quiero' ? 'Guardado' : 'Guardar' }}</button>
                 @endauth
             </div>
 
             @if ($s->contacto)
                 <section class="tarjeta p-5">
-                    <h2 class="mb-2 text-xl font-bold">Contacto</h2>
+                    <h2 class="mb-2 flex items-center gap-2 text-xl font-bold">@svg('heroicon-o-phone', 'size-5 text-pino', ['aria-hidden' => 'true'])Contacto</h2>
                     <div class="prosa">{!! enlazar($s->contacto) !!}</div>
                 </section>
             @endif
@@ -100,7 +110,7 @@
 
             {{-- Reseñas --}}
             <section class="grid gap-4" id="resenas">
-                <h2 class="text-2xl font-bold">Reseñas</h2>
+                <h2 class="flex items-center gap-2 text-2xl font-bold">@svg('heroicon-o-chat-bubble-left-right', 'size-6 text-pino', ['aria-hidden' => 'true'])Reseñas</h2>
 
                 @forelse ($resenas as $r)
                     <article wire:key="r-{{ $r->id }}" class="tarjeta p-4">
@@ -111,9 +121,9 @@
                         </div>
                         <p class="mt-1 text-sm">
                             @if ($r->pudo_entrar === 'si')
-                                <span class="sello bg-ok-suave text-ok">Entró con su perro</span>
+                                <span class="sello bg-ok-suave text-ok">@svg('heroicon-s-check-circle', 'size-4', ['aria-hidden' => 'true'])Entró con su perro</span>
                             @else
-                                <span class="sello bg-mal-suave text-mal">No le dejaron entrar</span>
+                                <span class="sello bg-mal-suave text-mal">@svg('heroicon-s-no-symbol', 'size-4', ['aria-hidden' => 'true'])No le dejaron entrar</span>
                             @endif
                             @if ($r->tamano_perro) <span class="text-gris">· {{ Resena::TAMANOS[$r->tamano_perro] ?? '' }}</span> @endif
                         </p>
@@ -167,7 +177,7 @@
                             <textarea id="texto" wire:model="texto" rows="4" class="campo" placeholder="¿Dónde os dejaron estar? ¿Pusieron agua? ¿Algún pero?"></textarea>
                             @error('texto') <p class="error">{{ $message }}</p> @enderror
                         </div>
-                        <button class="btn btn-pri justify-self-start" wire:loading.attr="disabled">Enviar reseña</button>
+                        <button class="btn btn-pri justify-self-start" wire:loading.attr="disabled">@svg('heroicon-o-paper-airplane', 'size-5', ['aria-hidden' => 'true'])Enviar reseña</button>
                     </form>
                 @else
                     <p class="tarjeta p-4"><a href="{{ route('entrar') }}" wire:navigate class="font-bold text-pino underline">Entra</a> o <a href="{{ route('registro') }}" wire:navigate class="font-bold text-pino underline">crea una cuenta</a> para dejar tu reseña.</p>
@@ -182,12 +192,12 @@
             @endif
 
             <div class="tarjeta grid gap-2 p-4">
-                <h2 class="font-bold">Mi viaje</h2>
+                <h2 class="flex items-center gap-2 font-bold">@svg('heroicon-o-bookmark', 'size-5 text-pino', ['aria-hidden' => 'true'])Mi viaje</h2>
                 <p class="text-sm text-gris">Apunta los sitios a los que quieres ir y los que ya has visitado con tu perro.</p>
                 @auth
                     <div class="grid grid-cols-2 gap-2">
-                        <button type="button" wire:click="alternarViaje('quiero')" class="btn {{ $enViaje === 'quiero' ? 'btn-pri' : '' }}" aria-pressed="{{ $enViaje === 'quiero' ? 'true' : 'false' }}">♡ Quiero ir</button>
-                        <button type="button" wire:click="alternarViaje('visitado')" class="btn {{ $enViaje === 'visitado' ? 'btn-pri' : '' }}" aria-pressed="{{ $enViaje === 'visitado' ? 'true' : 'false' }}">✓ He ido</button>
+                        <button type="button" wire:click="alternarViaje('quiero')" class="btn {{ $enViaje === 'quiero' ? 'btn-pri' : '' }}" aria-pressed="{{ $enViaje === 'quiero' ? 'true' : 'false' }}">@svg('heroicon-o-heart', 'size-5', ['aria-hidden' => 'true'])Quiero ir</button>
+                        <button type="button" wire:click="alternarViaje('visitado')" class="btn {{ $enViaje === 'visitado' ? 'btn-pri' : '' }}" aria-pressed="{{ $enViaje === 'visitado' ? 'true' : 'false' }}">@svg('heroicon-o-check', 'size-5', ['aria-hidden' => 'true'])He ido</button>
                     </div>
                 @else
                     <p class="text-sm text-gris"><a href="{{ route('entrar') }}" wire:navigate class="font-bold text-pino underline">Entra</a> o <a href="{{ route('registro') }}" wire:navigate class="font-bold text-pino underline">crea una cuenta gratis</a> para guardarlos.</p>
@@ -205,12 +215,12 @@
                             <textarea id="err" wire:model="error_mensaje" rows="3" class="campo" placeholder="Por ejemplo: ya no admiten perros en la terraza"></textarea>
                             @error('error_mensaje') <p class="error">{{ $message }}</p> @enderror
                             <div class="flex gap-2">
-                                <button class="btn btn-pri">Enviar</button>
+                                <button class="btn btn-pri">@svg('heroicon-o-paper-airplane', 'size-5', ['aria-hidden' => 'true'])Enviar aviso</button>
                                 <button type="button" class="btn" wire:click="$set('mostrarError', false)">Cancelar</button>
                             </div>
                         </form>
                     @else
-                        <button type="button" class="btn" wire:click="$set('mostrarError', true)">¿Este dato está mal?</button>
+                        <button type="button" class="btn" wire:click="$set('mostrarError', true)">@svg('heroicon-o-flag', 'size-5', ['aria-hidden' => 'true'])¿Este dato está mal?</button>
                     @endif
                 @else
                     <p class="text-sm text-gris">¿Algún dato está mal? <a href="{{ route('entrar') }}" wire:navigate class="font-bold text-pino underline">Entra</a> y avísanos.</p>
@@ -222,7 +232,7 @@
                     <h2 class="font-bold">Cerca de aquí</h2>
                     @foreach ($cercanos as $c)
                         <a href="{{ route('sitio', $c) }}" wire:navigate class="tarjeta flex items-center gap-3 p-3 no-underline hover:border-gris">
-                            <span class="size-2.5 flex-none rounded-full" style="background: {{ $c->color() }}"></span>
+                            <x-icono-tipo :tipo="$c->tipo" class="size-5" />
                             <span class="min-w-0">
                                 <strong class="block truncate">{{ $c->nombre }}</strong>
                                 <span class="text-sm text-gris">{{ $c->etiquetaTipo() }} · {{ $c->municipio->nombre }}</span>
@@ -233,7 +243,7 @@
             @endif
 
             @if (auth()->user()?->isStaff())
-                <a href="{{ \App\Filament\Resources\Sitios\SitioResource::getUrl('edit', ['record' => $s]) }}" class="btn">Editar en el panel</a>
+                <a href="{{ \App\Filament\Resources\Sitios\SitioResource::getUrl('edit', ['record' => $s]) }}" class="btn">@svg('heroicon-o-pencil-square', 'size-5', ['aria-hidden' => 'true'])Editar en el panel</a>
             @endif
         </aside>
     </div>
