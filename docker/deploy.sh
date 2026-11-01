@@ -9,7 +9,8 @@ APP_DIR="/home/luisb/travel"
 RAMA="main"
 IMAGEN="travelpet:production"
 URL_SALUD="http://127.0.0.1:8070/"
-export GIT_SSH_COMMAND="ssh -i $HOME/.ssh/travelpet_deploy -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
+export PATH="/usr/local/bin:/usr/bin:/bin"
+CLAVE_DEPLOY="$HOME/.ssh/travelpet_deploy"
 
 cd "$APP_DIR"
 
@@ -17,7 +18,9 @@ cd "$APP_DIR"
 exec 9>/tmp/travelpet-deploy.lock
 flock -n 9 || exit 0
 
-git fetch --quiet origin "$RAMA"
+# Con la clave de solo lectura del repo si GitHub la acepta; si no, con la clave SSH normal del servidor
+GIT_SSH_COMMAND="ssh -i $CLAVE_DEPLOY -o IdentitiesOnly=yes -o BatchMode=yes" git fetch --quiet origin "$RAMA" 2>/dev/null \
+    || git fetch --quiet origin "$RAMA"
 ACTUAL=$(git rev-parse HEAD)
 NUEVO=$(git rev-parse "origin/$RAMA")
 [ "$ACTUAL" = "$NUEVO" ] && exit 0
