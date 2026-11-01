@@ -35,6 +35,27 @@ Route::middleware('auth')->group(function () {
     })->name('salir');
 });
 
+// Datos actuales en JSON (lo mismo que ya se ve en la web). Lo consulta Claude antes de
+// preparar cambios de datos, porque desde el repositorio no ve la base de datos.
+Route::get('/datos/sitios.json', function () {
+    $sitios = Sitio::publicados()->with('municipio.provincia')->orderBy('id')->get()->map(fn (Sitio $s) => [
+        'nombre' => $s->nombre,
+        'municipio' => $s->municipio->nombre,
+        'provincia' => $s->municipio->provincia->nombre,
+        'comarca' => $s->municipio->comarca,
+        'tipo' => $s->tipo,
+        'subtipo' => $s->subtipo,
+        'url' => route('sitio', $s),
+        ...$s->only([
+            'direccion', 'latitud', 'longitud', 'contacto', 'admite_perros', 'tamano_maximo', 'suplemento',
+            'zonas_permitidas', 'temporada', 'otras_condiciones', 'fuente', 'verificado', 'fuente_oficial',
+        ]),
+        'fecha_comprobacion' => $s->fecha_comprobacion?->toDateString(),
+    ]);
+
+    return response()->json(['generado' => now()->toIso8601String(), 'total' => $sitios->count(), 'sitios' => $sitios], 200, [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+})->name('datos.sitios');
+
 // Para que Google encuentre cada ficha
 Route::get('/sitemap.xml', function () {
     $sitios = Sitio::publicados()->get(['slug', 'updated_at']);

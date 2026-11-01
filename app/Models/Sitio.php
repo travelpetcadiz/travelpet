@@ -45,6 +45,9 @@ class Sitio extends Model
     // Datos con más de 6 meses se marcan como antiguos
     public const DIAS_ANTIGUO = 183;
 
+    // Quién figura en el historial cuando el cambio no lo hace una persona del panel
+    public static string $origenCambios = 'Sistema';
+
     protected function casts(): array
     {
         return [
@@ -60,6 +63,8 @@ class Sitio extends Model
     protected static function booted(): void
     {
         static::creating(function (Sitio $sitio) {
+            // Para el slug hace falta el nombre del municipio
+            $sitio->loadMissing('municipio');
             $sitio->slug ??= static::slugUnico($sitio->nombre.' '.$sitio->municipio?->nombre);
         });
 
@@ -77,7 +82,7 @@ class Sitio extends Model
                     'campo' => $campo,
                     'antes' => static::texto($sitio->getOriginal($campo)),
                     'despues' => static::texto($nuevo),
-                    'fuente' => auth()->user()?->name ?? 'Sistema',
+                    'fuente' => auth()->user()?->name ?? static::$origenCambios,
                     'fecha' => now()->toDateString(),
                 ]);
             }
