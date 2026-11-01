@@ -21,6 +21,7 @@
     <meta property="og:image" content="{{ asset('hero.jpg') }}">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" href="{{ asset('logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
     @isset($jsonLd)
         <script type="application/ld+json">{!! json_encode($jsonLd, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) !!}</script>
     @endisset
@@ -33,9 +34,7 @@
     <header x-data="{ abierto: false }" class="sticky top-0 z-30 border-b border-linea bg-white/95 backdrop-blur">
         <div class="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5">
             <a href="{{ route('inicio') }}" wire:navigate class="flex items-center gap-2 font-display text-xl font-extrabold tracking-tight text-pino no-underline">
-                <span aria-hidden="true" class="grid size-8 place-items-center rounded-full bg-pino text-white">
-                    <svg viewBox="0 0 24 24" fill="currentColor" class="size-5"><ellipse cx="6" cy="9.5" rx="2" ry="2.6"/><ellipse cx="10" cy="5.8" rx="2" ry="2.6"/><ellipse cx="14" cy="5.8" rx="2" ry="2.6"/><ellipse cx="18" cy="9.5" rx="2" ry="2.6"/><path d="M12 11c-2.6 0-5.5 3.6-5.5 6.2 0 1.6 1.2 2.5 2.8 2.5 1.1 0 1.8-.6 2.7-.6s1.6.6 2.7.6c1.6 0 2.8-.9 2.8-2.5C17.5 14.6 14.6 11 12 11z"/></svg>
-                </span>
+                <img src="{{ asset('logo.png') }}" alt="" width="36" height="36" class="size-9">
                 {{ $marca }}
             </a>
             <span class="flex-1"></span>
