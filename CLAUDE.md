@@ -64,7 +64,7 @@ Guía de sitios que admiten perros. Empezó con la provincia de Cádiz (web est�
 Natalia gestiona el día a día en el panel. Cuando pida cambios de datos a Claude (corregir sitios, añadir varios a la vez, ocultar uno), se hacen con una **migración** que usa `App\Support\DatosGuia`; al llegar a `main` se aplica sola en producción (`migrate --force` al desplegar).
 
 1. **Consultar primero los datos actuales** en https://travelpetcadiz.es/datos/sitios.json (sitios publicados). Desde el repo no se ve la base de datos y Natalia edita en el panel, así que `database/data/datos.json` está desactualizado: no usarlo como referencia ni editarlo.
-2. Crear la migración con `php artisan make:migration datos_<descripcion_corta>` y usar solo `DatosGuia` en `up()`; dejar `down()` vacío (los datos no se deshacen con rollback).
+2. Crear la migración con `php artisan make:migration datos_<descripcion_corta>` y usar solo `DatosGuia` en `up()`; dejar `down()` vacío (los datos no se deshacen con rollback). Empezar `up()` con `if (! Sitio::exists()) return;`: los tests migran una base vacía y `crearOActualizar` falla si no existe la provincia, lo que pararía el despliegue.
 3. Cambiar solo los campos pedidos. Nunca borrar sitios (usar `ocultar`), ni tocar `users`, `resenas` o `sugerencias`, ni hacer `truncate` o `update` masivos sin `where`.
 4. `php artisan test` antes de subir.
 
