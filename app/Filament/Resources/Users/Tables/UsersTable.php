@@ -28,7 +28,7 @@ class UsersTable
                         'editor' => 'warning',
                         default => 'gray',
                     }),
-                IconColumn::make('activo')->boolean(),
+                IconColumn::make('activo')->label('Puede entrar')->boolean()->tooltip('Si está desactivado, no puede entrar ni publicar nada'),
                 TextColumn::make('resenas_count')->label('Reseñas')->counts('resenas')->sortable(),
                 TextColumn::make('created_at')->label('Registro')->date('d/m/Y')->sortable(),
             ])
@@ -37,7 +37,7 @@ class UsersTable
                 TernaryFilter::make('activo'),
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()->label('Cambiar'),
             ]);
     }
 }

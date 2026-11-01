@@ -21,7 +21,7 @@ class ProvinciaResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedGlobeEuropeAfrica;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Geografía';
+    protected static string|UnitEnum|null $navigationGroup = 'Ajustes';
 
     protected static ?string $modelLabel = 'provincia';
 

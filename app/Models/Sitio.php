@@ -29,6 +29,20 @@ class Sitio extends Model
         'urgencias_24h' => false,
     ];
 
+    // Nombre de cada campo tal como lo entiende una persona (para el historial)
+    public const CAMPOS = [
+        'nombre' => 'Nombre', 'tipo' => 'Tipo', 'subtipo' => 'Qué es exactamente', 'municipio_id' => 'Municipio',
+        'direccion' => 'Dirección', 'latitud' => 'Ubicación (latitud)', 'longitud' => 'Ubicación (longitud)',
+        'contacto' => 'Teléfono / web', 'admite_perros' => '¿Admite mascotas?', 'tamano_maximo' => 'Tamaño o peso máximo',
+        'suplemento' => 'Suplemento', 'zonas_permitidas' => 'Zonas permitidas', 'temporada' => 'Temporada / horario',
+        'otras_condiciones' => 'Otras condiciones', 'fuente' => 'De dónde sale el dato', 'fecha_comprobacion' => 'Fecha de comprobación',
+        'verificado' => 'Confirmado por el propio sitio', 'fuente_oficial' => 'Fuente oficial', 'publicado' => 'Se ve en la web',
+        'admite_grandes' => 'Admite perros grandes', 'sin_suplemento' => 'Sin suplemento', 'puede_entrar' => 'Puede estar dentro',
+        'sin_correa' => 'Zona sin correa', 'urgencias_24h' => 'Urgencias 24 h', 'periodo_tipo' => 'Fechas: cuándo',
+        'periodo_desde' => 'Fechas: desde', 'periodo_hasta' => 'Fechas: hasta',
+        'Latitud/Longitud' => 'Ubicación',
+    ];
+
     public const PERIODOS = [
         'todo' => 'Se puede ir todo el año',
         'solo' => 'Solo se puede ir entre estas fechas',

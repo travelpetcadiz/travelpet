@@ -15,7 +15,7 @@ class Sugerencia extends Model
     ];
 
     public const ESTADOS = [
-        'pendiente' => 'Pendiente',
+        'pendiente' => 'Por revisar',
         'hecha' => 'Hecha',
         'descartada' => 'Descartada',
     ];

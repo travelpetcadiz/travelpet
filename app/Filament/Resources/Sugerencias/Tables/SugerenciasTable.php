@@ -18,6 +18,9 @@ class SugerenciasTable
     {
         return $table
             ->defaultSort('created_at', 'desc')
+            ->emptyStateHeading('No hay sugerencias por revisar')
+            ->emptyStateDescription('Cuando alguien proponga un sitio o avise de un dato mal, aparecerá aquí. Para ver las ya hechas, cambia el filtro del embudo.')
+            ->emptyStateIcon('heroicon-o-light-bulb')
             ->columns([
                 TextColumn::make('tipo')
                     ->badge()
@@ -40,22 +43,24 @@ class SugerenciasTable
                 TextColumn::make('created_at')->label('Fecha')->dateTime('d/m/Y H:i')->sortable(),
             ])
             ->filters([
-                SelectFilter::make('estado')->options(Sugerencia::ESTADOS)->default('pendiente'),
+                SelectFilter::make('estado')->label('Mostrar')->options(Sugerencia::ESTADOS)->default('pendiente'),
                 SelectFilter::make('tipo')->options(Sugerencia::TIPOS),
             ])
             ->recordActions([
                 Action::make('abrirSitio')
-                    ->label('Editar sitio')
+                    ->label('Corregir el sitio')
                     ->icon('heroicon-o-pencil-square')
                     ->visible(fn (Sugerencia $record) => $record->sitio_id !== null)
                     ->url(fn (Sugerencia $record) => SitioResource::getUrl('edit', ['record' => $record->sitio])),
                 Action::make('hecha')
                     ->label('Marcar hecha')
+                    ->tooltip('Ya lo has revisado o corregido')
+                    ->successNotificationTitle('Marcada como hecha')
                     ->icon('heroicon-o-check')
                     ->color('success')
                     ->visible(fn (Sugerencia $record) => $record->estado === 'pendiente')
                     ->action(fn (Sugerencia $record) => $record->update(['estado' => 'hecha'])),
-                EditAction::make(),
+                EditAction::make()->label('Leer entera'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

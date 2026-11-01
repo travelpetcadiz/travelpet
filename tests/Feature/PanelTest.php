@@ -28,7 +28,7 @@ class PanelTest extends TestCase
     {
         return [
             ['/admin'], ['/admin/sitios'], ['/admin/sitios/create'], ['/admin/resenas'], ['/admin/sugerencias'],
-            ['/admin/cambios'], ['/admin/municipios'], ['/admin/users'], ['/admin/provincias'],
+            ['/admin/historial'], ['/admin/municipios'], ['/admin/usuarios'], ['/admin/provincias'], ['/admin/ayuda'],
             ['/admin/fotos'], ['/admin/fotos/create'], ['/mockup'],
         ];
     }
@@ -37,6 +37,27 @@ class PanelTest extends TestCase
     public function test_el_admin_ve_todo_el_panel(string $url): void
     {
         $this->actingAs(User::factory()->admin()->create())->get($url)->assertOk();
+    }
+
+    public function test_el_inicio_dice_lo_que_hay_pendiente(): void
+    {
+        $this->sitio->update(['fecha_comprobacion' => now()->subMonths(5)]);
+
+        $this->actingAs(User::factory()->admin()->create(['name' => 'Natalia García']))
+            ->get('/admin')
+            ->assertOk()
+            ->assertSee('Hola, Natalia')
+            ->assertSee('Lo que tienes pendiente')
+            ->assertSee('Datos que caducan pronto')
+            ->assertSee('filters%5Bcaducan%5D%5BisActive%5D=1', false);
+    }
+
+    public function test_los_filtros_del_inicio_funcionan_en_la_lista(): void
+    {
+        $this->actingAs(User::factory()->admin()->create())
+            ->get('/admin/sitios?filters[sin_coordenadas][isActive]=1')
+            ->assertOk()
+            ->assertSee('Hotel Prueba');
     }
 
     public function test_el_admin_puede_editar_un_sitio(): void
@@ -53,7 +74,7 @@ class PanelTest extends TestCase
 
         $this->actingAs($editor)->get('/admin/sitios')->assertOk();
         $this->actingAs($editor)->get('/admin/resenas')->assertOk();
-        $this->actingAs($editor)->get('/admin/users')->assertForbidden();
+        $this->actingAs($editor)->get('/admin/usuarios')->assertForbidden();
         $this->actingAs($editor)->get('/admin/provincias')->assertForbidden();
     }
 

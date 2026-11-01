@@ -19,6 +19,9 @@ class ResenasTable
     {
         return $table
             ->defaultSort('created_at', 'desc')
+            ->emptyStateHeading('No hay reseñas por revisar')
+            ->emptyStateDescription('Cuando alguien escriba una en la web, aparecerá aquí. Para ver las ya publicadas, cambia el filtro del embudo.')
+            ->emptyStateIcon('heroicon-o-chat-bubble-left-right')
             ->columns([
                 TextColumn::make('sitio.nombre')->label('Sitio')->searchable()->wrap(),
                 TextColumn::make('user.name')->label('Autor')->searchable(),
@@ -40,27 +43,35 @@ class ResenasTable
                 TextColumn::make('created_at')->label('Fecha')->dateTime('d/m/Y H:i')->sortable(),
             ])
             ->filters([
-                SelectFilter::make('estado')->options(Resena::ESTADOS)->default('pendiente'),
+                SelectFilter::make('estado')->label('Mostrar')->options(Resena::ESTADOS)->default('pendiente'),
             ])
             ->recordActions([
                 Action::make('aprobar')
+                    ->label('Publicar')
+                    ->tooltip('Se verá en la ficha del sitio')
+                    ->successNotificationTitle('Publicada')
                     ->icon('heroicon-o-check')
                     ->color('success')
                     ->visible(fn (Resena $record) => $record->estado !== 'aprobada')
                     ->action(fn (Resena $record) => $record->update(['estado' => 'aprobada'])),
                 Action::make('rechazar')
+                    ->label('No publicar')
+                    ->tooltip('Para spam, insultos o reseñas que no son de este sitio')
+                    ->successNotificationTitle('No se publicará')
                     ->icon('heroicon-o-x-mark')
-                    ->color('danger')
+                    ->color('gray')
                     ->visible(fn (Resena $record) => $record->estado !== 'rechazada')
                     ->action(fn (Resena $record) => $record->update(['estado' => 'rechazada'])),
-                EditAction::make(),
+                EditAction::make()->label('Leer entera'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     BulkAction::make('aprobar')
+                        ->label('Publicar')
                         ->icon('heroicon-o-check')
                         ->action(fn (Collection $records) => $records->each->update(['estado' => 'aprobada'])),
                     BulkAction::make('rechazar')
+                        ->label('No publicar')
                         ->icon('heroicon-o-x-mark')
                         ->action(fn (Collection $records) => $records->each->update(['estado' => 'rechazada'])),
                     DeleteBulkAction::make(),

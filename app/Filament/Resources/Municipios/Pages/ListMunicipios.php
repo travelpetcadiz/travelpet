@@ -10,10 +10,15 @@ class ListMunicipios extends ListRecords
 {
     protected static string $resource = MunicipioResource::class;
 
+    public function getSubheading(): ?string
+    {
+        return 'Los pueblos de la guía. Normalmente no hace falta tocarlos: al añadir un sitio puedes crear su pueblo con el «+».';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()->label('Añadir un pueblo')->icon('heroicon-o-plus'),
         ];
     }
 }

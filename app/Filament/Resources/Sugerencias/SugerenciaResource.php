@@ -12,12 +12,15 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class SugerenciaResource extends Resource
 {
     protected static ?string $model = Sugerencia::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedLightBulb;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Lo que envía la gente';
 
     protected static ?string $modelLabel = 'sugerencia';
 

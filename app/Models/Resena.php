@@ -11,9 +11,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Resena extends Model
 {
     public const ESTADOS = [
-        'pendiente' => 'Pendiente',
-        'aprobada' => 'Aprobada',
-        'rechazada' => 'Rechazada',
+        'pendiente' => 'Por revisar',
+        'aprobada' => 'Publicada',
+        'rechazada' => 'No publicada',
     ];
 
     public const TAMANOS = [

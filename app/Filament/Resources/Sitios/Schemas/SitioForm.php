@@ -22,6 +22,8 @@ class SitioForm
             ->columns(2)
             ->components([
                 Section::make('Datos básicos')
+                    ->description('Qué es, dónde está y cómo contactar.')
+                    ->icon('heroicon-o-map-pin')
                     ->columnSpanFull()
                     ->columns(2)
                     ->schema([
@@ -29,7 +31,8 @@ class SitioForm
                         Select::make('tipo')
                             ->options(collect(Sitio::TIPOS)->mapWithKeys(fn ($v, $k) => [$k => $v[0]]))
                             ->required(),
-                        TextInput::make('subtipo')->placeholder('Hotel, playa canina, clínica…'),
+                        TextInput::make('subtipo')->label('Qué es exactamente')->placeholder('Hotel, playa canina, clínica…')
+                            ->helperText('Sale debajo del nombre en la web.'),
                         Select::make('municipio_id')
                             ->label('Municipio')
                             ->relationship('municipio', 'nombre', fn (Builder $query) => $query->with('provincia')->orderBy('nombre'))
@@ -39,25 +42,33 @@ class SitioForm
                             ->required()
                             ->createOptionForm(MunicipioForm::campos()),
                         TextInput::make('direccion')->label('Dirección'),
-                        TextInput::make('latitud')->numeric()->minValue(-90)->maxValue(90)->helperText('Ejemplo: 36.529800. En Google Maps: clic derecho sobre el sitio.'),
-                        TextInput::make('longitud')->numeric()->minValue(-180)->maxValue(180)->helperText('Ejemplo: -6.292600'),
+                        TextInput::make('latitud')->label('Ubicación: latitud')->numeric()->minValue(-90)->maxValue(90)
+                            ->placeholder('36.529800')
+                            ->helperText('En Google Maps, pulsa con el botón derecho sobre el sitio y copia los dos números: el primero va aquí.'),
+                        TextInput::make('longitud')->label('Ubicación: longitud')->numeric()->minValue(-180)->maxValue(180)
+                            ->placeholder('-6.292600')
+                            ->helperText('El segundo número (en Cádiz empieza por -5 o -6). Sin ubicación, el sitio no sale en el mapa.'),
                         Textarea::make('contacto')
                             ->label('Teléfono / Web')
                             ->helperText('Separa varios con punto y coma. Las direcciones que empiezan por https:// salen como enlace.')
                             ->columnSpanFull(),
                     ]),
                 Section::make('Condiciones para mascotas')
+                    ->description('Lo que la gente necesita saber antes de ir. Si algo no lo sabes, déjalo vacío: la web dirá «Aún no sabemos».')
+                    ->icon('heroicon-o-check-circle')
                     ->columnSpanFull()
                     ->columns(2)
                     ->schema([
                         Select::make('admite_perros')->label('¿Admite mascotas?')->options(Sitio::ADMITE)->required()->default('no_consta'),
                         TextInput::make('tamano_maximo')->label('Tamaño o peso máximo'),
                         TextInput::make('suplemento')->label('Suplemento (€)'),
-                        TextInput::make('temporada'),
+                        TextInput::make('temporada')->label('Temporada u horario')
+                            ->helperText('En veterinarios y servicios, su horario. En playas, el texto de la temporada (las fechas exactas van más abajo).'),
                         Textarea::make('zonas_permitidas')->rows(3)->columnSpanFull(),
                         Textarea::make('otras_condiciones')->rows(3)->columnSpanFull(),
                     ]),
                 Section::make('Para los filtros')
+                    ->icon('heroicon-o-adjustments-horizontal')
                     ->description('Lo que usan los filtros de la web y los iconos de la ficha. Si no lo sabes seguro, déjalo en «No lo sabemos»: así no sale en un filtro por error.')
                     ->columnSpanFull()
                     ->columns(2)
@@ -86,6 +97,7 @@ class SitioForm
                             ->helperText('Sale en «Urgencias veterinarias 24 h» de la portada.'),
                     ]),
                 Section::make('Fechas en que se puede ir (playas)')
+                    ->icon('heroicon-o-calendar-days')
                     ->description('Con esto la ficha dice «Hoy se puede ir» o «Hoy no». Los días van como día/mes: 01/06 es el 1 de junio.')
                     ->columnSpanFull()
                     ->columns(3)
@@ -109,14 +121,22 @@ class SitioForm
                             ->visible(fn ($get) => in_array($get('periodo_tipo'), ['solo', 'prohibido'], true)),
                     ]),
                 Section::make('Comprobación')
+                    ->description('De dónde sale el dato y si se ve en la web. Es lo que da confianza a la guía.')
+                    ->icon('heroicon-o-shield-check')
                     ->columnSpanFull()
                     ->columns(2)
                     ->schema([
-                        Textarea::make('fuente')->rows(2)->columnSpanFull()->helperText('De dónde sale el dato: web oficial, email, llamada…'),
-                        DatePicker::make('fecha_comprobacion')->label('Fecha de comprobación')->default(now()),
-                        Toggle::make('verificado')->helperText('Confirmado directamente con el sitio'),
-                        Toggle::make('fuente_oficial')->label('Fuente oficial'),
-                        Toggle::make('publicado')->default(true)->helperText('Si lo desactivas, deja de verse en la web'),
+                        Textarea::make('fuente')->label('De dónde sale el dato')->rows(2)->columnSpanFull()
+                            ->placeholder('Llamada al hotel el 2/11/2026 · web del ayuntamiento · email…'),
+                        DatePicker::make('fecha_comprobacion')->label('Cuándo lo comprobaste')->default(now())
+                            ->native(false)->displayFormat('d/m/Y')->firstDayOfWeek(1)
+                            ->helperText('A los 6 meses la web avisa de que el dato puede estar antiguo.'),
+                        Toggle::make('verificado')->label('Confirmado por el propio sitio')
+                            ->helperText('Márcalo si te lo ha dicho el propio sitio: por teléfono, email o en persona.'),
+                        Toggle::make('fuente_oficial')->label('Sale de una fuente oficial')
+                            ->helperText('Su propia web, su ayuntamiento o un organismo público.'),
+                        Toggle::make('publicado')->label('Se ve en la web')->default(true)
+                            ->helperText('Apágalo si ha cerrado o no quieres que se vea. No se borra nada.'),
                     ]),
             ]);
     }

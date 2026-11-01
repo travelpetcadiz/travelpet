@@ -17,18 +17,21 @@ class FotosTable
     {
         return $table
             ->defaultSort('created_at', 'desc')
+            ->emptyStateHeading('Aún no hay fotos')
+            ->emptyStateDescription('Sube fotos reales tuyas con tu mascota por Cádiz: playa, terraza, paseo… Se usarán en el diseño nuevo de la web.')
+            ->emptyStateIcon('heroicon-o-photo')
             ->columns([
                 ImageColumn::make('archivo')->label('Foto')->disk('public')->imageHeight(80),
                 TextColumn::make('descripcion')->label('Qué se ve')->wrap()->searchable(),
                 TextColumn::make('lugar')->label('Dónde')->placeholder('—'),
-                IconColumn::make('para_portada')->label('Para la portada')->boolean(),
+                IconColumn::make('para_portada')->label('Para la portada')->boolean()->falseIcon('heroicon-o-minus')->falseColor('gray'),
                 TextColumn::make('created_at')->label('Subida')->date('d/m/Y')->sortable(),
             ])
             ->filters([
                 TernaryFilter::make('para_portada')->label('Para la portada'),
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()->label('Cambiar'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

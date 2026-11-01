@@ -9,6 +9,7 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class CambioResource extends Resource
 {
@@ -16,13 +17,17 @@ class CambioResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClock;
 
+    protected static string|UnitEnum|null $navigationGroup = 'Ajustes';
+
+    protected static ?string $slug = 'historial';
+
     protected static ?string $modelLabel = 'cambio';
 
     protected static ?string $pluralModelLabel = 'historial de cambios';
 
     protected static ?string $navigationLabel = 'Historial';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 20;
 
     public static function table(Table $table): Table
     {

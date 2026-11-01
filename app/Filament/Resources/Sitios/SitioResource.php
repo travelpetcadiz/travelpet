@@ -14,6 +14,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use UnitEnum;
 
 class SitioResource extends Resource
 {
@@ -26,6 +27,8 @@ class SitioResource extends Resource
     protected static ?string $pluralModelLabel = 'sitios';
 
     protected static ?string $recordTitleAttribute = 'nombre';
+
+    protected static string|UnitEnum|null $navigationGroup = 'La guía';
 
     protected static ?int $navigationSort = 1;
 

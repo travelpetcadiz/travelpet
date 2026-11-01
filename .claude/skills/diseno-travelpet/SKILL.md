@@ -78,7 +78,19 @@ Los filtros prácticos (perros grandes, sin suplemento, dentro del local, sin co
 
 ## Panel de administración (Filament)
 
-Usa los componentes e iconos de Filament (`Heroicon::Outlined...`), etiquetas en español y `helperText` para explicar cualquier campo que pueda generar dudas. Color principal: `#0E7F8A`.
+Lo usa Natalia, que no es informática: cada pantalla tiene que explicarse sola.
+
+- **Menú agrupado por lo que hace ella**: «La guía» (Sitios, Fotos), «Lo que envía la gente» (Reseñas, Sugerencias), «Ajustes» (Usuarios, Provincias, Municipios, Historial) y «Enlaces» (Ayuda, Ver la web, Bocetos). Una sección nueva va en uno de estos grupos.
+- **Cada lista lleva una explicación** (`getSubheading()` en la página `List…`): qué es y qué se hace ahí. Y un mensaje para cuando está vacía (`emptyStateHeading/Description`) que diga qué significa, no «No se encontraron registros».
+- **Botones que dicen lo que hacen**: «Añadir un sitio», «Publicar», «No publicar», «Confirmar», «Marcar hecha», «Subir una foto». Nada de «Crear», «Aprobar» o «Editar» a secas. Las notificaciones al guardar también en ese idioma («Guardado. Ya se ve así en la web.»).
+- **Mismas palabras que la web**: «Confirmado por el propio sitio» (no «verificado»), «Se ve en la web» (no «publicado»), «Pueblo» (no «municipio») en las tablas. Los nombres de los campos para el historial están en `Sitio::CAMPOS`.
+- **No asustar**: un dato que falta va en gris, no en rojo. Borrar es secundario (gris) y su aviso propone la alternativa (ocultar).
+- **Cada campo dudoso lleva `helperText`**, y cada bloque del formulario una `description` y un icono.
+- **La página de Ayuda** (`app/Filament/Pages/Ayuda.php` y su vista) explica cada menú y tiene recetas paso a paso: si añades un menú o una tarea nueva, añádelo ahí.
+- **Inicio** (`app/Filament/Pages/Inicio.php`, widget `Pendientes`): cada tarea pendiente dice qué es y lleva un botón directo a la lista filtrada (`?filters[nombre][isActive]=1`).
+- Las vistas propias del panel usan **solo componentes de Filament y estilos en línea**: el panel no carga el CSS de la web, así que las clases de Tailwind propias no funcionan ahí. Los widgets van con `$isLazy = false`.
+- Colores: el turquesa de la marca va como paleta propia en `AdminPanelProvider` (no uses `Color::hex()`, lo aclara demasiado). Letra: Atkinson Hyperlegible, servida desde el propio servidor.
+- Comprueba siempre que las tablas caben a 1280 px de ancho sin que se corten los botones de la derecha: si no caben, pasa datos debajo del nombre (`->description()`) y oculta columnas (`toggleable(isToggledHiddenByDefault: true)`).
 
 ## Antes de dar el cambio por terminado
 

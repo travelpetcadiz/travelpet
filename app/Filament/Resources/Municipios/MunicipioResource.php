@@ -22,7 +22,7 @@ class MunicipioResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice2;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Geografía';
+    protected static string|UnitEnum|null $navigationGroup = 'Ajustes';
 
     protected static ?string $modelLabel = 'municipio';
 
