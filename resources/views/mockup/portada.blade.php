@@ -8,7 +8,6 @@
     if ($fotos->isEmpty()) {
         $fotos = Foto::latest()->take(6)->get();
     }
-    $principal = $fotos->first();
 
     // Cuántos sitios hay de cada categoría (para los accesos)
     $conteoTipos = Sitio::publicados()->selectRaw('tipo, count(*) as n')->groupBy('tipo')->pluck('n', 'tipo');
@@ -41,19 +40,27 @@
 @component('layouts.app', ['title' => 'Boceto: portada', 'noindex' => true])
     @include('mockup.partes.barra', ['actual' => 'portada'])
 
-    {{-- Portada: foto real arriba y el buscador visible sin bajar, también en el móvil --}}
-    <section class="relative bg-tinta">
-        @if ($principal)
-            <img src="{{ $principal->url() }}" alt="{{ $principal->descripcion }}" fetchpriority="high"
-                 class="h-[38svh] min-h-64 w-full object-cover object-[50%_30%] md:h-[560px]">
-        @else
-            <img src="{{ asset('hero.jpg') }}" alt="" class="h-[38svh] min-h-64 w-full object-cover md:h-[560px]">
-        @endif
+    {{-- Portada: carrusel con las fotos de portada; pasan solas y en el móvil se deslizan con el dedo.
+         Las fotos propias van sin crédito; las de otros (cedidas, Wikimedia) lo llevan, porque lo exige su licencia --}}
+    <section class="relative bg-tinta" aria-roledescription="carrusel" aria-label="Fotos de mascotas por Cádiz" data-carrusel>
+        <ul class="flex h-[38svh] min-h-64 snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] md:h-[560px] [&::-webkit-scrollbar]:hidden" data-pista>
+            @forelse ($fotos as $i => $f)
+                <li class="relative h-full w-full flex-none snap-center" aria-roledescription="foto" aria-label="{{ $i + 1 }} de {{ $fotos->count() }}">
+                    <img src="{{ $f->url() }}" alt="{{ $f->descripcion }}" @if ($i === 0) fetchpriority="high" @else loading="lazy" @endif
+                         class="size-full object-cover object-[50%_30%]">
+                    @if ($f->origen !== 'propia')
+                        <span class="absolute right-2 top-2 rounded-md bg-tinta/60 px-2 py-0.5 text-xs text-white">{{ $f->credito()['texto'] }}</span>
+                    @endif
+                </li>
+            @empty
+                <li class="h-full w-full flex-none"><img src="{{ asset('hero.jpg') }}" alt="" class="size-full object-cover"></li>
+            @endforelse
+        </ul>
         {{-- Degradado para que el título se lea sobre cualquier foto --}}
         <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-tinta/80 via-tinta/20 to-transparent md:bg-gradient-to-r md:from-tinta/75 md:via-tinta/30"></div>
 
-        <div class="absolute inset-x-0 bottom-0 md:inset-y-0">
-            <div class="mx-auto flex h-full max-w-6xl items-end px-4 pb-12 md:items-center md:pb-0">
+        <div class="pointer-events-none absolute inset-x-0 bottom-0 md:inset-y-0">
+            <div class="mx-auto flex h-full max-w-6xl items-end px-4 pb-16 md:items-center md:pb-0">
                 <div class="max-w-xl text-white">
                     <h1 class="text-4xl font-extrabold leading-tight drop-shadow sm:text-5xl md:text-6xl">¿Puedo ir con mi mascota?</h1>
                     <p class="mt-2 text-lg text-white/90 drop-shadow">Hoteles, bares, playas y parques de Cádiz: si admiten mascotas y con qué condiciones.</p>
@@ -61,8 +68,21 @@
             </div>
         </div>
 
-        @if ($principal)
-            <p class="absolute right-2 top-2 rounded-md bg-tinta/60 px-2 py-0.5 text-xs text-white">{{ $principal->credito()['texto'] }}@if ($principal->lugar) · {{ $principal->lugar }}@endif</p>
+        @if ($fotos->count() > 1)
+            {{-- Flechas (solo ordenador) y puntos para saber cuántas fotos hay --}}
+            <button type="button" data-anterior class="absolute left-3 top-1/2 hidden size-11 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-tinta shadow hover:bg-white md:grid">
+                @svg('heroicon-o-chevron-left', 'size-6', ['aria-hidden' => 'true'])<span class="sr-only">Foto anterior</span>
+            </button>
+            <button type="button" data-siguiente class="absolute right-3 top-1/2 hidden size-11 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-tinta shadow hover:bg-white md:grid">
+                @svg('heroicon-o-chevron-right', 'size-6', ['aria-hidden' => 'true'])<span class="sr-only">Foto siguiente</span>
+            </button>
+            <div class="absolute inset-x-0 bottom-11 flex justify-center gap-1.5 md:bottom-24">
+                @foreach ($fotos as $i => $f)
+                    <button type="button" data-punto="{{ $i }}" class="h-2 w-2 rounded-full bg-white/50 transition-all aria-[current=true]:w-6 aria-[current=true]:bg-white">
+                        <span class="sr-only">Ver foto {{ $i + 1 }}</span>
+                    </button>
+                @endforeach
+            </div>
         @endif
     </section>
 
@@ -173,24 +193,6 @@
         <a href="{{ route('como-funciona') }}" class="mt-3 inline-flex min-h-11 items-center gap-2 font-bold text-pino underline">@svg('heroicon-o-question-mark-circle', 'size-5', ['aria-hidden' => 'true'])Así funciona TravelPet</a>
     </section>
 
-    {{-- Más fotos reales: dan confianza y hacen que se sienta de Cádiz --}}
-    @if ($fotos->count() > 1)
-        <section class="mx-auto max-w-6xl px-4 pt-10">
-            <h2 class="mb-3 text-2xl font-extrabold">Con mascota por Cádiz</h2>
-            <ul class="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:thin] md:mx-0 md:grid md:grid-cols-4 md:overflow-visible md:px-0">
-                @foreach ($fotos->skip(1)->take(8) as $f)
-                    <li class="w-64 flex-none snap-start md:w-auto">
-                        <figure class="grid gap-1">
-                            <img src="{{ $f->url() }}" alt="{{ $f->descripcion }}" loading="lazy" class="aspect-[4/3] w-full rounded-2xl object-cover">
-                            <figcaption class="text-sm"><span class="font-bold">{{ $f->lugar ?: $f->descripcion }}</span></figcaption>
-                            <x-credito-foto :foto="$f" />
-                        </figure>
-                    </li>
-                @endforeach
-            </ul>
-        </section>
-    @endif
-
     {{-- Invitación a participar --}}
     <section class="mx-auto max-w-6xl px-4 py-10">
         <div class="flex flex-col gap-4 rounded-3xl bg-pino-suave p-6 md:flex-row md:items-center md:justify-between">
@@ -201,4 +203,27 @@
             <a href="{{ route('sugerir') }}" class="btn">@svg('heroicon-o-light-bulb', 'size-5', ['aria-hidden' => 'true'])Sugerir un sitio</a>
         </div>
     </section>
+    <script>
+        // Carrusel de la portada: pasa de foto cada 5 segundos y se para si la persona lo toca o tiene el movimiento reducido
+        (() => {
+            const c = document.querySelector('[data-carrusel]');
+            const pista = c?.querySelector('[data-pista]');
+            if (! pista || pista.children.length < 2) return;
+            const total = pista.children.length;
+            const puntos = [...c.querySelectorAll('[data-punto]')];
+            const actual = () => Math.round(pista.scrollLeft / pista.clientWidth);
+            const ir = i => pista.scrollTo({ left: ((i + total) % total) * pista.clientWidth, behavior: 'smooth' });
+            const marcar = () => puntos.forEach((p, i) => p.setAttribute('aria-current', i === actual() ? 'true' : 'false'));
+            let parado = matchMedia('(prefers-reduced-motion: reduce)').matches;
+            setInterval(() => { if (! parado && ! document.hidden) ir(actual() + 1); }, 5000);
+            pista.addEventListener('scroll', marcar, { passive: true });
+            ['pointerdown', 'touchstart', 'focusin'].forEach(e => c.addEventListener(e, () => (parado = true), { passive: true }));
+            c.addEventListener('mouseenter', () => (parado = true));
+            c.addEventListener('mouseleave', () => (parado = matchMedia('(prefers-reduced-motion: reduce)').matches));
+            c.querySelector('[data-anterior]')?.addEventListener('click', () => ir(actual() - 1));
+            c.querySelector('[data-siguiente]')?.addEventListener('click', () => ir(actual() + 1));
+            puntos.forEach((p, i) => p.addEventListener('click', () => ir(i)));
+            marcar();
+        })();
+    </script>
 @endcomponent

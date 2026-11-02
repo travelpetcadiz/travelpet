@@ -33,7 +33,11 @@
         })
         ->when($cerca, fn ($c) => $c->filter(fn ($s) => $s->distancia_km !== null)->sortBy('distancia_km'),
             fn ($c) => $c->sortBy([fn ($a, $b) => (int) ($a->admite_perros === 'no') <=> (int) ($b->admite_perros === 'no'), ['verificado', 'desc'], ['nombre', 'asc']]))
-        ->take(12)->values();
+        ->values();
+    // Paginación de 12 en 12, como en la web pero con flechas y números
+    $porPagina = 12;
+    $paginador = new \Illuminate\Pagination\LengthAwarePaginator($sitios->forPage(\Illuminate\Pagination\Paginator::resolveCurrentPage(), $porPagina)->values(), $sitios->count(), $porPagina, null, ['path' => route('mockup', 'resultados'), 'query' => request()->except('page')]);
+    $sitios = $paginador->getCollection();
 
     $distancia = fn ($km) => $km < 1 ? 'a '.(round($km * 10) * 100).' m' : 'a '.number_format($km, $km < 10 ? 1 : 0, ',', '.').' km';
     // Lo práctico que sabemos de cada sitio, con su icono (null = no lo sabemos y no sale)
@@ -184,9 +188,7 @@
                         </li>
                     @endforeach
                 </ul>
-                @if ($total > $sitios->count())
-                    <button type="button" class="btn mt-4 w-full">@svg('heroicon-o-chevron-down', 'size-5', ['aria-hidden' => 'true'])Ver más sitios ({{ $total - $sitios->count() }})</button>
-                @endif
+                {{ $paginador->links('mockup.partes.paginacion') }}
             @endif
         </section>
 

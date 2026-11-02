@@ -20,7 +20,7 @@
                 $servicio && $s->urgencias_24h => ['bg-mal-suave text-mal border-mal', 'Urgencias las 24 horas', 'lifebuoy', null],
                 $servicio => ['bg-white text-tinta border-linea', $s->etiquetaTipo(), $s->icono(), null],
                 $s->admite_perros === 'si' => ['bg-ok-suave text-ok border-ok', 'Sí, admite mascotas', 'check-circle', 'Puedes ir con tu mascota.'],
-                $s->admite_perros === 'condiciones' => ['bg-aviso-suave text-aviso border-albero', 'Sí, con condiciones', 'exclamation-triangle', 'Puedes ir, pero mira las condiciones de abajo.'],
+                $s->admite_perros === 'condiciones' => ['bg-aviso-suave text-aviso border-albero', 'Sí, con condiciones', 'exclamation-triangle', 'Mira las condiciones de abajo.'],
                 $s->admite_perros === 'no' => ['bg-mal-suave text-mal border-mal', 'No admite mascotas', 'no-symbol', 'Busca otro sitio cerca.'],
                 default => ['bg-cal text-gris border-linea', 'Aún no lo sabemos', 'question-mark-circle', 'Pregunta antes de ir.'],
             };
@@ -53,7 +53,9 @@
             @if ($fotos->isNotEmpty())
                 <figure class="mx-auto max-w-6xl md:px-4 md:pt-4">
                     <img src="{{ $fotos->first()->url() }}" alt="{{ $fotos->first()->descripcion }}" fetchpriority="high" class="aspect-[16/10] w-full object-cover md:aspect-[21/9] md:rounded-2xl">
-                    <div class="px-4 pt-1 md:px-0"><x-credito-foto :foto="$fotos->first()" /></div>
+                    @if ($fotos->first()->origen !== 'propia')
+                        <div class="px-4 pt-1 md:px-0"><x-credito-foto :foto="$fotos->first()" /></div>
+                    @endif
                 </figure>
             @endif
 
@@ -68,27 +70,25 @@
                         <p class="flex items-start gap-1.5 text-gris">@svg('heroicon-o-map-pin', 'mt-1 size-4 flex-none', ['aria-hidden' => 'true'])<span>{{ $direccion }}</span></p>
                     </header>
 
-                    {{-- La respuesta, bien grande: es a lo que viene la gente --}}
-                    <section class="rounded-3xl border-2 p-5 {{ $respuesta[0] }}">
-                        <p class="flex items-center gap-3 font-display text-3xl font-extrabold leading-tight sm:text-4xl">
-                            @svg('heroicon-s-'.$respuesta[2], 'size-10 flex-none', ['aria-hidden' => 'true']){{ $respuesta[1] }}
-                        </p>
-                        @if ($respuesta[3])
-                            <p class="mt-1 text-lg text-tinta">{{ $respuesta[3] }}</p>
-                        @endif
-                        @if ($hoy)
-                            <p class="mt-3 flex items-start gap-2 rounded-2xl bg-white/80 p-3 text-tinta">
-                                @svg('heroicon-s-calendar-days', 'mt-0.5 size-6 flex-none '.($hoy['puede'] ? 'text-ok' : 'text-mal'), ['aria-hidden' => 'true'])
-                                <span><strong class="block text-lg {{ $hoy['puede'] ? 'text-ok' : 'text-mal' }}">{{ $hoy['puede'] ? 'Hoy se puede ir' : 'Hoy no se puede ir' }}</strong>{{ $hoy['texto'] }}</span>
+                    {{-- La respuesta, lo primero y fácil de ver, sin ocupar media pantalla --}}
+                    <section class="flex items-start gap-3 rounded-2xl border-l-4 p-3.5 {{ $respuesta[0] }}">
+                        @svg('heroicon-s-'.$respuesta[2], 'mt-0.5 size-7 flex-none', ['aria-hidden' => 'true'])
+                        <div class="grid min-w-0 gap-1">
+                            <p class="font-display text-xl font-extrabold leading-tight sm:text-2xl">{{ $respuesta[1] }}</p>
+                            <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-tinta">
+                                @if ($respuesta[3])<span>{{ $respuesta[3] }}</span>@endif
+                                @if ($s->verificado)
+                                    <x-confirmado />
+                                @else
+                                    <span class="sello bg-white text-gris">@svg('heroicon-s-shield-check', 'size-4', ['aria-hidden' => 'true'])Sin confirmar por el sitio</span>
+                                @endif
                             </p>
-                        @endif
-                        <p class="mt-3 flex flex-wrap items-center gap-2 text-sm text-tinta">
-                            @if ($s->verificado)
-                                <x-confirmado class="px-2.5 py-1 text-sm" /><span>nos lo ha dicho el propio sitio</span>
-                            @else
-                                <span class="sello bg-white px-2.5 py-1 text-sm text-gris">@svg('heroicon-s-shield-check', 'size-4', ['aria-hidden' => 'true'])Sin confirmar por el sitio</span><span>confírmalo antes de ir</span>
+                            @if ($hoy)
+                                <p class="flex items-center gap-1.5 text-sm font-bold {{ $hoy['puede'] ? 'text-ok' : 'text-mal' }}">
+                                    @svg('heroicon-s-calendar-days', 'size-4 flex-none', ['aria-hidden' => 'true']){{ $hoy['puede'] ? 'Hoy se puede ir' : 'Hoy no se puede ir' }}<span class="font-normal text-tinta">· {{ $hoy['texto'] }}</span>
+                                </p>
                             @endif
-                        </p>
+                        </div>
                     </section>
 
                     {{-- Propuesta pendiente: «Qué animales admite» (solo si Natalia la aprueba) --}}
