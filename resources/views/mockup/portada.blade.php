@@ -4,7 +4,7 @@
     use App\Models\Sitio;
 
     // Fotos de Natalia marcadas para la portada (si aún no hay, las últimas subidas)
-    $fotos = Foto::where('para_portada', true)->orderBy('orden')->latest()->get();
+    $fotos = Foto::paraPortada()->get();
     if ($fotos->isEmpty()) {
         $fotos = Foto::latest()->take(6)->get();
     }

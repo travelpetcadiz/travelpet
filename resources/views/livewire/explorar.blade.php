@@ -30,7 +30,7 @@
     @if ($portada)
         {{-- Portada: lo primero es buscar. El buscador va dentro y busca al pulsar (no mientras escribes) --}}
         <section class="bg-pino-suave">
-            <div class="mx-auto grid max-w-6xl items-center gap-8 px-4 py-8 md:grid-cols-[minmax(0,1fr)_260px] md:gap-12 md:py-12">
+            <div class="mx-auto grid max-w-6xl items-center gap-8 px-4 py-8 xl:grid-cols-[minmax(0,1fr)_420px] md:gap-12 md:py-12">
                 <div class="grid gap-6">
                     <div>
                         <h1 class="text-4xl font-extrabold leading-tight text-tinta sm:text-5xl">¿Puedo ir con mi mascota?</h1>
@@ -78,7 +78,7 @@
                     </div>
                 </div>
                 {{-- Carrusel con las fotos de portada: pasan solas cada 5 s y se deslizan con el dedo.
-                     En el móvil va debajo de las categorías, para que el buscador se vea sin bajar.
+                     En el móvil va arriba del todo, de lado a lado.
                      Las fotos propias van sin crédito; las de otros lo llevan, porque lo exige su licencia --}}
                 <div x-data="{
                         i: 0,
@@ -89,7 +89,7 @@
                         destroy() { clearInterval(this.reloj); },
                      }"
                      @pointerdown="parado = true" @focusin="parado = true"
-                     class="relative overflow-hidden rounded-3xl bg-pino shadow-sm aspect-[16/10] md:aspect-[4/5]"
+                     class="relative -mx-4 -mt-8 order-first aspect-[16/11] overflow-hidden bg-pino sm:aspect-[5/2] md:-mt-12 lg:aspect-[3/1] xl:order-none xl:mx-0 xl:mt-0 xl:aspect-[4/3] xl:rounded-3xl xl:shadow-sm"
                      aria-roledescription="carrusel" aria-label="Fotos de mascotas por Cádiz">
                     <ul x-ref="pista" @scroll.debounce.100ms="i = Math.round($el.scrollLeft / $el.clientWidth)"
                         class="flex size-full snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">

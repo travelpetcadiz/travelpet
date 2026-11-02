@@ -79,6 +79,16 @@ class WebTest extends TestCase
             ->assertDontSee('Foto: Natalia');
     }
 
+    public function test_la_foto_con_posicion_1_sale_la_primera_en_el_carrusel(): void
+    {
+        Foto::create(['archivo' => 'fotos/a.webp', 'descripcion' => 'Perrita en la marisma', 'para_portada' => true]);
+        Foto::create(['archivo' => 'fotos/b.webp', 'descripcion' => 'Dos border collies en la playa', 'para_portada' => true, 'orden' => 1]);
+        Foto::create(['archivo' => 'fotos/c.webp', 'descripcion' => 'Perro sentado', 'para_portada' => true]);
+
+        $this->assertSame('Dos border collies en la playa', Foto::paraPortada()->first()->descripcion);
+        Livewire::test(Explorar::class)->assertSeeInOrder(['Dos border collies en la playa', 'Perro sentado', 'Perrita en la marisma']);
+    }
+
     public function test_la_paginacion_usa_flechas_y_numeros_en_espanol(): void
     {
         $conil = Municipio::firstWhere('nombre', 'Conil de la Frontera');

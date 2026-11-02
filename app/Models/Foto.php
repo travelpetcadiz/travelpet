@@ -104,6 +104,14 @@ class Foto extends Model
         return $q->where('publicada', true)->orderBy('orden')->orderBy('id');
     }
 
+    /**
+     * Fotos del carrusel de la portada: primero las numeradas (1, 2, 3…) y luego las demás, de la más nueva a la más antigua.
+     */
+    public function scopeParaPortada(Builder $q): Builder
+    {
+        return $q->where('para_portada', true)->orderByRaw('orden = 0')->orderBy('orden')->latest()->orderByDesc('id');
+    }
+
     public function url(): string
     {
         return Storage::disk('public')->url($this->archivo);

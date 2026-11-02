@@ -56,6 +56,7 @@
         'Fotos para el diseño de la web' => [
             'Ve a <strong>Fotos</strong> y pulsa <strong>Subir una foto</strong>, sin elegir sitio.',
             'Marca <strong>Me gustaría que saliera en la portada</strong> en tus favoritas.',
+            'Para elegir el orden del carrusel, pon en <strong>Posición en la portada</strong> un 1 en la que quieras primera, un 2 en la segunda…',
         ],
         'Dar acceso a alguien que te ayude' => [
             'Ve a <strong>Usuarios</strong> y pulsa <strong>Añadir un usuario</strong> (o busca su cuenta si ya se registró en la web).',

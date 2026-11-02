@@ -206,7 +206,7 @@ class Explorar extends Component
             'conteoTipos' => Sitio::publicados()->selectRaw('tipo, count(*) n')->groupBy('tipo')->pluck('n', 'tipo'),
             'mapaCfg' => mapa_config(),
             // Fotos del carrusel de la portada: las que Natalia marca «para la portada» en el panel
-            'fotosPortada' => Foto::where('para_portada', true)->orderBy('orden')->latest()->get(),
+            'fotosPortada' => Foto::paraPortada()->get(),
         ]);
     }
 

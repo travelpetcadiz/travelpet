@@ -97,7 +97,15 @@ class FotoForm
                         ->live(),
                     Toggle::make('para_portada')
                         ->label('Me gustaría que saliera en la portada')
-                        ->visible(fn (Get $get) => blank($get('sitio_id'))),
+                        ->visible(fn (Get $get) => blank($get('sitio_id')))
+                        ->live(),
+                    TextInput::make('orden')
+                        ->label('Posición en la portada')
+                        ->numeric()
+                        ->minValue(0)
+                        ->default(0)
+                        ->helperText('1 = la primera del carrusel, 2 = la segunda… Con 0 sale detrás de las numeradas.')
+                        ->visible(fn (Get $get) => blank($get('sitio_id')) && $get('para_portada')),
                 ]) : null,
 
             Section::make('Permiso y crédito')
