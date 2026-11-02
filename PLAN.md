@@ -156,8 +156,8 @@ Claude marca aquí lo que se va terminando.
 - [x] Iconos, página «Cómo funciona», «mascota» en toda la web y un solo menú de categorías
 - [x] Seguridad y mapa más rápido
 - [x] Sección «Fotos» en el panel y página de bocetos
-- [ ] Paso 1. Subir fotos
-- [ ] Paso 2. Bocetos
+- [x] Paso 1. Subir fotos
+- [x] Paso 2. Bocetos
 - [ ] Paso 3. Revisión de bocetos
 - [ ] Paso 4. Diseño nuevo en la web
 - [x] Paso 5. «Cerca de mí»
