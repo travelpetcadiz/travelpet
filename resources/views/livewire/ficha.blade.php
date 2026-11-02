@@ -101,9 +101,9 @@
                 @endif
             @endif
 
-            {{-- La respuesta a lo que viene a buscar la gente, lo primero --}}
-            <section class="rounded-2xl border-2 p-5 {{ $respuesta[0] }}">
-                <p class="flex items-center gap-2 font-display text-2xl font-extrabold">@svg('heroicon-s-'.$respuesta[2], 'size-7 flex-none', ['aria-hidden' => 'true']){{ $respuesta[1] }}</p>
+            {{-- La respuesta a lo que viene a buscar la gente, lo primero (sin ocupar media pantalla) --}}
+            <section class="rounded-2xl border p-4 {{ $respuesta[0] }}">
+                <p class="flex items-center gap-2 font-display text-xl font-extrabold leading-tight">@svg('heroicon-s-'.$respuesta[2], 'size-6 flex-none', ['aria-hidden' => 'true']){{ $respuesta[1] }}</p>
                 @if ($hoy)
                     <p class="mt-3 flex items-start gap-2 rounded-xl bg-white/70 p-3 text-tinta">
                         @svg('heroicon-s-calendar-days', 'mt-0.5 size-6 flex-none '.($hoy['puede'] ? 'text-ok' : 'text-mal'), ['aria-hidden' => 'true'])

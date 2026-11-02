@@ -91,17 +91,6 @@
                         </div>
                     </section>
 
-                    {{-- Propuesta pendiente: «Qué animales admite» (solo si Natalia la aprueba) --}}
-                    @unless ($servicio || $s->admite_perros === 'no')
-                        <section class="grid gap-2 rounded-2xl border border-dashed border-albero bg-albero-suave/50 p-4">
-                            <p class="text-sm font-bold text-aviso">Propuesta pendiente: «Qué animales admite». Así se vería si dices que sí.</p>
-                            <ul class="flex flex-wrap gap-2">
-                                <li class="sello bg-ok-suave px-3 py-1.5 text-sm text-ok">@svg('heroicon-s-check-circle', 'size-4', ['aria-hidden' => 'true'])Confirmado para perros</li>
-                                <li class="sello bg-white px-3 py-1.5 text-sm text-gris">@svg('heroicon-s-question-mark-circle', 'size-4', ['aria-hidden' => 'true'])Gatos: aún no lo sabemos</li>
-                                <li class="sello bg-white px-3 py-1.5 text-sm text-gris">@svg('heroicon-s-question-mark-circle', 'size-4', ['aria-hidden' => 'true'])Otros animales: aún no lo sabemos</li>
-                            </ul>
-                        </section>
-                    @endunless
 
                     {{-- Condiciones con icono, en dos columnas en el móvil --}}
                     @if ($s->admite_perros !== 'no' && $condiciones)

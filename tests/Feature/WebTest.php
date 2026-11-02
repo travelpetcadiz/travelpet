@@ -6,6 +6,7 @@ use App\Livewire\Auth\Entrar;
 use App\Livewire\Auth\Registro;
 use App\Livewire\Explorar;
 use App\Livewire\Ficha;
+use App\Models\Foto;
 use App\Models\Municipio;
 use App\Models\Provincia;
 use App\Models\Resena;
@@ -63,6 +64,34 @@ class WebTest extends TestCase
             ->assertSee('Playa de los Bateles')
             ->assertDontSee('Bar Ayamonte')
             ->assertDontSee('¿A qué pueblo o sitio quieres ir?');
+    }
+
+    public function test_el_carrusel_de_la_portada_muestra_las_fotos_de_portada_sin_credito_si_son_propias(): void
+    {
+        Foto::create(['archivo' => 'fotos/a.webp', 'descripcion' => 'Perro en la playa', 'autor' => 'Natalia', 'para_portada' => true]);
+        Foto::create(['archivo' => 'fotos/b.webp', 'descripcion' => 'Perro en la marisma', 'autor' => 'Natalia', 'para_portada' => true]);
+        Foto::create(['archivo' => 'fotos/c.webp', 'descripcion' => 'Foto que no es de portada', 'autor' => 'Natalia']);
+
+        Livewire::test(Explorar::class)
+            ->assertSee('Perro en la playa')->assertSee('Perro en la marisma')
+            ->assertSee('Ver foto 2')
+            ->assertDontSee('Foto que no es de portada')
+            ->assertDontSee('Foto: Natalia');
+    }
+
+    public function test_la_paginacion_usa_flechas_y_numeros_en_espanol(): void
+    {
+        $conil = Municipio::firstWhere('nombre', 'Conil de la Frontera');
+        foreach (range(1, 30) as $n) {
+            Sitio::create(['municipio_id' => $conil->id, 'nombre' => "Bar {$n}", 'tipo' => 'Restauración', 'admite_perros' => 'si']);
+        }
+
+        Livewire::test(Explorar::class)
+            ->set('tipo', 'Restauración')
+            ->assertSee('Página siguiente')->assertSee('Página 1 de 2')
+            ->assertDontSee('pagination.next')
+            ->call('nextPage')
+            ->assertSee('Página anterior')->assertSee('Página 2 de 2');
     }
 
     public function test_una_provincia_desactivada_no_sale_en_la_web(): void

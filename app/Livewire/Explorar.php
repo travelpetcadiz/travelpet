@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Foto;
 use App\Models\Municipio;
 use App\Models\Provincia;
 use App\Models\Sitio;
@@ -204,6 +205,16 @@ class Explorar extends Component
             'municipios' => $geoElegida ? $this->municipios()->has('sitios')->orderBy('nombre')->pluck('nombre', 'id') : collect(),
             'conteoTipos' => Sitio::publicados()->selectRaw('tipo, count(*) n')->groupBy('tipo')->pluck('n', 'tipo'),
             'mapaCfg' => mapa_config(),
+            // Fotos del carrusel de la portada: las que Natalia marca «para la portada» en el panel
+            'fotosPortada' => Foto::where('para_portada', true)->orderBy('orden')->latest()->get(),
         ]);
+    }
+
+    /**
+     * Paginación propia: flechas y números de página, con los textos en español.
+     */
+    public function paginationView(): string
+    {
+        return 'livewire.partes.paginacion';
     }
 }

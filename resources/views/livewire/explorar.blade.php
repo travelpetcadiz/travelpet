@@ -77,9 +77,43 @@
                         </p>
                     </div>
                 </div>
-                {{-- En el móvil no va la foto: el buscador tiene que verse sin bajar --}}
-                <img src="{{ asset('hero.jpg') }}" alt="Perro con correa sobre una mesa de madera en un parque"
-                     class="hidden w-full rounded-3xl object-cover object-[50%_12%] shadow-sm md:block md:aspect-[4/5]">
+                {{-- Carrusel con las fotos de portada: pasan solas cada 5 s y se deslizan con el dedo.
+                     En el móvil va debajo de las categorías, para que el buscador se vea sin bajar.
+                     Las fotos propias van sin crédito; las de otros lo llevan, porque lo exige su licencia --}}
+                <div x-data="{
+                        i: 0,
+                        total: {{ max(1, $fotosPortada->count()) }},
+                        parado: matchMedia('(prefers-reduced-motion: reduce)').matches,
+                        ir(n) { this.i = (n + this.total) % this.total; this.$refs.pista.scrollTo({ left: this.i * this.$refs.pista.clientWidth, behavior: 'smooth' }); },
+                        init() { this.reloj = setInterval(() => { if (! this.parado && ! document.hidden && this.total > 1) this.ir(this.i + 1); }, 5000); },
+                        destroy() { clearInterval(this.reloj); },
+                     }"
+                     @pointerdown="parado = true" @focusin="parado = true"
+                     class="relative overflow-hidden rounded-3xl bg-pino shadow-sm aspect-[16/10] md:aspect-[4/5]"
+                     aria-roledescription="carrusel" aria-label="Fotos de mascotas por Cádiz">
+                    <ul x-ref="pista" @scroll.debounce.100ms="i = Math.round($el.scrollLeft / $el.clientWidth)"
+                        class="flex size-full snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        @forelse ($fotosPortada as $n => $f)
+                            <li class="relative size-full flex-none snap-center" aria-roledescription="foto" aria-label="{{ $n + 1 }} de {{ $fotosPortada->count() }}">
+                                <img src="{{ $f->url() }}" alt="{{ $f->descripcion }}" @if ($n === 0) fetchpriority="high" @else loading="lazy" @endif class="size-full object-cover object-[50%_30%]">
+                                @if ($f->origen !== 'propia')
+                                    <span class="absolute right-2 top-2 rounded-md bg-tinta/60 px-2 py-0.5 text-xs text-white">{{ $f->credito()['texto'] }}</span>
+                                @endif
+                            </li>
+                        @empty
+                            <li class="size-full flex-none"><img src="{{ asset('hero.jpg') }}" alt="Perro con correa sobre una mesa de madera en un parque" class="size-full object-cover object-[50%_12%]"></li>
+                        @endforelse
+                    </ul>
+                    @if ($fotosPortada->count() > 1)
+                        <div class="absolute inset-x-0 bottom-3 flex justify-center gap-1.5">
+                            @foreach ($fotosPortada as $n => $f)
+                                <button type="button" @click="ir({{ $n }})" class="h-2 rounded-full transition-all" :class="i === {{ $n }} ? 'w-6 bg-white' : 'w-2 bg-white/60'" :aria-current="i === {{ $n }}">
+                                    <span class="sr-only">Ver foto {{ $n + 1 }}</span>
+                                </button>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
             </div>
         </section>
     @endif
@@ -267,7 +301,7 @@
                     @endforeach
                 </ul>
 
-                <div class="mt-6">{{ $sitios->links() }}</div>
+                {{ $sitios->links() }}
             @endif
         </section>
     @endif
