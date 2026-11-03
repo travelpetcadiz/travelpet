@@ -11,6 +11,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -42,12 +43,18 @@ class SitioForm
                             ->required()
                             ->createOptionForm(MunicipioForm::campos()),
                         TextInput::make('direccion')->label('Dirección'),
+                        Toggle::make('a_domicilio')->label('Servicio a domicilio (no tiene local)')
+                            ->live()
+                            ->helperText('Para peluquerías, veterinarios o paseadores que van a casa. No sale en el mapa y no hace falta ubicación.')
+                            ->columnSpanFull(),
                         TextInput::make('latitud')->label('Ubicación: latitud')->numeric()->minValue(-90)->maxValue(90)
                             ->placeholder('36.529800')
-                            ->helperText('En Google Maps, pulsa con el botón derecho sobre el sitio y copia los dos números: el primero va aquí.'),
+                            ->helperText('En Google Maps, pulsa con el botón derecho sobre el sitio y copia los dos números: el primero va aquí.')
+                            ->hidden(fn (Get $get) => $get('a_domicilio')),
                         TextInput::make('longitud')->label('Ubicación: longitud')->numeric()->minValue(-180)->maxValue(180)
                             ->placeholder('-6.292600')
-                            ->helperText('El segundo número (en Cádiz empieza por -5 o -6). Sin ubicación, el sitio no sale en el mapa.'),
+                            ->helperText('El segundo número (en Cádiz empieza por -5 o -6). Sin ubicación, el sitio no sale en el mapa.')
+                            ->hidden(fn (Get $get) => $get('a_domicilio')),
                         Textarea::make('contacto')
                             ->label('Teléfono / Web')
                             ->helperText('Separa varios con punto y coma. Las direcciones que empiezan por https:// salen como enlace.')

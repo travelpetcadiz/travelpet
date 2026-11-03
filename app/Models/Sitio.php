@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 #[Fillable([
-    'municipio_id', 'nombre', 'slug', 'tipo', 'subtipo', 'direccion', 'latitud', 'longitud',
+    'municipio_id', 'nombre', 'slug', 'tipo', 'subtipo', 'direccion', 'latitud', 'longitud', 'a_domicilio',
     'contacto', 'admite_perros', 'tamano_maximo', 'suplemento', 'zonas_permitidas', 'temporada',
     'otras_condiciones', 'fuente', 'fecha_comprobacion', 'verificado', 'fuente_oficial', 'publicado',
     'admite_grandes', 'sin_suplemento', 'puede_entrar', 'sin_correa', 'urgencias_24h',
@@ -27,12 +27,13 @@ class Sitio extends Model
         'fuente_oficial' => false,
         'publicado' => true,
         'urgencias_24h' => false,
+        'a_domicilio' => false,
     ];
 
     // Nombre de cada campo tal como lo entiende una persona (para el historial)
     public const CAMPOS = [
         'nombre' => 'Nombre', 'tipo' => 'Tipo', 'subtipo' => 'Qué es exactamente', 'municipio_id' => 'Municipio',
-        'direccion' => 'Dirección', 'latitud' => 'Ubicación (latitud)', 'longitud' => 'Ubicación (longitud)',
+        'direccion' => 'Dirección', 'latitud' => 'Ubicación (latitud)', 'longitud' => 'Ubicación (longitud)', 'a_domicilio' => 'Servicio a domicilio',
         'contacto' => 'Teléfono / web', 'admite_perros' => '¿Admite mascotas?', 'tamano_maximo' => 'Tamaño o peso máximo',
         'suplemento' => 'Suplemento', 'zonas_permitidas' => 'Zonas permitidas', 'temporada' => 'Temporada / horario',
         'otras_condiciones' => 'Información adicional', 'fuente' => 'De dónde sale el dato', 'fecha_comprobacion' => 'Fecha de comprobación',
@@ -93,6 +94,7 @@ class Sitio extends Model
             'puede_entrar' => 'boolean',
             'sin_correa' => 'boolean',
             'urgencias_24h' => 'boolean',
+            'a_domicilio' => 'boolean',
         ];
     }
 
@@ -102,6 +104,14 @@ class Sitio extends Model
             // Para el slug hace falta el nombre del municipio
             $sitio->loadMissing('municipio');
             $sitio->slug ??= static::slugUnico($sitio->nombre.' '.$sitio->municipio?->nombre);
+        });
+
+        // Un servicio a domicilio no tiene local: sin ubicación, para que no salga en el mapa
+        static::saving(function (Sitio $sitio) {
+            if ($sitio->a_domicilio) {
+                $sitio->latitud = null;
+                $sitio->longitud = null;
+            }
         });
 
         // Cada cambio hecho desde el panel queda en el historial
@@ -146,6 +156,13 @@ class Sitio extends Model
     }
 
     // Publicados y de una provincia activa
+    // Les falta la latitud o la longitud y deberían tenerla (los servicios a domicilio no la llevan)
+    public function scopeSinUbicacion(Builder $q): Builder
+    {
+        return $q->where('a_domicilio', false)
+            ->where(fn (Builder $w) => $w->whereNull('latitud')->orWhereNull('longitud'));
+    }
+
     public function scopePublicados(Builder $q): Builder
     {
         return $q->where('publicado', true)

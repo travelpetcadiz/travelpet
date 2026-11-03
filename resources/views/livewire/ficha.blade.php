@@ -70,7 +70,7 @@
                     {{ $s->etiquetaTipo() }}@if ($s->subtipo)<span class="font-normal text-gris">· {{ $s->subtipo }}</span>@endif
                 </span>
                 <h1 class="text-3xl font-extrabold leading-tight sm:text-4xl">{{ $s->nombre }}</h1>
-                <p class="flex items-start gap-1.5 text-gris">@svg('heroicon-o-map-pin', 'mt-1 size-4 flex-none', ['aria-hidden' => 'true'])<span>{{ $direccion }}</span></p>
+                <p class="flex items-start gap-1.5 text-gris">@svg('heroicon-o-map-pin', 'mt-1 size-4 flex-none', ['aria-hidden' => 'true'])<span>@if ($s->a_domicilio)<strong class="text-tinta">Servicio a domicilio</strong> · @endif{{ $direccion }}</span></p>
                 @if ($media)
                     <a href="#resenas" class="text-sm font-bold text-aviso no-underline">★ {{ number_format($media, 1, ',', '') }}, {{ $resenas->count() }} {{ $resenas->count() === 1 ? 'reseña' : 'reseñas' }}</a>
                 @endif
@@ -142,7 +142,7 @@
                 @if ($telefono)
                     <a class="btn w-full sm:w-auto" href="tel:{{ $telefono }}">@svg('heroicon-o-phone', 'size-5', ['aria-hidden' => 'true']){{ $telUrgencias ? 'Llamar a la clínica' : 'Llamar' }} · {{ $verTel($telefono) }}</a>
                 @endif
-                @if ($s->latitud)
+                @if ($s->latitud && ! $s->a_domicilio)
                     <a class="btn btn-albero flex-1 sm:flex-none" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination={{ $s->latitud }},{{ $s->longitud }}">@svg('heroicon-o-map', 'size-5', ['aria-hidden' => 'true'])Cómo llegar</a>
                 @endif
                 {{-- En el móvil abre el menú de compartir (WhatsApp, etc.); si no lo hay, WhatsApp directamente --}}
@@ -268,7 +268,7 @@
         </article>
 
         <aside class="grid content-start gap-4">
-            @if ($s->latitud)
+            @if ($s->latitud && ! $s->a_domicilio)
                 <div wire:ignore x-data="mapaSitio(@js($mapaCfg), {{ $s->longitud }}, {{ $s->latitud }}, @js($s->color()))"
                      class="h-64 overflow-hidden rounded-xl border border-linea"></div>
             @endif

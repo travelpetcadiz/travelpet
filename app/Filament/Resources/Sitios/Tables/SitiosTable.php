@@ -101,7 +101,11 @@ class SitiosTable
                     ->query(fn (Builder $query) => $query->where('fecha_comprobacion', '<', now()->subDays(Sitio::DIAS_ANTIGUO - 60))),
                 Filter::make('sin_coordenadas')
                     ->label('No salen en el mapa (les falta la ubicación)')
-                    ->query(fn (Builder $query) => $query->where(fn (Builder $q) => $q->whereNull('latitud')->orWhereNull('longitud'))),
+                    ->query(fn (Builder $query) => $query->sinUbicacion()),
+                TernaryFilter::make('a_domicilio')
+                    ->label('Servicio a domicilio')
+                    ->trueLabel('Solo los que van a domicilio')
+                    ->falseLabel('Solo los que tienen local'),
                 Filter::make('playas_sin_fechas')
                     ->label('Playas sin fechas')
                     ->query(fn (Builder $query) => $query->where('tipo', 'Playa')->where('admite_perros', '!=', 'no')->whereNull('periodo_tipo')),

@@ -35,6 +35,11 @@
             'Léela. Si está bien, pulsa <strong>Publicar</strong>. Si es spam o insultante, pulsa <strong>No publicar</strong>.',
             'Si dice que no le dejaron entrar, revisa la ficha de ese sitio por si ha cambiado.',
         ],
+        'Un servicio que va a domicilio (sin local)' => [
+            'Abre el sitio en <strong>Sitios</strong> y, en <strong>Datos básicos</strong>, activa <strong>Servicio a domicilio</strong>.',
+            'Desaparecen las casillas de ubicación: no hace falta ponerla. Al guardar, el sitio deja de salir en el mapa y ya no te lo pide como pendiente.',
+            'En su ficha de la web sale «Servicio a domicilio» junto a su pueblo. Para ver todos los que tienes así, usa el embudo y elige <strong>Servicio a domicilio</strong>.',
+        ],
         'Poner las fechas de una playa' => [
             'Abre la playa en <strong>Sitios</strong> y baja a <strong>Fechas en que se puede ir</strong>.',
             'Elige si se puede ir todo el año, solo entre unas fechas o si está prohibido entre unas fechas.',

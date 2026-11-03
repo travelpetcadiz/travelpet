@@ -68,7 +68,7 @@ class Pendientes extends Widget
             [
                 'icono' => 'heroicon-o-map-pin',
                 'titulo' => 'Sitios que no salen en el mapa',
-                'n' => $sitios()->whereNull('latitud')->count(),
+                'n' => $sitios()->sinUbicacion()->count(),
                 'texto' => 'Les falta la ubicación. Búscalos en Google Maps y copia sus coordenadas.',
                 'boton' => 'Ver cuáles son',
                 'url' => $filtro('sin_coordenadas'),

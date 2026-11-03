@@ -168,6 +168,8 @@ class Explorar extends Component
         // Los puntos solo viajan al navegador cuando se está viendo el mapa
         $puntos = $this->vista !== 'mapa' ? collect() : $this->consulta()
             ->whereNotNull('latitud')
+            ->whereNotNull('longitud')
+            ->where('a_domicilio', false)
             ->with('municipio:id,nombre')
             ->get(['municipio_id', 'nombre', 'slug', 'tipo', 'latitud', 'longitud', 'admite_perros', 'verificado'])
             ->map(fn (Sitio $s) => [
