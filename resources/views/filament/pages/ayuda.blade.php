@@ -3,6 +3,7 @@
         ['heroicon-o-home', 'Inicio', 'Lo que tienes pendiente (reseñas, sugerencias, datos que caducan…) con un botón para ir directo a cada cosa.'],
         ['heroicon-o-map-pin', 'Sitios', 'Todos los lugares de la guía: hoteles, bares, playas, parques, veterinarios… Aquí los añades, los corriges, los confirmas o los ocultas.'],
         ['heroicon-o-photo', 'Fotos', 'Las fotos de los sitios (salen en su ficha) y las del diseño de la web. Ninguna se ve hasta que pulsas «Publicar».'],
+        ['heroicon-o-truck', 'Transporte con mascota', 'Las aerolíneas, trenes, autobuses y barcos de la página «Transporte con mascota» de la web, con sus normas para mascotas.'],
         ['heroicon-o-chat-bubble-left-right', 'Reseñas', 'Opiniones que escribe la gente. No se ven en la web hasta que las publicas tú.'],
         ['heroicon-o-light-bulb', 'Sugerencias', 'Sitios nuevos que propone la gente y avisos de datos que están mal.'],
         ['heroicon-o-users', 'Usuarios', 'Las cuentas: quién puede entrar en este panel (administradores y editores) y quién solo usa la web.'],
@@ -62,6 +63,12 @@
             'Ve a <strong>Fotos</strong> y pulsa <strong>Subir una foto</strong>, sin elegir sitio.',
             'Marca <strong>Me gustaría que saliera en la portada</strong> en tus favoritas.',
             'Para elegir el orden del carrusel, pon en <strong>Posición en la portada</strong> un 1 en la que quieras primera, un 2 en la segunda…',
+        ],
+        'Una compañía de transporte ha cambiado sus normas' => [
+            'Ve a <strong>Transporte con mascota</strong> y pulsa <strong>Corregir</strong> en esa compañía.',
+            'Cambia lo que haya cambiado (peso, transportín, precio…) mirando su web oficial, y pega su enlace en <strong>Enlace a su norma oficial</strong>.',
+            'Pon la fecha de hoy en <strong>Fecha de comprobación</strong> y pulsa <strong>Guardar cambios</strong>.',
+            'Si aún no sabes sus normas, elige <strong>Aún no lo hemos comprobado</strong> en <strong>Respuesta</strong>: en la web saldrá en gris.',
         ],
         'Dar acceso a alguien que te ayude' => [
             'Ve a <strong>Usuarios</strong> y pulsa <strong>Añadir un usuario</strong> (o busca su cuenta si ya se registró en la web).',

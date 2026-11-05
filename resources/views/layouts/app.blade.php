@@ -44,11 +44,12 @@
 
             @php
                 $ic = fn (string $n) => svg('heroicon-o-'.$n, 'size-5 flex-none', ['aria-hidden' => 'true'])->toHtml();
-                $enlace = 'inline-flex items-center gap-2 rounded-lg px-3 py-2 font-bold hover:bg-cal';
+                $enlace = 'inline-flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-bold hover:bg-cal';
             @endphp
             <nav class="hidden items-center gap-1 lg:flex" aria-label="Principal">
                 <a href="{{ route('inicio') }}" wire:navigate class="{{ $enlace }}">{!! $ic('magnifying-glass') !!}Explorar</a>
                 <a href="{{ route('como-funciona') }}" wire:navigate class="{{ $enlace }}">{!! $ic('question-mark-circle') !!}Cómo funciona</a>
+                <a href="{{ route('transporte') }}" wire:navigate class="{{ $enlace }} {{ request()->routeIs('transporte') ? 'bg-pino-suave text-pino' : '' }}" @if (request()->routeIs('transporte')) aria-current="page" @endif>{!! $ic('truck') !!}<span class="xl:hidden">Transporte</span><span class="hidden xl:inline">Transporte con mascota</span></a>
                 <a href="{{ route('sugerir') }}" wire:navigate class="{{ $enlace }}">{!! $ic('light-bulb') !!}Sugerir un sitio</a>
                 @auth
                     <a href="{{ route('viaje') }}" wire:navigate class="{{ $enlace }}">{!! $ic('bookmark') !!}Mi viaje</a>
@@ -61,7 +62,7 @@
                     </form>
                 @else
                     <a href="{{ route('entrar') }}" wire:navigate class="{{ $enlace }}">{!! $ic('arrow-right-end-on-rectangle') !!}Entrar</a>
-                    <a href="{{ route('registro') }}" wire:navigate class="btn btn-pri ml-1">{!! $ic('user-plus') !!}Crear cuenta</a>
+                    <a href="{{ route('registro') }}" wire:navigate class="btn btn-pri ml-1 whitespace-nowrap">{!! $ic('user-plus') !!}Crear cuenta</a>
                 @endauth
             </nav>
 
@@ -72,6 +73,7 @@
             <a href="{{ route('inicio') }}" wire:navigate class="{{ $enlace }}">{!! $ic('magnifying-glass') !!}Explorar</a>
             <a href="{{ route('como-funciona') }}" wire:navigate class="{{ $enlace }}">{!! $ic('question-mark-circle') !!}Cómo funciona</a>
             <a href="{{ route('urgencias') }}" wire:navigate class="{{ $enlace }} text-mal">{!! $ic('lifebuoy') !!}Urgencias veterinarias 24 h</a>
+            <a href="{{ route('transporte') }}" wire:navigate class="{{ $enlace }} {{ request()->routeIs('transporte') ? 'bg-pino-suave text-pino' : '' }}" @if (request()->routeIs('transporte')) aria-current="page" @endif>{!! $ic('truck') !!}Transporte con mascota</a>
             <a href="{{ route('sugerir') }}" wire:navigate class="{{ $enlace }}">{!! $ic('light-bulb') !!}Sugerir un sitio</a>
             @auth
                 <a href="{{ route('viaje') }}" wire:navigate class="{{ $enlace }}">{!! $ic('bookmark') !!}Mi viaje</a>
@@ -103,6 +105,7 @@
             @foreach ($provinciasPie = \App\Models\Provincia::activas()->has('sitios')->orderBy('nombre')->get(['nombre', 'slug']) as $p)
                 <a href="{{ route('guia', $p) }}" class="underline">Pueblo a pueblo{{ $provinciasPie->count() > 1 ? ' ('.$p->nombre.')' : '' }}</a>
             @endforeach
+            <a href="{{ route('transporte') }}" class="underline">Transporte con mascota</a>
             <a href="{{ route('urgencias') }}" class="underline">Urgencias veterinarias 24 h</a>
             <span>Mapa: © OpenStreetMap</span>
         </div>

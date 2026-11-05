@@ -8,6 +8,7 @@ use App\Livewire\Ficha;
 use App\Livewire\MiViaje;
 use App\Livewire\Sugerir;
 use App\Models\Sitio;
+use App\Models\Transporte;
 use App\Support\PaginasGuia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,9 @@ Route::get('/guia/{provincia}/{seccion}', [GuiaController::class, 'seccion'])->n
 Route::get('/guia/{provincia}/{pueblo}/{categoria}', [GuiaController::class, 'puebloCategoria'])->name('guia.pueblo');
 
 Route::view('/como-funciona', 'paginas.como-funciona')->name('como-funciona');
+Route::get('/transporte-con-mascota', fn () => view('paginas.transporte', [
+    'grupos' => Transporte::publicados()->orderBy('orden')->orderBy('nombre')->get()->groupBy('medio'),
+]))->name('transporte');
 Route::view('/aviso-legal', 'legal.aviso')->name('legal.aviso');
 Route::view('/privacidad', 'legal.privacidad')->name('legal.privacidad');
 
