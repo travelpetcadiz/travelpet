@@ -99,6 +99,10 @@
             <a href="{{ route('legal.aviso') }}" class="underline">Aviso legal</a>
             <a href="{{ route('legal.privacidad') }}" class="underline">Privacidad</a>
             <a href="{{ route('como-funciona') }}" class="underline">Cómo funciona</a>
+            {{-- Para Google y para quien quiere ver la guía por pueblos --}}
+            @foreach ($provinciasPie = \App\Models\Provincia::activas()->has('sitios')->orderBy('nombre')->get(['nombre', 'slug']) as $p)
+                <a href="{{ route('guia', $p) }}" class="underline">Pueblo a pueblo{{ $provinciasPie->count() > 1 ? ' ('.$p->nombre.')' : '' }}</a>
+            @endforeach
             <a href="{{ route('urgencias') }}" class="underline">Urgencias veterinarias 24 h</a>
             <span>Mapa: © OpenStreetMap</span>
         </div>

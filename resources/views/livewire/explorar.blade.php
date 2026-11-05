@@ -263,36 +263,7 @@
                 <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($sitios as $s)
                         <li wire:key="s-{{ $s->id }}" class="flex flex-col">
-                            <a href="{{ route('sitio', $s) }}" wire:navigate class="tarjeta flex flex-1 flex-col gap-2 p-4 no-underline transition hover:border-gris hover:shadow-sm">
-                                <span class="flex flex-wrap gap-1.5">
-                                    {{-- En veterinarios y servicios para mascotas se da por hecho que admiten mascotas --}}
-                                    @if (! $s->esServicio() || $s->admite_perros === 'no')
-                                        <x-admite :valor="$s->admite_perros" class="px-2.5 py-1 text-sm" />
-                                    @endif
-                                    @if ($s->verificado)
-                                        <x-confirmado class="px-2.5 py-1 text-sm" />
-                                    @endif
-                                    @if ($s->urgencias_24h)
-                                        <span class="sello bg-mal-suave px-2.5 py-1 text-sm text-mal">@svg('heroicon-s-lifebuoy', 'size-4', ['aria-hidden' => 'true'])Urgencias 24 h</span>
-                                    @endif
-                                    @if ($estadoHoy = $s->hoy())
-                                        <span class="sello px-2.5 py-1 text-sm {{ $estadoHoy['puede'] ? 'bg-ok-suave text-ok' : 'bg-mal-suave text-mal' }}">@svg('heroicon-s-calendar-days', 'size-4', ['aria-hidden' => 'true']){{ $estadoHoy['puede'] ? 'Hoy sí' : 'Hoy no' }}</span>
-                                    @endif
-                                </span>
-                                <h2 class="text-lg font-semibold leading-snug">{{ $s->nombre }}</h2>
-                                <span class="flex items-center gap-2 text-sm text-gris">
-                                    <x-icono-tipo :tipo="$s->tipo" />
-                                    {{ $s->subtipo ?: $s->etiquetaTipo() }}, {{ $s->municipio->nombre }}
-                                </span>
-                                @if (isset($s->distancia_km))
-                                    <span class="flex items-center gap-2 text-sm font-bold text-pino">@svg('heroicon-o-map-pin', 'size-4 flex-none', ['aria-hidden' => 'true']){{ $distancia($s->distancia_km) }}</span>
-                                @endif
-                                @if ($s->esServicio() && $s->temporada)
-                                    <p class="flex items-start gap-2 text-sm text-gris">@svg('heroicon-o-clock', 'mt-0.5 size-4 flex-none', ['aria-hidden' => 'true'])<span class="line-clamp-2">{{ $s->temporada }}</span></p>
-                                @elseif ($s->otras_condiciones || $s->zonas_permitidas)
-                                    <p class="line-clamp-2 text-sm text-gris">{{ $s->zonas_permitidas ?: $s->otras_condiciones }}</p>
-                                @endif
-                            </a>
+                            <x-tarjeta-sitio :sitio="$s" :distancia="isset($s->distancia_km) ? $distancia($s->distancia_km) : null" />
                             {{-- En una urgencia lo primero es llamar: sin tener que abrir la ficha --}}
                             @if ($s->urgencias_24h && ($tel = $s->telefonoUrgencias()))
                                 <a href="tel:{{ $tel }}" class="btn btn-pri mt-2 w-full">@svg('heroicon-o-phone', 'size-5', ['aria-hidden' => 'true'])Llamar a urgencias</a>
