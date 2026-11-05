@@ -36,7 +36,7 @@
 
     <header x-data="{ abierto: false }" class="sticky top-0 z-30 border-b border-linea bg-white/95 backdrop-blur">
         <div class="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5">
-            <a href="{{ route('inicio') }}" wire:navigate class="flex items-center gap-2 font-display text-xl font-extrabold tracking-tight text-pino no-underline">
+            <a href="{{ route('inicio') }}" wire:navigate class="flex flex-none items-center gap-2 font-display text-xl font-extrabold tracking-tight text-pino no-underline">
                 <img src="{{ asset('logo.png') }}" alt="" width="36" height="36" class="size-9">
                 {{ $marca }}
             </a>
@@ -46,10 +46,10 @@
                 $ic = fn (string $n) => svg('heroicon-o-'.$n, 'size-5 flex-none', ['aria-hidden' => 'true'])->toHtml();
                 $enlace = 'inline-flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-bold hover:bg-cal';
             @endphp
-            <nav class="hidden items-center gap-1 lg:flex" aria-label="Principal">
+            <nav class="hidden items-center gap-1 xl:flex" aria-label="Principal">
                 <a href="{{ route('inicio') }}" wire:navigate class="{{ $enlace }}">{!! $ic('magnifying-glass') !!}Explorar</a>
                 <a href="{{ route('como-funciona') }}" wire:navigate class="{{ $enlace }}">{!! $ic('question-mark-circle') !!}Cómo funciona</a>
-                <a href="{{ route('transporte') }}" wire:navigate class="{{ $enlace }} {{ request()->routeIs('transporte') ? 'bg-pino-suave text-pino' : '' }}" @if (request()->routeIs('transporte')) aria-current="page" @endif>{!! $ic('truck') !!}<span class="xl:hidden">Transporte</span><span class="hidden xl:inline">Transporte con mascota</span></a>
+                <a href="{{ route('transporte') }}" wire:navigate class="{{ $enlace }} {{ request()->routeIs('transporte') ? 'bg-pino-suave text-pino' : '' }}" @if (request()->routeIs('transporte')) aria-current="page" @endif>{!! $ic('truck') !!}<span class="2xl:hidden">Transporte</span><span class="hidden 2xl:inline">Transporte con mascota</span></a>
                 <a href="{{ route('sugerir') }}" wire:navigate class="{{ $enlace }}">{!! $ic('light-bulb') !!}Sugerir un sitio</a>
                 @auth
                     <a href="{{ route('viaje') }}" wire:navigate class="{{ $enlace }}">{!! $ic('bookmark') !!}Mi viaje</a>
@@ -66,10 +66,10 @@
                 @endauth
             </nav>
 
-            <button type="button" class="btn lg:hidden" @click="abierto = !abierto" :aria-expanded="abierto" aria-controls="menu-movil">{!! $ic('bars-3') !!}Menú</button>
+            <button type="button" class="btn xl:hidden" @click="abierto = !abierto" :aria-expanded="abierto" aria-controls="menu-movil">{!! $ic('bars-3') !!}Menú</button>
         </div>
 
-        <nav id="menu-movil" x-show="abierto" x-cloak @click.outside="abierto = false" class="grid gap-1 border-t border-linea px-4 py-3 lg:hidden" aria-label="Principal">
+        <nav id="menu-movil" x-show="abierto" x-cloak @click.outside="abierto = false" class="grid gap-1 border-t border-linea px-4 py-3 xl:hidden" aria-label="Principal">
             <a href="{{ route('inicio') }}" wire:navigate class="{{ $enlace }}">{!! $ic('magnifying-glass') !!}Explorar</a>
             <a href="{{ route('como-funciona') }}" wire:navigate class="{{ $enlace }}">{!! $ic('question-mark-circle') !!}Cómo funciona</a>
             <a href="{{ route('urgencias') }}" wire:navigate class="{{ $enlace }} text-mal">{!! $ic('lifebuoy') !!}Urgencias veterinarias 24 h</a>
