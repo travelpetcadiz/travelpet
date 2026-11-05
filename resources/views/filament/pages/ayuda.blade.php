@@ -5,7 +5,7 @@
         ['heroicon-o-photo', 'Fotos', 'Las fotos de los sitios (salen en su ficha) y las del diseño de la web. Ninguna se ve hasta que pulsas «Publicar».'],
         ['heroicon-o-truck', 'Transporte con mascota', 'Las aerolíneas, trenes, autobuses y barcos de la página «Transporte con mascota» de la web, con sus normas para mascotas.'],
         ['heroicon-o-chat-bubble-left-right', 'Reseñas', 'Opiniones que escribe la gente. No se ven en la web hasta que las publicas tú.'],
-        ['heroicon-o-light-bulb', 'Sugerencias', 'Sitios nuevos que propone la gente y avisos de datos que están mal.'],
+        ['heroicon-o-light-bulb', 'Sugerencias', 'Sitios nuevos que propone la gente, avisos de datos que están mal y negocios que piden aparecer (desde la página «¿Tienes un negocio?»). Antes de publicar un negocio, comprueba sus datos; márcalo como confirmado solo cuando compruebes que viene del propio negocio (por ejemplo, contestando a su correo o llamándole).'],
         ['heroicon-o-users', 'Usuarios', 'Las cuentas: quién puede entrar en este panel (administradores y editores) y quién solo usa la web.'],
         ['heroicon-o-clock', 'Historial', 'Cada cambio que se hace en un sitio: qué había antes, qué hay ahora, quién y cuándo. Sirve para deshacer un error.'],
         ['heroicon-o-building-office-2', 'Municipios y Provincias', 'Los pueblos y provincias de la guía. Solo hace falta tocarlos para abrir una provincia nueva.'],

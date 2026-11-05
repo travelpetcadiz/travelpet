@@ -153,9 +153,13 @@
                         : window.open('https://wa.me/?text=' + encodeURIComponent(texto + ' ' + url), '_blank', 'noopener')">
                     @svg('heroicon-o-share', 'size-5', ['aria-hidden' => 'true'])Compartir
                 </button>
-                @auth
-                    <button type="button" wire:click="alternarViaje('quiero')" class="btn flex-1 sm:flex-none {{ $enViaje === 'quiero' ? 'btn-pri' : '' }}" aria-pressed="{{ $enViaje === 'quiero' ? 'true' : 'false' }}">@svg($enViaje === 'quiero' ? 'heroicon-s-bookmark' : 'heroicon-o-bookmark', 'size-5', ['aria-hidden' => 'true']){{ $enViaje === 'quiero' ? 'Guardado' : 'Guardar' }}</button>
-                @endauth
+                {{-- Guardar en Mi viaje: sin cuenta se queda en el móvil (resources/js/viaje.js) --}}
+                <button type="button" x-data @click="$store.viaje.alternar({{ $s->id }}, 'quiero')"
+                    :class="$store.viaje.estado({{ $s->id }}) === 'quiero' && 'btn-pri'" :aria-pressed="$store.viaje.estado({{ $s->id }}) === 'quiero'"
+                    class="btn flex-1 sm:flex-none" aria-pressed="false">
+                    <span x-show="$store.viaje.estado({{ $s->id }}) !== 'quiero'" class="inline-flex items-center gap-2">@svg('heroicon-o-bookmark', 'size-5', ['aria-hidden' => 'true'])Guardar</span>
+                    <span x-show="$store.viaje.estado({{ $s->id }}) === 'quiero'" x-cloak class="inline-flex items-center gap-2">@svg('heroicon-s-bookmark', 'size-5', ['aria-hidden' => 'true'])Guardado</span>
+                </button>
             </div>
 
             @if ($otroContacto)
@@ -276,14 +280,11 @@
             <div class="tarjeta grid gap-2 p-4">
                 <h2 class="flex items-center gap-2 font-bold">@svg('heroicon-o-bookmark', 'size-5 text-pino', ['aria-hidden' => 'true'])Mi viaje</h2>
                 <p class="text-sm text-gris">Apunta los sitios a los que quieres ir y los que ya has visitado con tu mascota.</p>
-                @auth
-                    <div class="grid grid-cols-2 gap-2">
-                        <button type="button" wire:click="alternarViaje('quiero')" class="btn {{ $enViaje === 'quiero' ? 'btn-pri' : '' }}" aria-pressed="{{ $enViaje === 'quiero' ? 'true' : 'false' }}">@svg('heroicon-o-heart', 'size-5', ['aria-hidden' => 'true'])Quiero ir</button>
-                        <button type="button" wire:click="alternarViaje('visitado')" class="btn {{ $enViaje === 'visitado' ? 'btn-pri' : '' }}" aria-pressed="{{ $enViaje === 'visitado' ? 'true' : 'false' }}">@svg('heroicon-o-check', 'size-5', ['aria-hidden' => 'true'])He ido</button>
-                    </div>
-                @else
-                    <p class="text-sm text-gris"><a href="{{ route('entrar') }}" wire:navigate class="font-bold text-pino underline">Entra</a> o <a href="{{ route('registro') }}" wire:navigate class="font-bold text-pino underline">crea una cuenta gratis</a> para guardarlos.</p>
-                @endauth
+                <div class="grid grid-cols-2 gap-2" x-data="{ id: {{ $s->id }} }">
+                    <button type="button" @click="$store.viaje.alternar(id, 'quiero')" class="btn" :class="$store.viaje.estado(id) === 'quiero' && 'btn-pri'" :aria-pressed="$store.viaje.estado(id) === 'quiero'" aria-pressed="false">@svg('heroicon-o-heart', 'size-5', ['aria-hidden' => 'true'])Quiero ir</button>
+                    <button type="button" @click="$store.viaje.alternar(id, 'visitado')" class="btn" :class="$store.viaje.estado(id) === 'visitado' && 'btn-pri'" :aria-pressed="$store.viaje.estado(id) === 'visitado'" aria-pressed="false">@svg('heroicon-o-check', 'size-5', ['aria-hidden' => 'true'])He ido</button>
+                </div>
+                <a href="{{ route('viaje') }}" wire:navigate class="text-sm font-bold text-pino underline">Ver Mi viaje</a>
             </div>
 
             <div class="tarjeta grid gap-2 p-4">

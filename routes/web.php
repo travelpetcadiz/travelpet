@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\GuiaController;
+use App\Http\Controllers\ViajeController;
 use App\Livewire\Auth\Entrar;
 use App\Livewire\Auth\Registro;
 use App\Livewire\Explorar;
 use App\Livewire\Ficha;
 use App\Livewire\MiViaje;
+use App\Livewire\Negocios;
 use App\Livewire\Sugerir;
 use App\Models\Sitio;
 use App\Models\Transporte;
@@ -28,6 +30,10 @@ Route::view('/como-funciona', 'paginas.como-funciona')->name('como-funciona');
 Route::get('/transporte-con-mascota', fn () => view('paginas.transporte', [
     'grupos' => Transporte::publicados()->orderBy('orden')->orderBy('nombre')->get()->groupBy('medio'),
 ]))->name('transporte');
+Route::view('/anade-travelpet-a-tu-movil', 'paginas.instalar')->name('instalar');
+Route::livewire('/negocios', Negocios::class)->name('negocios');
+// Mi viaje: sin cuenta se guarda en el navegador; con cuenta, en el servidor
+Route::livewire('/mi-viaje', MiViaje::class)->name('viaje');
 Route::view('/aviso-legal', 'legal.aviso')->name('legal.aviso');
 Route::view('/privacidad', 'legal.privacidad')->name('legal.privacidad');
 
@@ -37,7 +43,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::livewire('/mi-viaje', MiViaje::class)->name('viaje');
+    Route::post('/mi-viaje/guardar', [ViajeController::class, 'guardar'])->middleware('throttle:60,1')->name('viaje.guardar');
     Route::livewire('/sugerir', Sugerir::class)->name('sugerir');
 
     // Bocetos del rediseño: solo el equipo (admin y editores)

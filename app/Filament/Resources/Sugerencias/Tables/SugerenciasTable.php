@@ -25,7 +25,9 @@ class SugerenciasTable
                 TextColumn::make('tipo')
                     ->badge()
                     ->formatStateUsing(fn (string $state) => Sugerencia::TIPOS[$state] ?? $state)
-                    ->color(fn (string $state) => $state === 'error' ? 'danger' : 'info'),
+                    ->color(fn (string $state) => match ($state) {
+                        'error' => 'danger', 'negocio' => 'warning', default => 'info'
+                    }),
                 TextColumn::make('sitio')
                     ->label('Sitio')
                     ->state(fn (Sugerencia $record) => $record->sitio?->nombre ?? trim($record->nombre.' ('.collect([$record->municipio, $record->provincia?->nombre])->filter()->implode(', ').')', ' ()'))

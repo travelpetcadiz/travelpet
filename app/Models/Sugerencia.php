@@ -12,6 +12,7 @@ class Sugerencia extends Model
     public const TIPOS = [
         'nuevo_sitio' => 'Sitio nuevo',
         'error' => 'Dato incorrecto',
+        'negocio' => 'Negocio que quiere aparecer',
     ];
 
     public const ESTADOS = [

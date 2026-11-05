@@ -70,10 +70,10 @@
 
         <section aria-labelledby="cuenta">
             <h2 id="cuenta" class="mb-1 text-2xl font-bold">Con una cuenta gratis</h2>
-            <p class="mb-4 text-gris">Para buscar no hace falta cuenta. Con ella, además, puedes:</p>
+            <p class="mb-4 text-gris">Para buscar y para guardar sitios en Mi viaje no hace falta cuenta: sin ella, lo guardado se queda en tu móvil. Con una cuenta, además, puedes:</p>
             <ul class="grid gap-3 sm:grid-cols-2">
                 @foreach ([
-                    ['bookmark', 'Guardar sitios en Mi viaje', 'Marca los sitios a los que quieres ir y los que ya has visitado. Los verás en cualquier móvil u ordenador.'],
+                    ['bookmark', 'Tener Mi viaje en todos tus dispositivos', 'Los sitios a los que quieres ir y los que ya has visitado se guardan en tu cuenta y los ves en cualquier móvil u ordenador. Lo que guardaste antes de entrar se pasa solo a la cuenta.'],
                     ['chat-bubble-left-right', 'Dejar una reseña', 'Cuenta cómo os fue. La revisamos antes de publicarla, normalmente en un par de días.'],
                     ['flag', 'Avisar de un dato mal', 'Si un sitio ha cambiado sus normas, pulsa «¿Este dato está mal?» en su ficha.'],
                     ['light-bulb', 'Sugerir un sitio', 'Si conoces uno que no está, cuéntanos lo que sepas y lo comprobamos antes de añadirlo.'],

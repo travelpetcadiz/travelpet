@@ -70,4 +70,14 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->belongsToMany(Sitio::class, 'viaje')->withPivot('estado')->withTimestamps();
     }
+
+    /**
+     * Lo guardado en Mi viaje, como lo usa la web: id del sitio => «quiero» o «visitado».
+     *
+     * @return array<int, string>
+     */
+    public function viajeItems(): array
+    {
+        return $this->viaje()->pluck('viaje.estado', 'sitios.id')->all();
+    }
 }
