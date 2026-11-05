@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GuiaController;
 use App\Livewire\Auth\Entrar;
 use App\Livewire\Auth\Registro;
 use App\Livewire\Explorar;
@@ -7,6 +8,7 @@ use App\Livewire\Ficha;
 use App\Livewire\MiViaje;
 use App\Livewire\Sugerir;
 use App\Models\Sitio;
+use App\Support\PaginasGuia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +17,11 @@ Route::livewire('/', Explorar::class)->name('inicio');
 Route::livewire('/sitio/{sitio}', Ficha::class)->name('sitio');
 // Dirección corta para compartir: veterinarios con urgencias 24 h, los más cercanos primero
 Route::redirect('/urgencias', '/?urgencias=1')->name('urgencias');
+
+// Páginas para Google: /guia/cadiz, /guia/cadiz/playas, /guia/cadiz/conil-de-la-frontera y /guia/cadiz/conil-de-la-frontera/playas
+Route::get('/guia/{provincia}', [GuiaController::class, 'provincia'])->name('guia');
+Route::get('/guia/{provincia}/{seccion}', [GuiaController::class, 'seccion'])->name('guia.seccion');
+Route::get('/guia/{provincia}/{pueblo}/{categoria}', [GuiaController::class, 'puebloCategoria'])->name('guia.pueblo');
 
 Route::view('/como-funciona', 'paginas.como-funciona')->name('como-funciona');
 Route::view('/aviso-legal', 'legal.aviso')->name('legal.aviso');
@@ -71,5 +78,5 @@ Route::get('/datos/sitios.json', function () {
 Route::get('/sitemap.xml', function () {
     $sitios = Sitio::publicados()->get(['slug', 'updated_at']);
 
-    return response()->view('sitemap', ['sitios' => $sitios])->header('Content-Type', 'application/xml');
+    return response()->view('sitemap', ['sitios' => $sitios, 'guia' => PaginasGuia::paraSitemap()])->header('Content-Type', 'application/xml');
 })->name('sitemap');

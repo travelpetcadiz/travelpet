@@ -162,7 +162,7 @@ Claude marca aquí lo que se va terminando.
 - [ ] Paso 4. Diseño nuevo en la web
 - [x] Paso 5. «Cerca de mí»
 - [x] «¿Se puede ir hoy?» en playas, urgencias 24 h, filtros prácticos, compartir y datos para Google
-- [ ] Paso 6. Páginas para Google
+- [x] Paso 6. Páginas para Google
 - [ ] Paso 7. Participación
 - [ ] Paso 8. Revisión escalonada de datos
 - [ ] Paso 9. Medir el uso
