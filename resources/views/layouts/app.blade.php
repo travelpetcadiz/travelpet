@@ -1,6 +1,6 @@
 @php
     $marca = config('app.name');
-    $titulo = isset($title) ? $title.' · '.$marca : $marca.' · Guía para viajar con mascota';
+    $titulo = isset($title) ? $title.' · '.$marca : $marca.' · Guía de sitios que admiten mascotas en Cádiz';
     $descripcion ??= 'Guía gratuita de sitios pet-friendly: alojamientos, restaurantes, playas, parques y servicios que admiten mascotas, con sus condiciones y de dónde sale cada dato.';
 @endphp
 <!DOCTYPE html>
@@ -21,7 +21,10 @@
     <meta property="og:title" content="{{ $titulo }}">
     <meta property="og:description" content="{{ $descripcion }}">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:image" content="{{ asset('hero.jpg') }}">
+    <meta property="og:image" content="{{ asset('compartir.jpg') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="TravelPet Cádiz: ¿Puedo ir con mi mascota? Guía gratuita de la provincia de Cádiz">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
