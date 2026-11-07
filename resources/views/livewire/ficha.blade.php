@@ -263,6 +263,7 @@
                             <textarea id="texto" wire:model="texto" rows="4" class="campo" placeholder="¿Dónde os dejaron estar? ¿Pusieron agua? ¿Algún pero?"></textarea>
                             @error('texto') <p class="error">{{ $message }}</p> @enderror
                         </div>
+                        <p class="text-sm text-gris">Tu nombre de la cuenta saldrá junto a la reseña cuando la publiquemos; tu correo, nunca. Cuenta tu experiencia sin datos personales de nadie (ver <a href="{{ route('legal.condiciones') }}" class="underline">condiciones de uso</a>).</p>
                         <button class="btn btn-pri justify-self-start" wire:loading.attr="disabled">@svg('heroicon-o-paper-airplane', 'size-5', ['aria-hidden' => 'true'])Enviar reseña</button>
                     </form>
                 @else

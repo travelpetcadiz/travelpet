@@ -231,6 +231,12 @@ public function up(): void
 - Si el sitio no existe, `actualizar`/`ocultar` lo anotan en el log y siguen (no rompen el despliegue). Cada campo cambiado queda en el historial del panel con fuente «GitHub».
 - Una migración solo se ejecuta una vez: si luego Natalia cambia ese sitio en el panel, su cambio se respeta.
 
+## Páginas legales (tienen que decir la verdad)
+- `/aviso-legal`, `/privacidad`, `/cookies` y `/condiciones` (`resources/views/legal/`). Los datos del titular salen de `TITULAR_*` en el `.env` del servidor.
+- **Si añades algo que trate datos o guarde cosas en el navegador** (analítica, una cookie, `localStorage`, un formulario, un proveedor nuevo, correo…), actualiza en el mismo cambio la privacidad o las cookies y su fecha de «Última actualización» (`x-pagina-legal`). Hoy no hay analítica ni cookies de terceros, y por eso no hay banner de cookies: si se añadieran, haría falta pedir consentimiento.
+- Plazos prometidos: contacto de negocios 12 meses tras revisarlo (`travelpet:limpiar-datos`, cada noche), registros del servidor 14 días, copias unos días.
+- Registro: 14 años o más (art. 7 LOPDGDD).
+
 ## Roles (`users.role`)
 - `admin`: todo, incluidos usuarios y provincias. `editor`: sitios, reseñas, sugerencias y municipios. `usuario`: solo la web.
 - En closures de Filament, el parámetro del query builder se llama `$query` (Filament inyecta por nombre).

@@ -56,3 +56,11 @@
 
 .maplibregl-popup-content { @apply rounded-xl px-3 py-2 font-sans shadow-lg; }
 [x-cloak]{display:none!important}
+
+/* Textos legales: listas y tablas legibles */
+.legal ul { @apply mb-3 list-disc pl-6; }
+.legal li { @apply mb-1; }
+.legal table { @apply mb-4 w-full border-collapse text-sm; }
+.legal th, .legal td { @apply border border-linea p-2 text-left align-top; }
+.legal th { @apply bg-cal; }
+.legal h3 { @apply mt-4 mb-1 font-bold; }

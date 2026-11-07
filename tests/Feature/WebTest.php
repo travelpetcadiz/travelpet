@@ -39,7 +39,7 @@ class WebTest extends TestCase
 
     public function test_las_paginas_publicas_cargan(): void
     {
-        foreach (['/', '/como-funciona', '/entrar', '/registro', '/aviso-legal', '/privacidad', '/sitemap.xml', '/sitio/'.$this->sitio->slug, '/mi-viaje', '/negocios', '/anade-travelpet-a-tu-movil'] as $url) {
+        foreach (['/', '/como-funciona', '/entrar', '/registro', '/aviso-legal', '/privacidad', '/cookies', '/condiciones', '/sitemap.xml', '/sitio/'.$this->sitio->slug, '/mi-viaje', '/negocios', '/anade-travelpet-a-tu-movil'] as $url) {
             $this->get($url)->assertOk();
         }
         $this->get('/')->assertSee('¿Puedo ir con mi mascota?')->assertDontSee('mi perro');

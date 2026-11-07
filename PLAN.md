@@ -127,6 +127,12 @@ Que un hotel o un bar pueda reclamar su ficha y confirmar sus datos. Tú decides
 1. **Fechas de las playas.** Ya tienen fechas 14 playas. A las que solo dicen «temporada de verano» (Los Manolos, Santa Clara, Bonanza, El Aculadero…) les falta saber del día tal al día cual. Cuando lo sepas: Panel › Sitios › la playa › «Fechas en que se puede ir».
 2. **Datos para los filtros.** Se rellenaron solos a partir de lo que ya estaba escrito, solo cuando el texto lo decía claro. Lo que no se sabe pone «No lo sabemos» y no sale en los filtros. Cuando confirmes algo con un sitio (si admite perros grandes, si cobra suplemento, si se puede estar dentro…), márcalo en «Para los filtros». En el Historial verás lo que se rellenó solo como «Clasificación automática».
 
+## Datos que faltan en el aviso legal ✋ (importante)
+
+La ley obliga a que la web diga quién es su titular. Ahora el aviso legal y la privacidad muestran «[PENDIENTE]». Pásale a tu desarrollador (no por aquí): **nombre y apellidos (o el nombre de la empresa), NIF y una dirección postal**. Él los pone en el servidor y salen solos en las páginas legales.
+
+Las páginas legales ya están hechas: [aviso legal](https://travelpetcadiz.es/aviso-legal), [privacidad](https://travelpetcadiz.es/privacidad), [cookies](https://travelpetcadiz.es/cookies) y [condiciones de uso](https://travelpetcadiz.es/condiciones).
+
 ## Una decisión pendiente para ti ✋
 
 La web ya habla de **mascotas**, pero **casi todos los datos se preguntaron por perros**. Un hotel que admite perros no siempre admite gatos.

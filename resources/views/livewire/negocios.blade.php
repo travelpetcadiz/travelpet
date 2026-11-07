@@ -78,6 +78,7 @@
                 </label>
                 @error('trabajaAqui') <p class="error">{{ $message }}</p> @enderror
             </div>
+            <p class="text-sm text-gris">Usamos tu correo o teléfono solo para comprobar estos datos contigo: no se publica ni se lo damos a nadie, y se borra como máximo 12 meses después de revisar tu solicitud. Más información en la <a href="{{ route('legal.privacidad') }}" class="underline">política de privacidad</a>.</p>
             <button class="btn btn-pri" wire:loading.attr="disabled">@svg('heroicon-o-paper-airplane', 'size-5', ['aria-hidden' => 'true'])Enviar mis datos</button>
         </form>
     @endif

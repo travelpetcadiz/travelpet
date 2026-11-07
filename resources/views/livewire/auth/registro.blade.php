@@ -28,7 +28,7 @@
         </div>
         <label class="flex items-start gap-2">
             <input type="checkbox" wire:model="acepto" class="mt-0.5 size-5 flex-none accent-pino">
-            <span>He leído y acepto la <a href="{{ route('legal.privacidad') }}" target="_blank" class="font-bold text-pino underline">política de privacidad</a>.</span>
+            <span>Tengo 14 años o más y acepto las <a href="{{ route('legal.condiciones') }}" target="_blank" class="font-bold text-pino underline">condiciones de uso</a> y la <a href="{{ route('legal.privacidad') }}" target="_blank" class="font-bold text-pino underline">política de privacidad</a>.</span>
         </label>
         @error('acepto') <p class="error -mt-2">{{ $message }}</p> @enderror
         <button class="btn btn-pri" wire:loading.attr="disabled">Crear cuenta</button>

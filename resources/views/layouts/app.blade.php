@@ -164,6 +164,8 @@
             <span>© {{ date('Y') }} {{ $marca }} · Guía gratuita</span>
             <a href="{{ route('legal.aviso') }}" class="underline">Aviso legal</a>
             <a href="{{ route('legal.privacidad') }}" class="underline">Privacidad</a>
+            <a href="{{ route('legal.cookies') }}" class="underline">Cookies</a>
+            <a href="{{ route('legal.condiciones') }}" class="underline">Condiciones de uso</a>
             <a href="{{ route('como-funciona') }}" class="underline">Cómo funciona</a>
             {{-- Para Google y para quien quiere ver la guía por pueblos --}}
             @foreach ($provinciasPie = \App\Models\Provincia::activas()->has('sitios')->orderBy('nombre')->get(['nombre', 'slug']) as $p)

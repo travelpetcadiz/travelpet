@@ -36,6 +36,8 @@ Route::livewire('/negocios', Negocios::class)->name('negocios');
 Route::livewire('/mi-viaje', MiViaje::class)->name('viaje');
 Route::view('/aviso-legal', 'legal.aviso')->name('legal.aviso');
 Route::view('/privacidad', 'legal.privacidad')->name('legal.privacidad');
+Route::view('/cookies', 'legal.cookies')->name('legal.cookies');
+Route::view('/condiciones', 'legal.condiciones')->name('legal.condiciones');
 
 Route::middleware('guest')->group(function () {
     Route::livewire('/entrar', Entrar::class)->name('entrar');

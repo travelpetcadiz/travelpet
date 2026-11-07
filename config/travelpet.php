@@ -20,7 +20,7 @@ return [
         'nombre' => env('TITULAR_NOMBRE', ''),
         'nif' => env('TITULAR_NIF', ''),
         'domicilio' => env('TITULAR_DOMICILIO', ''),
-        'email' => env('TITULAR_EMAIL', 'hola@travelpetcadiz.es'),
+        'email' => env('TITULAR_EMAIL', 'travelpetcadiz@outlook.es'),
     ],
 
 ];

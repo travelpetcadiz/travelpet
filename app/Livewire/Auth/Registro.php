@@ -39,7 +39,7 @@ class Registro extends Component
             'password' => ['required', 'confirmed', Password::min(8)],
             'acepto' => ['accepted'],
         ], [
-            'acepto.accepted' => 'Tienes que aceptar la política de privacidad.',
+            'acepto.accepted' => 'Para crear la cuenta tienes que tener 14 años o más y aceptar las condiciones de uso y la política de privacidad.',
             'email.unique' => 'Ya hay una cuenta con este email. ¿Quieres entrar?',
         ], ['name' => 'nombre']);
 

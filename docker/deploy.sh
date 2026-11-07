@@ -18,6 +18,9 @@ cd "$APP_DIR"
 exec 9>/tmp/travelpet-deploy.lock
 flock -n 9 || exit 0
 
+# Tareas programadas de Laravel (limpieza de datos personales…): este cron corre cada minuto
+docker exec travelpet_app php artisan schedule:run --no-interaction >/dev/null 2>&1 || true
+
 # Con la clave de solo lectura del repo si GitHub la acepta; si no, con la clave SSH normal del servidor
 GIT_SSH_COMMAND="ssh -i $CLAVE_DEPLOY -o IdentitiesOnly=yes -o BatchMode=yes" git fetch --quiet origin "$RAMA" 2>/dev/null \
     || git fetch --quiet origin "$RAMA"
