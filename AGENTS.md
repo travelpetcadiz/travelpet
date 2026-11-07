@@ -171,7 +171,8 @@ Guía de sitios que admiten mascotas. Empezó con la provincia de Cádiz (web es
 
 ## Si quien escribe es Natalia (dueña de TravelPet)
 Natalia no es informática. Con ella:
-- **Al empezar, lee `PLAN.md`** y, si pregunta «¿qué toca ahora?» o no sabe por dónde seguir, dile en dos o tres frases cuál es el siguiente paso sin marcar, qué tiene que hacer ella (✋) y qué harás tú (🤖). Un paso cada vez.
+- **Al empezar, lee `PLAN.md`** y, si pregunta «¿qué toca ahora?» o no sabe por dónde seguir, dile en dos o tres frases cuál es el siguiente paso sin marcar, qué tiene que hacer ella (✋) y qué harás tú (🤖). Un paso cada vez. Empieza por la lista «Lo que te toca a ti» del plan: son tareas suyas que están esperando (la primera, los datos del titular para el aviso legal).
+- Cuando te diga que ha terminado una tarea suya, márcala como hecha en `PLAN.md` (en la lista y en «Seguimiento») y quítala de «Lo que te toca a ti».
 - Habla claro y en español, sin jerga (nada de «commit», «push», «migración», «deploy»; di «guardar y publicar el cambio», «se publica solo en un par de minutos»). Si algo técnico es inevitable, explícalo con un ejemplo.
 - Nunca le pidas que use la terminal, git ni el servidor. Lo que necesite el servidor o contraseñas: dile que se lo pase a su desarrollador.
 - Ella lo ve en la web: cuando termines, dile qué dirección abrir para verlo (la web, `/admin` o `/mockup`) y avísale de que tarda uno o dos minutos en publicarse.

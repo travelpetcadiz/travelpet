@@ -21,6 +21,15 @@ No necesitas saber nada de programación. Para cada paso pone **qué haces tú**
 
 ---
 
+## Lo que te toca a ti ✋ (por orden)
+
+1. **Los datos del titular para el aviso legal.** Es obligatorio por ley y ahora la web muestra «[PENDIENTE]». Pásale a tu desarrollador (no por aquí): nombre y apellidos o el de la empresa, NIF y una dirección postal.
+2. **Pedir fotos a los negocios.** En el panel, **Ayuda › Correo para pedir fotos a un negocio** (con botón para copiarlo). El mismo correo les pide que confirmen sus datos, y así salen como «Confirmado por el propio sitio».
+3. **Revisar los bocetos del diseño nuevo** (paso 3 del plan) en https://travelpetcadiz.es/mockup y decirle a Claude qué cambiar.
+4. **Decidir si quieres guardar qué animales admite cada sitio** (perros, gatos, otros): ver «Una decisión pendiente para ti» más abajo.
+
+Cuando termines una, díselo a Claude y la marcará como hecha. Cuando haya fotos nuevas esperando (de Wikimedia o subidas por alguien del equipo), te saldrá «Fotos por revisar» en el Inicio del panel.
+
 ## Lo que ya tienes
 
 - 525 sitios en 41 municipios, con sus condiciones y de dónde sale cada dato.
@@ -173,4 +182,9 @@ Claude marca aquí lo que se va terminando.
 - [ ] Paso 8. Revisión escalonada de datos
 - [ ] Paso 9. Medir el uso
 - [ ] Paso 10. Negocios
-- [ ] Decisión: qué animales admite cada sitio
+- [x] Fotos en la ficha de cada sitio, con permisos y créditos
+- [x] ✋ Revisar y publicar las fotos de playas y parques (49 publicadas)
+- [x] Páginas legales: aviso legal, privacidad, cookies y condiciones de uso
+- [ ] ✋ Datos del titular en el aviso legal (nombre, NIF y dirección, al desarrollador)
+- [ ] ✋ Pedir fotos a los negocios con el correo modelo
+- [ ] Decisión: qué animales admite cada sitio ✋
