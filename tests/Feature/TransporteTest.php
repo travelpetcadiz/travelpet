@@ -37,6 +37,11 @@ class TransporteTest extends TestCase
         $this->get('/sitemap.xml')->assertSee(route('transporte'), false);
     }
 
+    public function test_la_pagina_de_negocios_va_en_el_sitemap(): void
+    {
+        $this->get('/sitemap.xml')->assertSee(route('negocios'), false);
+    }
+
     public function test_el_equipo_la_gestiona_en_el_panel(): void
     {
         $transporte = Transporte::create(['medio' => 'avion', 'nombre' => 'Aerolínea Prueba']);
