@@ -4,9 +4,13 @@
         <h2>Quién está detrás de TravelPet</h2>
         <p>Cumpliendo la Ley 34/2002 de servicios de la sociedad de la información (LSSI), estos son los datos del titular de travelpetcadiz.es:</p>
         <ul>
-            <li><strong>Titular:</strong> {{ $t['nombre'] ?: '[PENDIENTE: nombre y apellidos o razón social]' }}</li>
-            <li><strong>NIF:</strong> {{ $t['nif'] ?: '[PENDIENTE]' }}</li>
-            <li><strong>Domicilio:</strong> {{ $t['domicilio'] ?: '[PENDIENTE]' }}</li>
+            <li><strong>Titular:</strong> {{ $t['nombre'] }}</li>
+            @if ($t['nif'])
+                <li><strong>NIF:</strong> {{ $t['nif'] }}</li>
+            @endif
+            @if ($t['domicilio'])
+                <li><strong>Domicilio:</strong> {{ $t['domicilio'] }}</li>
+            @endif
             <li><strong>Correo:</strong> <a href="mailto:{{ $t['email'] }}">{{ $t['email'] }}</a></li>
         </ul>
 

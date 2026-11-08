@@ -5,8 +5,10 @@
 
         <h2>Quién es el responsable</h2>
         <ul>
-            <li><strong>Responsable:</strong> {{ $t['nombre'] ?: '[PENDIENTE: titular]' }}{{ $t['nif'] ? ' · NIF '.$t['nif'] : '' }}</li>
-            <li><strong>Domicilio:</strong> {{ $t['domicilio'] ?: '[PENDIENTE]' }}</li>
+            <li><strong>Responsable:</strong> {{ $t['nombre'] }}{{ $t['nif'] ? ' · NIF '.$t['nif'] : '' }}</li>
+            @if ($t['domicilio'])
+                <li><strong>Domicilio:</strong> {{ $t['domicilio'] }}</li>
+            @endif
             <li><strong>Correo para cualquier asunto de privacidad:</strong> <a href="mailto:{{ $t['email'] }}">{{ $t['email'] }}</a></li>
         </ul>
 

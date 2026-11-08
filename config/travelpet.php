@@ -15,9 +15,10 @@ return [
         'zoom' => 5,
     ],
 
-    // Datos del titular para el aviso legal (LSSI). Rellenar antes de publicar.
+    // Datos del titular para el aviso legal y la privacidad. NIF y domicilio se añadirán
+    // antes de cobrar nada; mientras estén vacíos, esas líneas no se muestran.
     'titular' => [
-        'nombre' => env('TITULAR_NOMBRE', ''),
+        'nombre' => env('TITULAR_NOMBRE') ?: 'Natalia Domínguez González',
         'nif' => env('TITULAR_NIF', ''),
         'domicilio' => env('TITULAR_DOMICILIO', ''),
         'email' => env('TITULAR_EMAIL', 'travelpetcadiz@outlook.es'),
