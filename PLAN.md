@@ -23,7 +23,7 @@ No necesitas saber nada de programación. Para cada paso pone **qué haces tú**
 
 ## Lo que te toca a ti ✋ (por orden)
 
-1. **Los datos del titular para el aviso legal.** Es obligatorio por ley y ahora la web muestra «[PENDIENTE]». Pásale a tu desarrollador (no por aquí): nombre y apellidos o el de la empresa, NIF y una dirección postal.
+1. **Los datos del titular para el aviso legal.** ✅ Hecho el 8/11: ya sale tu nombre como titular y el correo de contacto. El NIF y la dirección postal quedan para **antes de empezar a cobrar** (pásaselos a tu desarrollador, no por aquí).
 2. **Pedir fotos a los negocios.** En el panel, **Ayuda › Correo para pedir fotos a un negocio** (con botón para copiarlo). El mismo correo les pide que confirmen sus datos, y así salen como «Confirmado por el propio sitio».
 3. **Revisar los bocetos del diseño nuevo** (paso 3 del plan) en https://travelpetcadiz.es/mockup y decirle a Claude qué cambiar.
 4. **Decidir si quieres guardar qué animales admite cada sitio** (perros, gatos, otros): ver «Una decisión pendiente para ti» más abajo.
