@@ -1,6 +1,6 @@
 @php($t = config('travelpet.titular'))
 @component('layouts.app', ['title' => 'Aviso legal', 'descripcion' => 'Quién está detrás de TravelPet, para qué sirve la guía y hasta dónde llega nuestra responsabilidad.'])
-    <x-pagina-legal titulo="Aviso legal">
+    <x-pagina-legal titulo="Aviso legal" actualizado="9 de noviembre de 2026">
         <h2>Quién está detrás de TravelPet</h2>
         <p>Cumpliendo la Ley 34/2002 de servicios de la sociedad de la información (LSSI), estos son los datos del titular de travelpetcadiz.es:</p>
         <ul>
@@ -17,6 +17,9 @@
         <h2>Qué es TravelPet</h2>
         <p>TravelPet es una guía gratuita de sitios que admiten mascotas: alojamientos, bares y restaurantes, playas, parques, veterinarios y otros servicios. Para usarla no hace falta cuenta. Con una cuenta gratuita puedes, además, dejar reseñas, avisar de datos incorrectos y sugerir sitios.</p>
         <p><strong>No vendemos nada ni hacemos reservas.</strong> Los sitios no pagan por aparecer en la guía y la etiqueta «Confirmado por el propio sitio» no se puede comprar: solo indica que el sitio nos ha confirmado sus datos.</p>
+
+        <h2>Enlaces de afiliado</h2>
+        <p>En algunos alojamientos hay un botón «Ver precios y reservar» que lleva a Booking.com a través de Travelpayouts. Son <strong>enlaces de afiliado</strong>: si reservas desde ellos, recibimos una pequeña comisión. A ti no te cuesta más, la reserva la haces directamente con Booking.com (con sus condiciones) y no cambia nada de lo que contamos sobre el sitio: un alojamiento no sale antes ni con mejores datos por tener este enlace.</p>
 
         <h2>La información de la guía puede cambiar</h2>
         <p>Comprobamos cada dato y en cada ficha decimos de dónde sale y cuándo lo comprobamos. Aun así, los sitios cambian sus normas sin avisar, y las playas y los parques dependen de ordenanzas que se modifican cada temporada. Por eso:</p>
@@ -41,7 +44,7 @@
         <p>Las fotos son de sus autores, que se indican debajo de cada una. Algunas son del equipo de TravelPet, otras nos las han cedido los propios sitios y otras tienen licencia libre (Wikimedia Commons), con su autor y su licencia enlazados. Si eres autor de una foto, sales en ella y quieres que la retiremos, escríbenos a <a href="mailto:{{ $t['email'] }}">{{ $t['email'] }}</a> y la quitaremos.</p>
 
         <h2>Enlaces a otras webs</h2>
-        <p>Enlazamos a las webs de los sitios, a Google Maps para «Cómo llegar» y a WhatsApp para compartir. Cada una tiene sus propias condiciones y políticas de privacidad; no somos responsables de su contenido.</p>
+        <p>Enlazamos a las webs de los sitios, a Google Maps para «Cómo llegar», a WhatsApp para compartir y, en algunos alojamientos, a Booking.com para reservar. Cada una tiene sus propias condiciones y políticas de privacidad; no somos responsables de su contenido.</p>
 
         <h2>Más información</h2>
         <p>Cómo tratamos tus datos: <a href="{{ route('legal.privacidad') }}">política de privacidad</a>. Qué guardamos en tu navegador: <a href="{{ route('legal.cookies') }}">política de cookies</a>. Normas para usar la guía y publicar reseñas: <a href="{{ route('legal.condiciones') }}">condiciones de uso</a>.</p>

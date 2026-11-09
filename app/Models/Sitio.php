@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 
 #[Fillable([
     'municipio_id', 'nombre', 'slug', 'tipo', 'subtipo', 'direccion', 'latitud', 'longitud', 'a_domicilio',
-    'contacto', 'admite_perros', 'tamano_maximo', 'suplemento', 'zonas_permitidas', 'temporada',
+    'contacto', 'enlace_reserva', 'admite_perros', 'tamano_maximo', 'suplemento', 'zonas_permitidas', 'temporada',
     'otras_condiciones', 'fuente', 'fecha_comprobacion', 'verificado', 'fuente_oficial', 'publicado',
     'admite_grandes', 'sin_suplemento', 'puede_entrar', 'sin_correa', 'urgencias_24h',
     'periodo_tipo', 'periodo_desde', 'periodo_hasta',
@@ -34,7 +34,7 @@ class Sitio extends Model
     public const CAMPOS = [
         'nombre' => 'Nombre', 'tipo' => 'Tipo', 'subtipo' => 'Qué es exactamente', 'municipio_id' => 'Municipio',
         'direccion' => 'Dirección', 'latitud' => 'Ubicación (latitud)', 'longitud' => 'Ubicación (longitud)', 'a_domicilio' => 'Servicio a domicilio',
-        'contacto' => 'Teléfono / web', 'admite_perros' => '¿Admite mascotas?', 'tamano_maximo' => 'Tamaño o peso máximo',
+        'contacto' => 'Teléfono / web', 'enlace_reserva' => 'Enlace para reservar', 'admite_perros' => '¿Admite mascotas?', 'tamano_maximo' => 'Tamaño o peso máximo',
         'suplemento' => 'Suplemento', 'zonas_permitidas' => 'Zonas permitidas', 'temporada' => 'Temporada / horario',
         'otras_condiciones' => 'Información adicional', 'fuente' => 'De dónde sale el dato', 'fecha_comprobacion' => 'Fecha de comprobación',
         'verificado' => 'Confirmado por el propio sitio', 'fuente_oficial' => 'Fuente oficial', 'publicado' => 'Se ve en la web',

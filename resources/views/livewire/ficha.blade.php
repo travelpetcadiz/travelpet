@@ -162,6 +162,14 @@
                 </button>
             </div>
 
+            {{-- Reservar: enlace de afiliado, solo en alojamientos que admiten mascotas. No cambia ningún dato ni el sello «Confirmado». --}}
+            @if ($s->tipo === 'Alojamiento' && filled($s->enlace_reserva) && $s->admite_perros !== 'no')
+                <section class="tarjeta grid gap-2 p-4">
+                    <a class="btn btn-pri w-full sm:w-auto sm:justify-self-start" target="_blank" rel="sponsored noopener" href="{{ $s->enlace_reserva }}">@svg('heroicon-o-calendar-days', 'size-5', ['aria-hidden' => 'true'])Ver precios y reservar</a>
+                    <p class="text-sm text-gris">Enlace de afiliado: si reservas desde aquí, TravelPet recibe una pequeña comisión. A ti no te cuesta más y no cambia nada de lo que contamos sobre este sitio. Al reservar, avisa de que vas con tu mascota.</p>
+                </section>
+            @endif
+
             @if ($otroContacto)
                 <section class="tarjeta p-5">
                     <h2 class="mb-2 flex items-center gap-2 text-lg font-bold">@svg('heroicon-o-globe-alt', 'size-5 text-pino', ['aria-hidden' => 'true'])Web y contacto</h2>

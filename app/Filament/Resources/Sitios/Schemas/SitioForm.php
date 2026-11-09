@@ -31,6 +31,7 @@ class SitioForm
                         TextInput::make('nombre')->required()->maxLength(255),
                         Select::make('tipo')
                             ->options(collect(Sitio::TIPOS)->mapWithKeys(fn ($v, $k) => [$k => $v[0]]))
+                            ->live()
                             ->required(),
                         TextInput::make('subtipo')->label('Qué es exactamente')->placeholder('Hotel, playa canina, clínica…')
                             ->helperText('Sale debajo del nombre en la web.'),
@@ -58,6 +59,13 @@ class SitioForm
                         Textarea::make('contacto')
                             ->label('Teléfono / Web')
                             ->helperText('Separa varios con punto y coma. Las direcciones que empiezan por https:// salen como enlace.')
+                            ->columnSpanFull(),
+                        TextInput::make('enlace_reserva')
+                            ->label('Enlace para reservar (afiliado)')
+                            ->helperText('Solo alojamientos. Pega aquí el enlace de Booking que te da Travelpayouts para este alojamiento. En la ficha sale el botón «Ver precios y reservar» con un aviso de que es un enlace de afiliado. Si lo dejas vacío, no sale el botón.')
+                            ->url()
+                            ->maxLength(1000)
+                            ->visible(fn (Get $get) => $get('tipo') === 'Alojamiento')
                             ->columnSpanFull(),
                     ]),
                 Section::make('Condiciones para mascotas')
