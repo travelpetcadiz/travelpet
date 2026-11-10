@@ -31,7 +31,18 @@ class PaginasGuia
         'Espacio' => ['parques-y-paseos', 'Parques y paseos para mascotas', 'parques y paseos'],
         'Salud' => ['veterinarios', 'Veterinarios', 'veterinarios'],
         'Servicios' => ['servicios-para-mascotas', 'Servicios para mascotas', 'servicios'],
-        'Transporte y ocio' => ['transporte-y-ocio', 'Transporte y ocio con mascota', 'sitios de transporte y ocio'],
+        'Ocio' => ['planes', 'Planes con mascota', 'planes'],
+        'Transporte' => ['transporte', 'Transporte que admite mascotas', 'sitios de transporte'],
+        'Comercio' => ['comercios', 'Comercios que admiten mascotas', 'comercios'],
+    ];
+
+    /**
+     * Direcciones antiguas que ya no existen y a cuál llevan ahora (por si Google o alguien las tiene guardadas).
+     *
+     * @var array<string, string>
+     */
+    public const SLUGS_ANTIGUOS = [
+        'transporte-y-ocio' => 'planes',
     ];
 
     public static function slug(string $tipo): string

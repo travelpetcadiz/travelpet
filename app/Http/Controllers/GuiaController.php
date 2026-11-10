@@ -6,6 +6,7 @@ use App\Models\Municipio;
 use App\Models\Provincia;
 use App\Models\Sitio;
 use App\Support\PaginasGuia;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
@@ -35,17 +36,23 @@ class GuiaController extends Controller
     /**
      * El segundo trozo de la dirección es una categoría («playas») o un pueblo («conil-de-la-frontera»).
      */
-    public function seccion(Provincia $provincia, string $seccion): View
+    public function seccion(Provincia $provincia, string $seccion): View|RedirectResponse
     {
         abort_unless($provincia->activa, 404);
+        if (isset(PaginasGuia::SLUGS_ANTIGUOS[$seccion])) {
+            return redirect()->route('guia.seccion', [$provincia, PaginasGuia::SLUGS_ANTIGUOS[$seccion]], 301);
+        }
         $tipo = PaginasGuia::tipoDelSlug($seccion);
 
         return $tipo ? $this->categoria($provincia, $tipo) : $this->pueblo($provincia, $this->municipio($provincia, $seccion));
     }
 
-    public function puebloCategoria(Provincia $provincia, string $pueblo, string $categoria): View
+    public function puebloCategoria(Provincia $provincia, string $pueblo, string $categoria): View|RedirectResponse
     {
         abort_unless($provincia->activa, 404);
+        if (isset(PaginasGuia::SLUGS_ANTIGUOS[$categoria])) {
+            return redirect()->route('guia.pueblo', [$provincia, $pueblo, PaginasGuia::SLUGS_ANTIGUOS[$categoria]], 301);
+        }
         $municipio = $this->municipio($provincia, $pueblo);
         $tipo = PaginasGuia::tipoDelSlug($categoria) ?? abort(404);
         $sitios = PaginasGuia::sitios($provincia)->where('municipio_id', $municipio->id)->where('tipo', $tipo)->get();

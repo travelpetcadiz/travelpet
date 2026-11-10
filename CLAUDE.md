@@ -228,7 +228,7 @@ public function up(): void
 }
 ```
 
-- `tipo`: Alojamiento, Restauración, Playa, Espacio, Salud, Servicios, Transporte y ocio. `admite_perros`: si, condiciones, no, no_consta.
+- `tipo`: Alojamiento, Restauración, Playa, Espacio, Salud, Servicios, Ocio (en la web, «Planes»), Transporte, Comercio (en la web, «Comercios»). `admite_perros`: si, condiciones, no, no_consta.
 - Si el sitio no existe, `actualizar`/`ocultar` lo anotan en el log y siguen (no rompen el despliegue). Cada campo cambiado queda en el historial del panel con fuente «GitHub».
 - Una migración solo se ejecuta una vez: si luego Natalia cambia ese sitio en el panel, su cambio se respeta.
 

@@ -45,7 +45,7 @@
         $enlaceMenu = 'flex min-h-11 items-center gap-3 rounded-lg px-2 py-2 font-bold hover:bg-cal';
         $actual = fn (string $ruta) => request()->routeIs($ruta) ? 'bg-pino-suave text-pino' : '';
         // Categorías: lo que se busca para salir con la mascota y lo que se busca para la mascota
-        $salir = ['Alojamiento', 'Restauración', 'Playa', 'Espacio', 'Transporte y ocio'];
+        $salir = ['Alojamiento', 'Restauración', 'Playa', 'Espacio', 'Ocio', 'Transporte', 'Comercio'];
         $paraMascota = \App\Models\Sitio::SERVICIOS;
         $chipCategoria = fn (string $clave, string $extra = '') => '<a href="'.e(route('inicio', ['tipo' => $clave])).'" wire:navigate class="chip '.$extra.'">'
             .svg('heroicon-s-'.\App\Models\Sitio::TIPOS[$clave][2], 'size-5 flex-none', ['style' => 'color: '.\App\Models\Sitio::TIPOS[$clave][1], 'aria-hidden' => 'true'])->toHtml()

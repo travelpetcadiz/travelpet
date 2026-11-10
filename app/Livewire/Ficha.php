@@ -123,7 +123,9 @@ class Ficha extends Component
         'Espacio' => 'Park',
         'Salud' => 'VeterinaryCare',
         'Servicios' => 'LocalBusiness',
-        'Transporte y ocio' => 'TouristAttraction',
+        'Ocio' => 'TouristAttraction',
+        'Transporte' => 'LocalBusiness',
+        'Comercio' => 'Store',
     ];
 
     /**

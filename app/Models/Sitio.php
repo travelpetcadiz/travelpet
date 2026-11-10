@@ -58,7 +58,9 @@ class Sitio extends Model
         'Espacio' => ['Parques y paseos', '#5B8C2A', 'map'],
         'Salud' => ['Veterinarios', '#B3261E', 'heart'],
         'Servicios' => ['Servicios para mascotas', '#7B5AA6', 'scissors'],
-        'Transporte y ocio' => ['Transporte y ocio', '#6B6B3A', 'ticket'],
+        'Ocio' => ['Planes', '#6B6B3A', 'ticket'],
+        'Transporte' => ['Transporte', '#4B5D73', 'truck'],
+        'Comercio' => ['Comercios', '#9C4F6E', 'shopping-bag'],
     ];
 
     // Lo que busca quien viaja: van como accesos grandes en la portada; el resto, como utilidades
