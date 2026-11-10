@@ -83,29 +83,35 @@
     {{-- 3. Qué buscas: accesos grandes con el color de cada categoría --}}
     <section class="mx-auto max-w-6xl px-4 pt-12">
         <h2 class="text-2xl font-extrabold md:text-3xl">¿Qué buscas?</h2>
-        <div class="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div class="mt-4 grid grid-cols-2 gap-2 md:grid-cols-4">
             @foreach (Sitio::PRINCIPALES as $clave)
                 @php([$etiqueta, $color, $icono] = Sitio::TIPOS[$clave])
                 <a href="{{ route('mockup', 'rediseno-lista') }}?tipo={{ urlencode($clave) }}"
-                   class="group relative flex min-h-32 flex-col justify-between overflow-hidden rounded-2xl p-4 no-underline ring-1 ring-black/5 transition hover:-translate-y-0.5 hover:shadow-md"
-                   style="background-color: {{ $color }}1A">
-                    @svg('heroicon-o-'.$icono, 'absolute -bottom-4 -right-4 size-24 opacity-20 transition group-hover:scale-110', ['style' => 'color: '.$color, 'aria-hidden' => 'true'])
-                    <span class="grid size-11 place-items-center rounded-xl bg-white shadow-sm">
-                        <x-icono-tipo :tipo="$clave" class="size-6" />
+                   class="flex min-h-14 items-center gap-2.5 rounded-xl px-3 py-2 no-underline ring-1 ring-black/5 transition hover:shadow-sm"
+                   style="background-color: {{ $color }}14">
+                    <span class="grid size-9 flex-none place-items-center rounded-lg bg-white shadow-sm">
+                        <x-icono-tipo :tipo="$clave" class="size-5" />
                     </span>
-                    <span>
-                        <span class="block font-display text-lg font-extrabold leading-tight text-tinta">{{ $etiqueta }}</span>
+                    <span class="leading-tight">
+                        <span class="block font-bold text-tinta">{{ $etiqueta }}</span>
                         <span class="text-sm text-gris">{{ $conteoTipos[$clave] ?? 0 }} sitios</span>
                     </span>
                 </a>
             @endforeach
         </div>
-        <div class="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0">
+        <div class="-mx-4 mt-2 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0">
             @foreach (array_diff(array_keys(Sitio::TIPOS), Sitio::PRINCIPALES) as $clave)
                 <a href="{{ route('mockup', 'rediseno-lista') }}?tipo={{ urlencode($clave) }}" class="chip min-h-11 no-underline"><x-icono-tipo :tipo="$clave" />{{ Sitio::TIPOS[$clave][0] }}</a>
             @endforeach
-            <a href="{{ route('urgencias') }}" class="chip min-h-11 border-mal/30 bg-mal-suave text-mal no-underline">@svg('heroicon-o-lifebuoy', 'size-5', ['aria-hidden' => 'true'])Urgencias veterinarias 24 h</a>
         </div>
+        {{-- Urgencias: en rojo y a todo lo ancho, para encontrarlas al momento --}}
+        <a href="{{ route('urgencias') }}" class="mt-3 flex min-h-14 items-center gap-3 rounded-xl bg-mal px-4 py-3 text-white no-underline shadow-sm transition hover:brightness-110 md:max-w-xl">
+            @svg('heroicon-o-lifebuoy', 'size-7 flex-none', ['aria-hidden' => 'true'])
+            <span class="leading-tight">
+                <span class="block font-bold">Urgencias veterinarias 24 h</span>
+                <span class="text-sm text-white/90">Las más cercanas, con botón para llamar</span>
+            </span>
+        </a>
     </section>
 
     {{-- 4. Recién confirmados: sitios reales que nos han contestado --}}
