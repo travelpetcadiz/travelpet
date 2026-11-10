@@ -22,13 +22,14 @@
         default => ['Zonas permitidas'],
     };
     $faltan = array_values(array_filter($importan, fn ($k) => blank($datos[$k][1])));
+    // [_, texto, icono, color]
     $respuesta = match (true) {
-        $servicio && $s->urgencias_24h => ['bg-mal-suave text-mal border-mal', 'Urgencias las 24 horas', 'lifebuoy'],
-        $servicio => ['bg-white text-tinta border-linea', 'Información útil', 'information-circle'],
-        $s->admite_perros === 'si' => ['bg-ok-suave text-ok border-ok', 'Sí, admite mascotas', 'check-circle'],
-        $s->admite_perros === 'condiciones' => ['bg-aviso-suave text-aviso border-aviso', 'Admite mascotas, con condiciones', 'exclamation-triangle'],
-        $s->admite_perros === 'no' => ['bg-mal-suave text-mal border-mal', 'No admite mascotas', 'no-symbol'],
-        default => ['bg-cal text-gris border-linea', 'Aún no sabemos si admite mascotas', 'question-mark-circle'],
+        $servicio && $s->urgencias_24h => ['', 'Urgencias las 24 horas', 'lifebuoy', 'mal'],
+        $servicio => ['', 'Información útil', 'information-circle', 'pino'],
+        $s->admite_perros === 'si' => ['', 'Sí, admite mascotas', 'check-circle', 'ok'],
+        $s->admite_perros === 'condiciones' => ['', 'Sí, con condiciones', 'exclamation-triangle', 'aviso'],
+        $s->admite_perros === 'no' => ['', 'No admite mascotas', 'no-symbol', 'mal'],
+        default => ['', 'Aún no sabemos si admite mascotas', 'question-mark-circle', 'gris'],
     };
     $hoy = $s->hoy();
     // Datos clave con icono; solo los que sabemos (null = no lo sabemos y no se muestra)
@@ -54,86 +55,121 @@
         : ($s->direccion ?: $s->municipio->nombre);
     $textoCompartir = $s->nombre.' ('.$s->municipio->nombre.'): '.($servicio ? $s->etiquetaTipo() : mb_strtolower($respuesta[1])).'. Míralo en TravelPet:';
 @endphp
-<div class="mx-auto max-w-6xl px-4 py-6">
-    <nav class="mb-4 text-sm text-gris" aria-label="Ruta">
-        <a href="{{ route('inicio') }}" wire:navigate class="underline">Explorar</a> ›
-        <a href="{{ route('inicio', ['provincia' => $s->municipio->provincia->slug]) }}" wire:navigate class="underline">{{ $s->municipio->provincia->nombre }}</a> ›
-        <a href="{{ route('inicio', ['provincia' => $s->municipio->provincia->slug, 'municipio' => $s->municipio_id]) }}" wire:navigate class="underline">{{ $s->municipio->nombre }}</a> ›
-        <span>{{ $s->nombre }}</span>
-    </nav>
+<div>
+    @php
+        $principal = $fotos->first();
+        // Color de la respuesta: borde, círculo del icono y texto (clases enteras para que el diseño las encuentre)
+        [$claseBorde, $claseCirculo, $claseTexto] = match ($respuesta[3]) {
+            'mal' => ['border-mal', 'bg-mal-suave text-mal', 'text-mal'],
+            'ok' => ['border-ok', 'bg-ok-suave text-ok', 'text-ok'],
+            'aviso' => ['border-albero', 'bg-albero-suave text-aviso', 'text-aviso'],
+            'pino' => ['border-pino', 'bg-pino-suave text-pino', 'text-pino'],
+            default => ['border-linea', 'bg-cal text-gris', 'text-gris'],
+        };
+    @endphp
 
-    <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
-        <article class="grid content-start gap-5">
-            <header class="grid gap-2">
-                <span class="flex items-center gap-2 text-sm font-bold">
-                    <x-icono-tipo :tipo="$s->tipo" />
-                    {{ $s->etiquetaTipo() }}@if ($s->subtipo)<span class="font-normal text-gris">· {{ $s->subtipo }}</span>@endif
+    {{-- Cabecera: la foto principal del sitio o, si no la hay, el color de su categoría --}}
+    <header class="relative isolate overflow-hidden" style="background-color: {{ $s->color() }}">
+        @if ($principal)
+            <figure class="absolute inset-0 -z-10">
+                <img src="{{ $principal->url() }}" alt="{{ $principal->descripcion }}" class="size-full object-cover" fetchpriority="high">
+                <x-credito-foto :foto="$principal" class="absolute bottom-14 right-2 rounded-md bg-white/85 px-2 py-0.5" />
+            </figure>
+            <div class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-tinta/90 via-tinta/45 to-tinta/10"></div>
+        @else
+            <div class="absolute inset-0 -z-10 bg-gradient-to-br from-black/0 to-black/30"></div>
+            @svg('heroicon-o-'.\App\Models\Sitio::TIPOS[$s->tipo][2], 'absolute -right-8 -top-6 -z-10 size-56 text-white/10', ['aria-hidden' => 'true'])
+        @endif
+        <div class="mx-auto flex max-w-6xl flex-col px-4 pb-16 pt-5 text-white {{ $principal ? 'min-h-80 justify-between' : '' }}">
+            <nav class="mb-6 text-sm text-white/85" aria-label="Ruta">
+                <a href="{{ route('inicio') }}" wire:navigate class="underline">Explorar</a> ›
+                <a href="{{ route('inicio', ['provincia' => $s->municipio->provincia->slug, 'municipio' => $s->municipio_id]) }}" wire:navigate class="underline">{{ $s->municipio->nombre }}</a> ›
+                <a href="{{ route('inicio', ['tipo' => $s->tipo]) }}" wire:navigate class="underline">{{ $s->etiquetaTipo() }}</a>
+            </nav>
+            <div>
+                <span class="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-sm font-bold ring-1 ring-white/30 backdrop-blur">
+                    @svg('heroicon-s-'.\App\Models\Sitio::TIPOS[$s->tipo][2], 'size-4', ['aria-hidden' => 'true']){{ $s->subtipo ?: $s->etiquetaTipo() }}
                 </span>
-                <h1 class="text-3xl font-extrabold leading-tight sm:text-4xl">{{ $s->nombre }}</h1>
-                <p class="flex items-start gap-1.5 text-gris">@svg('heroicon-o-map-pin', 'mt-1 size-4 flex-none', ['aria-hidden' => 'true'])<span>@if ($s->a_domicilio)<strong class="text-tinta">Servicio a domicilio</strong> · @endif{{ $direccion }}</span></p>
+                <h1 class="mt-3 text-3xl font-extrabold leading-tight sm:text-5xl">{{ $s->nombre }}</h1>
+                <p class="mt-2 flex items-start gap-1.5 text-white/90">@svg('heroicon-o-map-pin', 'mt-1 size-4 flex-none', ['aria-hidden' => 'true'])<span>@if ($s->a_domicilio)<strong class="text-white">Servicio a domicilio</strong> · @endif{{ $direccion }}</span></p>
                 @if ($media)
-                    <a href="#resenas" class="text-sm font-bold text-aviso no-underline">★ {{ number_format($media, 1, ',', '') }}, {{ $resenas->count() }} {{ $resenas->count() === 1 ? 'reseña' : 'reseñas' }}</a>
+                    <a href="#resenas" class="mt-1 inline-block text-sm font-bold text-albero no-underline">★ {{ number_format($media, 1, ',', '') }}, {{ $resenas->count() }} {{ $resenas->count() === 1 ? 'reseña' : 'reseñas' }}</a>
                 @endif
-            </header>
+            </div>
+        </div>
+    </header>
 
-            @if ($s->esAntiguo())
-                <p class="rounded-xl bg-aviso-suave p-3 text-sm text-aviso">Este dato se comprobó hace más de 6 meses. Confírmalo con el sitio antes de ir.</p>
-            @endif
-
-            {{-- Fotos: la principal grande y el resto en fila; siempre con su crédito --}}
-            @if ($fotos->isNotEmpty())
-                @php($principal = $fotos->first())
-                <figure class="grid gap-2">
-                    <img src="{{ $principal->url() }}" alt="{{ $principal->descripcion }}" class="aspect-[16/9] w-full rounded-2xl object-cover" fetchpriority="high">
-                    <x-credito-foto :foto="$principal" />
-                </figure>
-                @if ($fotos->count() > 1)
-                    <ul class="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:thin]" aria-label="Más fotos">
-                        @foreach ($fotos->skip(1) as $f)
-                            <li class="w-56 flex-none snap-start">
-                                <figure class="grid gap-1">
-                                    <img src="{{ $f->url() }}" alt="{{ $f->descripcion }}" loading="lazy" class="aspect-[4/3] w-full rounded-xl object-cover">
-                                    <x-credito-foto :foto="$f" />
-                                </figure>
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
-            @endif
-
-            {{-- La respuesta a lo que viene a buscar la gente, lo primero (sin ocupar media pantalla) --}}
-            <section class="rounded-2xl border p-4 {{ $respuesta[0] }}">
-                <p class="flex items-center gap-2 font-display text-xl font-extrabold leading-tight">@svg('heroicon-s-'.$respuesta[2], 'size-6 flex-none', ['aria-hidden' => 'true']){{ $respuesta[1] }}</p>
+<div class="mx-auto max-w-6xl px-4 pb-28 lg:pb-8">
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
+        <article class="relative z-10 -mt-10 grid content-start gap-5">
+            {{-- La respuesta a lo que viene a buscar la gente, lo primero: tarjeta blanca sobre la cabecera --}}
+            <section class="overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-linea">
+                <div class="flex items-center gap-3 border-l-8 p-5 {{ $claseBorde }}">
+                    <span class="grid size-12 flex-none place-items-center rounded-full {{ $claseCirculo }}">@svg('heroicon-s-'.$respuesta[2], 'size-7', ['aria-hidden' => 'true'])</span>
+                    <div>
+                        <p class="font-display text-2xl font-extrabold leading-tight {{ $claseTexto }}">{{ $respuesta[1] }}</p>
+                        @if ($s->verificado)
+                            <p class="mt-1 inline-flex items-center gap-1 text-sm font-bold text-ok">@svg('heroicon-s-check-badge', 'size-4 flex-none', ['aria-hidden' => 'true'])Confirmado por el propio sitio{{ $s->fecha_comprobacion ? ' el '.$s->fecha_comprobacion->translatedFormat('j \d\e F \d\e Y') : '' }}</p>
+                        @elseif (! $servicio)
+                            <p class="mt-1 text-sm text-gris">Sin confirmar por el sitio. Pregúntalo antes de ir.</p>
+                        @endif
+                    </div>
+                </div>
                 @if ($hoy)
-                    <p class="mt-3 flex items-start gap-2 rounded-xl bg-white/70 p-3 text-tinta">
+                    <p class="mx-5 mb-4 flex items-start gap-2 rounded-xl p-3 {{ $hoy['puede'] ? 'bg-ok-suave' : 'bg-mal-suave' }}">
                         @svg('heroicon-s-calendar-days', 'mt-0.5 size-6 flex-none '.($hoy['puede'] ? 'text-ok' : 'text-mal'), ['aria-hidden' => 'true'])
                         <span><strong class="block text-lg {{ $hoy['puede'] ? 'text-ok' : 'text-mal' }}">{{ $hoy['puede'] ? 'Hoy se puede ir' : 'Hoy no se puede ir' }}</strong>{{ $hoy['texto'] }}</span>
                     </p>
                 @endif
                 @if ($hechos)
-                    <ul class="mt-3 flex flex-wrap gap-2">
+                    <ul class="grid grid-cols-2 gap-2 px-5 pb-5">
                         @foreach ($hechos as [$icono, $texto, $bueno])
-                            <li class="sello bg-white px-3 py-1.5 text-sm {{ $bueno ? 'text-tinta' : 'text-gris' }}">@svg('heroicon-o-'.$icono, 'size-5', ['aria-hidden' => 'true']){{ $texto }}</li>
+                            <li class="flex items-center gap-2 rounded-xl bg-cal px-3 py-2.5 text-sm font-bold {{ $bueno ? 'text-tinta' : 'text-gris' }}">@svg('heroicon-o-'.$icono, 'size-5 flex-none text-pino', ['aria-hidden' => 'true']){{ $texto }}</li>
                         @endforeach
                     </ul>
                 @endif
-                @if ($conocidos && ($servicio || $s->admite_perros !== 'no'))
-                    <dl class="mt-4 grid gap-4 border-t border-current/20 pt-4 text-tinta">
-                        @foreach ($conocidos as $etiqueta => [$icono, $valor])
-                            <div class="flex gap-3">
-                                @svg('heroicon-o-'.$icono, 'mt-0.5 size-5 flex-none text-gris', ['aria-hidden' => 'true'])
-                                <div>
-                                    <dt class="font-bold">{{ $etiqueta }}</dt>
-                                    <dd class="whitespace-pre-line">{{ $valor }}</dd>
-                                </div>
-                            </div>
-                        @endforeach
-                    </dl>
-                @endif
-                @if ($faltan && ($servicio || $s->admite_perros !== 'no'))
-                    <p class="mt-3 text-sm text-gris">Aún no sabemos: {{ mb_strtolower(implode(', ', $faltan)) }}. {{ $servicio ? 'Llama antes de ir.' : 'Pregúntalo al reservar.' }}</p>
-                @endif
             </section>
+
+            @if ($s->esAntiguo())
+                <p class="rounded-xl bg-aviso-suave p-3 text-sm text-aviso">Este dato se comprobó hace más de 6 meses. Confírmalo con el sitio antes de ir.</p>
+            @endif
+
+            {{-- Las condiciones, una por fila --}}
+            @if (($conocidos || $faltan) && ($servicio || $s->admite_perros !== 'no'))
+                <section class="rounded-3xl bg-white p-5 ring-1 ring-linea">
+                    <h2 class="text-xl font-extrabold">{{ $servicio ? 'Lo que debes saber' : 'Condiciones para tu mascota' }}</h2>
+                    @if ($conocidos)
+                        <dl class="mt-2 divide-y divide-linea">
+                            @foreach ($conocidos as $etiqueta => [$icono, $valor])
+                                <div class="flex gap-3 py-4">
+                                    <span class="grid size-10 flex-none place-items-center rounded-xl bg-pino-suave text-pino">@svg('heroicon-o-'.$icono, 'size-5', ['aria-hidden' => 'true'])</span>
+                                    <div>
+                                        <dt class="text-sm font-bold text-gris">{{ $etiqueta }}</dt>
+                                        <dd class="mt-0.5 whitespace-pre-line leading-snug">{{ $valor }}</dd>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </dl>
+                    @endif
+                    @if ($faltan)
+                        <p class="mt-3 text-sm text-gris">Aún no sabemos: {{ mb_strtolower(implode(', ', $faltan)) }}. {{ $servicio ? 'Llama antes de ir.' : 'Pregúntalo al reservar.' }}</p>
+                    @endif
+                </section>
+            @endif
+
+            {{-- Más fotos del sitio, siempre con su crédito --}}
+            @if ($fotos->count() > 1)
+                <ul class="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:thin]" aria-label="Más fotos">
+                    @foreach ($fotos->skip(1) as $f)
+                        <li class="w-56 flex-none snap-start">
+                            <figure class="grid gap-1">
+                                <img src="{{ $f->url() }}" alt="{{ $f->descripcion }}" loading="lazy" class="aspect-[4/3] w-full rounded-xl object-cover">
+                                <x-credito-foto :foto="$f" />
+                            </figure>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
 
             <div class="flex flex-wrap gap-2">
                 @if ($telUrgencias)
@@ -142,8 +178,9 @@
                 @if ($telefono)
                     <a class="btn w-full sm:w-auto" href="tel:{{ $telefono }}">@svg('heroicon-o-phone', 'size-5', ['aria-hidden' => 'true']){{ $telUrgencias ? 'Llamar a la clínica' : 'Llamar' }} · {{ $verTel($telefono) }}</a>
                 @endif
+                {{-- En el móvil, «Cómo llegar» y «Guardar» van en la barra fija de abajo --}}
                 @if ($s->latitud && ! $s->a_domicilio)
-                    <a class="btn btn-albero flex-1 sm:flex-none" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination={{ $s->latitud }},{{ $s->longitud }}">@svg('heroicon-o-map', 'size-5', ['aria-hidden' => 'true'])Cómo llegar</a>
+                    <a class="btn btn-albero hidden lg:inline-flex" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination={{ $s->latitud }},{{ $s->longitud }}">@svg('heroicon-o-map', 'size-5', ['aria-hidden' => 'true'])Cómo llegar</a>
                 @endif
                 {{-- En el móvil abre el menú de compartir (WhatsApp, etc.); si no lo hay, WhatsApp directamente --}}
                 <button type="button" class="btn flex-1 sm:flex-none"
@@ -156,7 +193,7 @@
                 {{-- Guardar en Mi viaje: sin cuenta se queda en el móvil (resources/js/viaje.js) --}}
                 <button type="button" x-data @click="$store.viaje.alternar({{ $s->id }}, 'quiero')"
                     :class="$store.viaje.estado({{ $s->id }}) === 'quiero' && 'btn-pri'" :aria-pressed="$store.viaje.estado({{ $s->id }}) === 'quiero'"
-                    class="btn flex-1 sm:flex-none" aria-pressed="false">
+                    class="btn hidden lg:inline-flex" aria-pressed="false">
                     <span x-show="$store.viaje.estado({{ $s->id }}) !== 'quiero'" class="inline-flex items-center gap-2">@svg('heroicon-o-bookmark', 'size-5', ['aria-hidden' => 'true'])Guardar</span>
                     <span x-show="$store.viaje.estado({{ $s->id }}) === 'quiero'" x-cloak class="inline-flex items-center gap-2">@svg('heroicon-s-bookmark', 'size-5', ['aria-hidden' => 'true'])Guardado</span>
                 </button>
@@ -330,5 +367,23 @@
                 <a href="{{ \App\Filament\Resources\Sitios\SitioResource::getUrl('edit', ['record' => $s]) }}" class="btn">@svg('heroicon-o-pencil-square', 'size-5', ['aria-hidden' => 'true'])Editar en el panel</a>
             @endif
         </aside>
+    </div>
+</div>
+
+    {{-- Barra fija abajo en el móvil: lo que más se hace desde la ficha, siempre a mano --}}
+    <div class="fixed inset-x-0 bottom-0 z-30 border-t border-linea bg-white/95 px-4 pb-[max(.75rem,env(safe-area-inset-bottom))] pt-3 shadow-[0_-4px_16px_rgba(19,42,46,.08)] backdrop-blur lg:hidden">
+        <div class="mx-auto flex max-w-6xl gap-2">
+            <button type="button" x-data @click="$store.viaje.alternar({{ $s->id }}, 'quiero')"
+                :class="$store.viaje.estado({{ $s->id }}) === 'quiero' && 'btn-pri'" :aria-pressed="$store.viaje.estado({{ $s->id }}) === 'quiero'"
+                class="btn min-h-12 flex-none px-4" aria-pressed="false">
+                <span x-show="$store.viaje.estado({{ $s->id }}) !== 'quiero'" class="inline-flex items-center gap-2">@svg('heroicon-o-bookmark', 'size-5', ['aria-hidden' => 'true'])Guardar</span>
+                <span x-show="$store.viaje.estado({{ $s->id }}) === 'quiero'" x-cloak class="inline-flex items-center gap-2">@svg('heroicon-s-bookmark', 'size-5', ['aria-hidden' => 'true'])Guardado</span>
+            </button>
+            @if ($s->latitud && ! $s->a_domicilio)
+                <a class="btn btn-albero min-h-12 flex-1" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination={{ $s->latitud }},{{ $s->longitud }}">@svg('heroicon-o-map', 'size-5', ['aria-hidden' => 'true'])Cómo llegar</a>
+            @elseif ($telUrgencias ?: $telefono)
+                <a class="btn btn-pri min-h-12 flex-1" href="tel:{{ $telUrgencias ?: $telefono }}">@svg('heroicon-o-phone', 'size-5', ['aria-hidden' => 'true'])Llamar</a>
+            @endif
+        </div>
     </div>
 </div>

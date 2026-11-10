@@ -152,7 +152,8 @@ class Explorar extends Component
     // Con ubicación, del más cercano al más lejano; sin ella, primero lo confirmado
     private function ordenados(): Builder
     {
-        $q = $this->consulta()->with('municipio:id,nombre');
+        // La primera foto de cada sitio sale en su tarjeta
+        $q = $this->consulta()->with(['municipio:id,nombre', 'fotos' => fn ($f) => $f->publicadas()]);
         if ($this->lat === null) {
             return $q->orderByDesc('verificado')->orderBy('nombre');
         }

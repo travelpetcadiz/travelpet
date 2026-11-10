@@ -25,8 +25,7 @@ No necesitas saber nada de programación. Para cada paso pone **qué haces tú**
 
 1. **Los datos del titular para el aviso legal.** ✅ Hecho el 8/11: ya sale tu nombre como titular y el correo de contacto. El NIF y la dirección postal quedan para **antes de empezar a cobrar** (pásaselos a tu desarrollador, no por aquí).
 2. **Pedir fotos a los negocios.** En el panel, **Ayuda › Correo para pedir fotos a un negocio** (con botón para copiarlo). El mismo correo les pide que confirmen sus datos, y así salen como «Confirmado por el propio sitio».
-3. **Revisar los bocetos del diseño nuevo** (paso 3 del plan) en https://travelpetcadiz.es/mockup y decirle a Claude qué cambiar.
-4. **Decidir si quieres guardar qué animales admite cada sitio** (perros, gatos, otros): ver «Una decisión pendiente para ti» más abajo.
+3. **Decidir si quieres guardar qué animales admite cada sitio** (perros, gatos, otros): ver «Una decisión pendiente para ti» más abajo.
 
 Cuando termines una, díselo a Claude y la marcará como hecha. Cuando haya fotos nuevas esperando (de Wikimedia o subidas por alguien del equipo), te saldrá «Fotos por revisar» en el Inicio del panel.
 
@@ -88,7 +87,7 @@ Los verás en https://travelpetcadiz.es/mockup. **La web real no cambia todavía
 
 👉 Dile a Claude: **«Prepárame los bocetos»**.
 
-### Paso 3. Revisa los bocetos y di qué cambiar ✋ *(lo haces tú)*
+### Paso 3. Revisa los bocetos y di qué cambiar ✅ *(hecho el 10/11)*
 
 Míralos con calma, sobre todo **en el móvil**, y díselo a Claude con tus palabras. Por ejemplo:
 - *«La foto de la portada mejor la de Bolonia.»*
@@ -99,7 +98,7 @@ Claude lo cambia y lo vuelves a mirar, tantas veces como haga falta.
 
 👉 Cuando te guste todo, dile: **«Aprobado, ponlo en la web»**.
 
-### Paso 4. El diseño nuevo, en la web 🤖 *(lo hace Claude)*
+### Paso 4. El diseño nuevo, en la web ✅ *(hecho el 10/11: portada, lista de sitios y ficha)*
 
 Claude pasa a la web real lo que hayas aprobado, sin tocar tus datos. Después te pide que eches un vistazo final.
 
@@ -173,8 +172,8 @@ Claude marca aquí lo que se va terminando.
 - [x] Sección «Fotos» en el panel y página de bocetos
 - [x] Paso 1. Subir fotos
 - [x] Paso 2. Bocetos
-- [ ] Paso 3. Revisión de bocetos
-- [ ] Paso 4. Diseño nuevo en la web
+- [x] Paso 3. Revisión de bocetos
+- [x] Paso 4. Diseño nuevo en la web (portada, lista y ficha)
 - [x] Paso 5. «Cerca de mí»
 - [x] «¿Se puede ir hoy?» en playas, urgencias 24 h, filtros prácticos, compartir y datos para Google
 - [x] Paso 6. Páginas para Google

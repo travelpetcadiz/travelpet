@@ -1,7 +1,7 @@
 {{-- Crédito de una foto: quién la hizo y, si es libre, su licencia con enlace (lo exigen las licencias CC) --}}
 @props(['foto'])
 @php($c = $foto->credito())
-<figcaption class="text-xs text-gris">
+<figcaption {{ $attributes->class(['text-xs text-gris']) }}>
     @if ($c['autor_url'])
         <a href="{{ $c['autor_url'] }}" target="_blank" rel="noopener nofollow" class="underline">{{ $c['texto'] }}</a>
     @else
