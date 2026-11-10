@@ -34,6 +34,7 @@ class PaginasGuia
         'Ocio' => ['planes', 'Planes con mascota', 'planes'],
         'Transporte' => ['transporte', 'Transporte que admite mascotas', 'sitios de transporte'],
         'Comercio' => ['comercios', 'Comercios que admiten mascotas', 'comercios'],
+        'Caravanas' => ['caravanas', 'Áreas para caravanas y autocaravanas con mascota', 'áreas para caravanas'],
     ];
 
     /**

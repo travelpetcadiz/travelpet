@@ -126,6 +126,7 @@ class Ficha extends Component
         'Ocio' => 'TouristAttraction',
         'Transporte' => 'LocalBusiness',
         'Comercio' => 'Store',
+        'Caravanas' => 'RVPark',
     ];
 
     /**

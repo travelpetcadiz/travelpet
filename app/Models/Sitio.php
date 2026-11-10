@@ -61,6 +61,7 @@ class Sitio extends Model
         'Ocio' => ['Planes', '#6B6B3A', 'ticket'],
         'Transporte' => ['Transporte', '#4B5D73', 'truck'],
         'Comercio' => ['Comercios', '#9C4F6E', 'shopping-bag'],
+        'Caravanas' => ['Caravanas', '#8A6A2F', 'home'],
     ];
 
     // Lo que busca quien viaja: van como accesos grandes en la portada; el resto, como utilidades
