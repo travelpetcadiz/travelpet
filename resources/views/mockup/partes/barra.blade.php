@@ -4,6 +4,9 @@
         'portada' => ['home', 'Portada'],
         'resultados' => ['list-bullet', 'Resultados'],
         'ficha' => ['document-text', 'Ficha'],
+        'rediseno-portada' => ['sparkles', 'Rediseño: portada'],
+        'rediseno-lista' => ['sparkles', 'Rediseño: lista'],
+        'rediseno-ficha' => ['sparkles', 'Rediseño: ficha'],
     ];
 @endphp
 <div class="border-b border-albero bg-albero-suave text-sm">
