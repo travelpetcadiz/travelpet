@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Foto;
 use App\Models\Municipio;
 use App\Models\Provincia;
 use App\Models\Sitio;
@@ -58,6 +59,18 @@ class PanelTest extends TestCase
             ->get('/admin/sitios?filters[sin_coordenadas][isActive]=1')
             ->assertOk()
             ->assertSee('Hotel Prueba');
+    }
+
+    public function test_el_filtro_sin_foto_deja_fuera_los_que_tienen_una_foto_en_la_web(): void
+    {
+        $conFoto = Sitio::create(['municipio_id' => $this->sitio->municipio_id, 'nombre' => 'Bar Con Foto', 'tipo' => 'Restauración', 'admite_perros' => 'si']);
+        Foto::create(['sitio_id' => $conFoto->id, 'archivo' => 'fotos/prueba.webp', 'descripcion' => 'Terraza', 'publicada' => true]);
+
+        $this->actingAs(User::factory()->admin()->create())
+            ->get('/admin/sitios?filters[sin_foto][isActive]=1')
+            ->assertOk()
+            ->assertSee('Hotel Prueba')
+            ->assertDontSee('Bar Con Foto');
     }
 
     public function test_el_admin_puede_editar_un_sitio(): void

@@ -74,6 +74,14 @@ class Pendientes extends Widget
                 'url' => $filtro('sin_coordenadas'),
             ],
             [
+                'icono' => 'heroicon-o-camera',
+                'titulo' => 'Sitios sin foto',
+                'n' => $sitios()->sinFoto()->count(),
+                'texto' => 'Aún no tienen ninguna foto en la web. Sube una tuya o pide una al propio sitio.',
+                'boton' => 'Ver cuáles son',
+                'url' => $filtro('sin_foto'),
+            ],
+            [
                 'icono' => 'heroicon-o-calendar-days',
                 'titulo' => 'Playas sin fechas',
                 'n' => $sitios()->where('tipo', 'Playa')->where('admite_perros', '!=', 'no')->whereNull('periodo_tipo')->count(),

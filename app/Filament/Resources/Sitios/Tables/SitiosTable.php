@@ -102,6 +102,9 @@ class SitiosTable
                 Filter::make('sin_coordenadas')
                     ->label('No salen en el mapa (les falta la ubicación)')
                     ->query(fn (Builder $query) => $query->sinUbicacion()),
+                Filter::make('sin_foto')
+                    ->label('Sin foto en la web')
+                    ->query(fn (Builder $query) => $query->sinFoto()),
                 TernaryFilter::make('a_domicilio')
                     ->label('Servicio a domicilio')
                     ->trueLabel('Solo los que van a domicilio')

@@ -166,6 +166,14 @@ class Sitio extends Model
             ->where(fn (Builder $w) => $w->whereNull('latitud')->orWhereNull('longitud'));
     }
 
+    /**
+     * No tienen ninguna foto que se vea en la web.
+     */
+    public function scopeSinFoto(Builder $q): Builder
+    {
+        return $q->whereDoesntHave('fotos', fn (Builder $f) => $f->where('publicada', true));
+    }
+
     public function scopePublicados(Builder $q): Builder
     {
         return $q->where('publicado', true)
