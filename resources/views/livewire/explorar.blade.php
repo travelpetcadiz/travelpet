@@ -31,7 +31,6 @@
         @php
             // Cifras que dan confianza, los últimos sitios confirmados y los pueblos más buscados
             $totalSitios = $conteoTipos->sum();
-            $confirmados = Sitio::publicados()->where('verificado', true)->count();
             $pueblos = Sitio::publicados()->distinct()->count('municipio_id');
             $recientes = Sitio::publicados()->where('verificado', true)
                 ->with(['municipio:id,nombre', 'fotos' => fn ($f) => $f->publicadas()])
@@ -51,7 +50,9 @@
             })->filter(fn ($d) => $d['municipio'] && $d['municipio']->sitios_count > 0)->values();
         @endphp
 
-        {{-- 1. Primera impresión: las fotos de portada de lado a lado y la pregunta en grande encima.
+        {{-- 1. Primera impresión: las fotos de portada y la pregunta en grande.
+             En el móvil la foto va arriba y el texto debajo, para no tapar a la mascota.
+             En el ordenador la foto se ve entera a la derecha, sobre una copia desenfocada de sí misma que llena el hueco.
              Pasan solas cada 5 s y se deslizan con el dedo. Las fotos propias van sin crédito; las de otros lo llevan --}}
         <section x-data="{
                     i: 0,
@@ -64,22 +65,26 @@
                  @pointerdown="parado = true" @focusin="parado = true"
                  class="relative isolate overflow-hidden bg-tinta" aria-roledescription="carrusel" aria-label="Fotos de mascotas por Cádiz">
             <ul x-ref="pista" @scroll.debounce.100ms="i = Math.round($el.scrollLeft / $el.clientWidth)"
-                class="absolute inset-0 -z-10 flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                class="absolute inset-x-0 top-0 -z-10 flex h-72 snap-x md:inset-0 md:h-auto snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 @forelse ($fotosPortada as $n => $f)
                     <li class="relative size-full flex-none snap-center" aria-roledescription="foto" aria-label="{{ $n + 1 }} de {{ $fotosPortada->count() }}">
-                        <img src="{{ $f->url() }}" alt="{{ $f->descripcion }}" @if ($n === 0) fetchpriority="high" @else loading="lazy" @endif class="size-full object-cover object-[50%_30%]">
+                        <img src="{{ $f->url() }}" alt="" aria-hidden="true" loading="lazy" class="absolute inset-0 hidden size-full scale-110 object-cover opacity-60 blur-2xl md:block">
+                        <img src="{{ $f->url() }}" alt="{{ $f->descripcion }}" @if ($n === 0) fetchpriority="high" @else loading="lazy" @endif class="relative size-full object-cover object-[50%_60%] md:object-contain md:object-right">
                         @if ($f->origen !== 'propia')
                             <span class="absolute right-2 top-2 rounded-md bg-tinta/60 px-2 py-0.5 text-xs text-white">{{ $f->credito()['texto'] }}</span>
                         @endif
                     </li>
                 @empty
-                    <li class="size-full flex-none"><img src="{{ asset('hero.jpg') }}" alt="Perro con correa sobre una mesa de madera en un parque" fetchpriority="high" class="size-full object-cover object-[50%_25%]"></li>
+                    <li class="relative size-full flex-none">
+                        <img src="{{ asset('hero.jpg') }}" alt="" aria-hidden="true" class="absolute inset-0 hidden size-full scale-110 object-cover opacity-60 blur-2xl md:block">
+                        <img src="{{ asset('hero.jpg') }}" alt="Perro con correa sobre una mesa de madera en un parque" fetchpriority="high" class="relative size-full object-cover object-[50%_60%] md:object-contain md:object-right">
+                    </li>
                 @endforelse
             </ul>
             {{-- Degradado para que el texto se lea sobre cualquier foto --}}
-            <div class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-tinta via-tinta/55 to-tinta/10 md:bg-gradient-to-r md:from-tinta/90 md:via-tinta/50 md:to-transparent"></div>
+            <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-72 bg-gradient-to-b from-transparent from-55% to-tinta md:inset-0 md:h-auto md:bg-gradient-to-r md:from-tinta md:from-25% md:via-tinta/60 md:to-transparent"></div>
 
-            <div class="pointer-events-none mx-auto flex min-h-[470px] max-w-6xl flex-col justify-end px-4 pb-24 pt-40 md:min-h-[560px] md:justify-center md:pb-28">
+            <div class="pointer-events-none mx-auto flex max-w-6xl flex-col justify-end px-4 pb-24 pt-[17rem] md:min-h-[560px] md:pt-40 md:justify-center md:pb-28">
                 <p class="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-sm font-bold text-white ring-1 ring-white/30 backdrop-blur">
                     @svg('heroicon-s-map-pin', 'size-4 text-albero', ['aria-hidden' => 'true']){{ $zona ? 'Provincia de '.$zona : 'Guía de sitios' }} · guía gratuita
                 </p>
@@ -88,7 +93,7 @@
             </div>
 
             @if ($fotosPortada->count() > 1)
-                <div class="absolute inset-x-0 bottom-20 flex justify-center gap-1.5 md:bottom-24">
+                <div class="absolute inset-x-0 top-[15rem] flex justify-center gap-1.5 md:bottom-24 md:top-auto">
                     @foreach ($fotosPortada as $n => $f)
                         <button type="button" @click="ir({{ $n }})" class="h-2 rounded-full transition-all" :class="i === {{ $n }} ? 'w-6 bg-white' : 'w-2 bg-white/60'" :aria-current="i === {{ $n }}">
                             <span class="sr-only">Ver foto {{ $n + 1 }}</span>
@@ -116,14 +121,10 @@
             </form>
 
             {{-- Las cifras que dan confianza, justo debajo del buscador --}}
-            <ul class="mt-4 grid grid-cols-3 gap-2 text-center md:max-w-3xl">
+            <ul class="mt-4 grid grid-cols-2 gap-2 text-center md:max-w-3xl">
                 <li class="rounded-2xl bg-white px-2 py-3 ring-1 ring-linea">
                     <span class="block font-display text-2xl font-extrabold text-pino">{{ $totalSitios }}</span>
                     <span class="text-sm leading-tight text-gris">sitios</span>
-                </li>
-                <li class="rounded-2xl bg-white px-2 py-3 ring-1 ring-linea">
-                    <span class="block font-display text-2xl font-extrabold text-ok">{{ $confirmados }}</span>
-                    <span class="text-sm leading-tight text-gris">confirmados por el sitio</span>
                 </li>
                 <li class="rounded-2xl bg-white px-2 py-3 ring-1 ring-linea">
                     <span class="block font-display text-2xl font-extrabold text-tinta">{{ $pueblos }}</span>
