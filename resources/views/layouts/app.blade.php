@@ -47,7 +47,8 @@
         // Categorías: lo que se busca para salir con la mascota y lo que se busca para la mascota
         $salir = ['Alojamiento', 'Restauración', 'Playa', 'Espacio', 'Ocio', 'Transporte', 'Comercio', 'Caravanas'];
         $paraMascota = \App\Models\Sitio::SERVICIOS;
-        $chipCategoria = fn (string $clave, string $extra = '') => '<a href="'.e(route('inicio', ['tipo' => $clave])).'" wire:navigate class="chip '.$extra.'">'
+        // Transporte no tiene fichas sueltas: su botón lleva a la página «Transporte con mascota»
+        $chipCategoria = fn (string $clave, string $extra = '') => '<a href="'.e($clave === 'Transporte' ? route('transporte') : route('inicio', ['tipo' => $clave])).'" wire:navigate class="chip '.$extra.'">'
             .svg('heroicon-s-'.\App\Models\Sitio::TIPOS[$clave][2], 'size-5 flex-none', ['style' => 'color: '.\App\Models\Sitio::TIPOS[$clave][1], 'aria-hidden' => 'true'])->toHtml()
             .e(\App\Models\Sitio::TIPOS[$clave][0]).'</a>';
         $globo = '<span x-show="$store.viaje.total" x-cloak x-text="$store.viaje.total" class="absolute -right-1.5 -top-1.5 grid size-5 place-items-center rounded-full bg-albero text-xs font-bold text-tinta"></span>';

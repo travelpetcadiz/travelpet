@@ -151,7 +151,11 @@
             </div>
             <div class="-mx-4 mt-2 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0">
                 @foreach (array_diff(array_keys(Sitio::TIPOS), Sitio::PRINCIPALES) as $clave)
-                    <button type="button" wire:click="$set('tipo', @js($clave))" class="chip min-h-11"><x-icono-tipo :tipo="$clave" />{{ Sitio::TIPOS[$clave][0] }}</button>
+                    @if ($clave === 'Transporte')
+                        <a href="{{ route('transporte') }}" wire:navigate class="chip min-h-11 no-underline"><x-icono-tipo :tipo="$clave" />{{ Sitio::TIPOS[$clave][0] }}</a>
+                    @else
+                        <button type="button" wire:click="$set('tipo', @js($clave))" class="chip min-h-11"><x-icono-tipo :tipo="$clave" />{{ Sitio::TIPOS[$clave][0] }}</button>
+                    @endif
                 @endforeach
             </div>
             {{-- Urgencias: en rojo y a todo lo ancho, para encontrarlas al momento --}}
@@ -265,10 +269,15 @@
             <div class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:overflow-visible md:px-0">
                 <button type="button" class="chip" wire:click="$set('tipo', '')" aria-pressed="{{ $tipo === '' ? 'true' : 'false' }}">Todo</button>
                 @foreach (Sitio::TIPOS as $clave => [$etiqueta])
-                    <button type="button" class="chip" wire:click="$set('tipo', @js($clave))" aria-pressed="{{ $tipo === $clave ? 'true' : 'false' }}">
-                        <x-icono-tipo :tipo="$clave" />
-                        {{ $etiqueta }} <span class="font-normal opacity-70">{{ $conteoTipos[$clave] ?? 0 }}</span>
-                    </button>
+                    @if ($clave === 'Transporte')
+                        {{-- El transporte está en su propia página, no en fichas sueltas --}}
+                        <a href="{{ route('transporte') }}" wire:navigate class="chip no-underline"><x-icono-tipo :tipo="$clave" />{{ $etiqueta }}</a>
+                    @else
+                        <button type="button" class="chip" wire:click="$set('tipo', @js($clave))" aria-pressed="{{ $tipo === $clave ? 'true' : 'false' }}">
+                            <x-icono-tipo :tipo="$clave" />
+                            {{ $etiqueta }} <span class="font-normal opacity-70">{{ $conteoTipos[$clave] ?? 0 }}</span>
+                        </button>
+                    @endif
                 @endforeach
             </div>
             @endunless
