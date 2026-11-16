@@ -147,11 +147,13 @@
     {{-- Categorías siempre a mano. En Explorar no hace falta: allí ya están los accesos y los filtros --}}
     @unless (request()->routeIs('inicio'))
         <nav class="border-b border-linea bg-white" aria-label="Categorías">
-            <div class="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {{-- En el móvil se desliza de lado y se difumina el borde derecho para que se vea que hay más; desde tablet caben todas en varias filas --}}
+            <div class="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 py-2.5 [mask-image:linear-gradient(to_right,black_85%,transparent)] [scrollbar-width:none] md:flex-wrap md:overflow-visible md:[mask-image:none] [&::-webkit-scrollbar]:hidden">
                 @foreach ([...$salir, ...$paraMascota] as $clave)
                     {!! $chipCategoria($clave) !!}
                 @endforeach
                 <a href="{{ route('urgencias') }}" wire:navigate class="chip border-mal/30 text-mal">{!! svg('heroicon-o-lifebuoy', 'size-5 flex-none', ['aria-hidden' => 'true'])->toHtml() !!}Urgencias 24 h</a>
+                <span class="w-8 flex-none md:hidden" aria-hidden="true"></span>
             </div>
         </nav>
     @endunless
